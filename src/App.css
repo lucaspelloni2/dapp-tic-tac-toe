@@ -27,6 +27,7 @@ input {
     height: 48px;
     font-family: inherit;
     font-size: 16px;
+    width: 275px;
 }
 
 input:focus {
@@ -36,4 +37,34 @@ input:focus {
     0 0 8px rgba(102, 175, 233, 0.6);
     box-shadow: inset 0 1px 1px rgba(0, 0, 0, 0.075),
     0 0 8px rgba(102, 175, 233, 0.6);
+}
+
+button {
+    font-size: 20px;
+    cursor: pointer;
+    background: 0 0;
+    width: initial;
+    padding: 1.452vh 2.96vw;
+    border-radius: 40px;
+    color: #121416;
+    border: 1px solid #121416;
+    transition: all .2s ease-in-out;
+    display: inline-block;
+    margin: 0;
+    -webkit-animation: ctaInAnimation .3s linear forwards;
+    animation: ctaInAnimation .3s linear forwards;
+    box-shadow: 0 0 1px -1px #121416;
+    text-decoration: none;
+    outline: none;
+}
+
+button:hover{
+    text-decoration: none;
+    background: #3899EC;
+    border-color: #3899EC;
+    color: #fff;
+}
+
+button:active{
+    outline: none;
 }
