@@ -15,8 +15,10 @@ contract TicTacToe {
     
     struct Game {
         string name; 
+        address gameAddr; 
         uint256 bet; 
         address[] playersAddr; 
+        
     }
     
     address owner;  
@@ -25,15 +27,36 @@ contract TicTacToe {
     // address = key, player is value
     mapping(address => Player) players; 
     mapping(address => Game) games; 
-    address[] gamesAddresses ; 
+    
+    Game[] public gamesObjects; 
     
     function TicTacToe() public {
         owner = msg.sender; 
     }
     
-    function createGame(address gameAddr, address gameOwner) public {
+    function createGame(address gameAddr, string name) public {
+        if (msg.sender == owner) {
+            revert(); 
+        }
+        address gameOwner = msg.sender; 
+        games[gameAddr].name = name; 
+        games[gameAddr].gameAddr = gameAddr; 
         games[gameAddr].playersAddr.push(gameOwner); 
-        gamesAddresses.push(gameAddr); 
+        gamesObjects.push(games[gameAddr]); 
+    }
+    
+    
+    function joinGame(address gameAddr) public {
+        if (msg.sender == owner) {
+            revert(); 
+        }
+        
+    }
+    
+    function alreadyCreated(address gameAddr) returns (bool) {
+        for (uint i = 0; i < gamesObjects.length; i++) {
+            // TODO: check if the given game has been already created
+        }
     }
     
     
