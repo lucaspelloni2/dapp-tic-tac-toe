@@ -39,17 +39,16 @@ class Login extends Component {
     return (
       <Container>
         <FieldsContainer>
-          <h1>Login</h1>
+          <h1>Welcome!</h1>
           <SubTitle>Please login in order to play our TicTacToe</SubTitle>
-
           <LoginRow>
-            <input placeholder={'Email'} />
+            <input placeholder={'Username'} />
           </LoginRow>
           <LoginRow>
             <input placeholder={'Password'} />
           </LoginRow>
 
-          <button class="login__submit">Login</button>
+          <button>Login</button>
         </FieldsContainer>
       </Container>
     );

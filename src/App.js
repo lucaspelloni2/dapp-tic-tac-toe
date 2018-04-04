@@ -14,7 +14,8 @@ class App extends Component {
     return (
         <Container>
             {/*<Login/>*/}
-            <Lobby/>
+            {/*<Lobby/>*/}
+            <Login/>
         </Container>
     );
   }
