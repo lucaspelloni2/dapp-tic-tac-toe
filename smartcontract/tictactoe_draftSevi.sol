@@ -24,11 +24,12 @@ contract TicTacToe {
     }
     
     struct Game {
+        uint gameId;
         string name;
         address ownerAddr;
         Player[] players;
         Bet[] bets;
-        //string[][] board;
+        string[3][3] board;
     }
     
     struct Bet {
@@ -43,12 +44,12 @@ contract TicTacToe {
         myPlayer.playerAddr = playerAddr;
         
         players[playerAddr] = myPlayer;
-        
     }
     
     
     function createGame(string name, address ownerAddr) public returns (uint gameId) {
         Game storage myGame;
+        myGame.gameId = counter;
         myGame.name = name;
         myGame.ownerAddr = ownerAddr;
         
@@ -67,21 +68,16 @@ contract TicTacToe {
     function startGame(uint gameId) public {
         if (games[gameId].ownerAddr == msg.sender
             && games[gameId].players.length == 2) {
-            //initialize(games[gameId]);
+            initialize(gameId);
         }
     }
     
-    /*function initialize(Game gameId) public {
-        
-    }*/
-        
-    
-      /*  
-    function alreadyCreated(address gameAddr) returns (bool) {
-        for (uint i = 0; i < gamesObjects.length; i++) {
-            // TODO: check if the given game has been already created
+    function initialize(uint gameId) public {
+        for (uint y = 0; y < 3; y++) {
+            for (uint x = 0; x < 3; x++) {
+                games[gameId].board[y][x] = "";
+            }
         }
     }
-    */
     
 }
