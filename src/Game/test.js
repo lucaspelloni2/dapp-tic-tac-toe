@@ -2,26 +2,44 @@ import React, {Component} from 'react';
 import Web3 from 'web3';
 let web3 = window.web3;
 
-class EtherAddress extends Component {
+
+export const UserAddress = props => {
+    return (<div>{props.state.ethAddress}</div>)
+};
+
+class Web3Manager extends Component {
   constructor() {
     super();
-    this.state = {ethAddress: ''};
+    this.state = {ethAddress: '', ethBalance: 0};
   }
 
   componentDidMount() {
     this.initWeb3();
   }
 
-  getUserAddress() {
+  getUserAccount() {
     web3.eth
       .getAccounts()
       .then(addr => {
         console.log(addr);
         this.setState({ethAddress: addr.toString()});
+        web3.eth
+          .getBalance(addr.toString())
+          .then(bal => {
+            console.log(bal);
+            this.setState({ethBalance: bal});
+          })
+          .catch(err => {
+            console.log('error getting balance' + err);
+          });
       })
       .catch(err => {
-        console.log("error " + err);
+        console.log('error getting address ' + err);
       });
+  }
+
+  getBalance() {
+    web3.eth.getBalance();
   }
 
   initWeb3() {
@@ -36,12 +54,12 @@ class EtherAddress extends Component {
       web3 = new Web3(this.web3Provider);
       console.log('new web3');
     }
-    this.getUserAddress();
+    this.getUserAccount();
   }
 
   render() {
-    return <div>Your Ethereum Address: {this.state.ethAddress}</div>;
+    return <div>{this.state.ethAddress}</div>;
   }
 }
 
-export default EtherAddress;
+export default Web3Manager;

@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import Web3Manager from "./test";
 
 const Container = styled.div`
   display: flex;
@@ -23,6 +24,7 @@ const FieldsContainer = styled.div`
   width: 600px;
   padding: 1.5rem 2.5rem;
   margin-bottom: 10em;
+  text-align: center;
 `;
 
 const LoginRow = styled.div`
@@ -39,7 +41,9 @@ class Login extends Component {
     return (
       <Container>
         <FieldsContainer>
-          <h1>Welcome!</h1>
+          <h1>Welcome User with address:
+              <Web3Manager/>
+          </h1>
           <SubTitle>Please login in order to play our TicTacToe</SubTitle>
           <LoginRow>
             <input placeholder={'Username'} />
