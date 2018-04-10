@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import styled from 'styled-components';
 import Login from "./Game/login";
 import './App.css';
-import Lobby from "./Game/lobby";
+import Test from "./Game/test";
 
 const Container = styled.div`
   display: flex;
@@ -15,7 +15,7 @@ class App extends Component {
         <Container>
             {/*<Login/>*/}
             {/*<Lobby/>*/}
-            <Login/>
+            <Test/>
         </Container>
     );
   }
