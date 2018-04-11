@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import Web3Manager from "./test";
+import Context from './Context';
 
 const Container = styled.div`
   display: flex;
@@ -41,16 +41,20 @@ class Login extends Component {
     return (
       <Container>
         <FieldsContainer>
-          <h1>Welcome User with address:
-              <Web3Manager/>
-          </h1>
+          <h1>Welcome User</h1>
           <SubTitle>Please login in order to play our TicTacToe</SubTitle>
+          <LoginRow>
+            <Context.Consumer>
+              {account => <div>{account.ethAddress}</div>}
+            </Context.Consumer>
+            
+          </LoginRow>
           <LoginRow>
             <input placeholder={'Username'} />
           </LoginRow>
-          <LoginRow>
-            <input placeholder={'Password'} />
-          </LoginRow>
+          {/*<LoginRow>*/}
+          {/*<input placeholder={'Password'} />*/}
+          {/*</LoginRow>*/}
 
           <button>Login</button>
         </FieldsContainer>

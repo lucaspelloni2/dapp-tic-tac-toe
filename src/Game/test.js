@@ -2,9 +2,12 @@ import React, {Component} from 'react';
 import Web3 from 'web3';
 let web3 = window.web3;
 
-
 export const UserAddress = props => {
-    return (<div>{props.state.ethAddress}</div>)
+  return <div>{props.ethAddress}</div>;
+};
+
+export const UserBalance = props => {
+  return <div>{props.ethBalance}</div>;
 };
 
 class Web3Manager extends Component {
@@ -21,12 +24,10 @@ class Web3Manager extends Component {
     web3.eth
       .getAccounts()
       .then(addr => {
-        console.log(addr);
         this.setState({ethAddress: addr.toString()});
         web3.eth
           .getBalance(addr.toString())
           .then(bal => {
-            console.log(bal);
             this.setState({ethBalance: bal});
           })
           .catch(err => {
@@ -36,10 +37,6 @@ class Web3Manager extends Component {
       .catch(err => {
         console.log('error getting address ' + err);
       });
-  }
-
-  getBalance() {
-    web3.eth.getBalance();
   }
 
   initWeb3() {
@@ -58,7 +55,13 @@ class Web3Manager extends Component {
   }
 
   render() {
-    return <div>{this.state.ethAddress}</div>;
+    if (this.props.ethAddress) {
+      return <UserAddress ethAddress={this.state.ethAddress} />;
+    } else if (this.props.ethBalance) {
+      return <UserBalance ethBalance={this.state.ethBalance} />;
+    } else {
+      return <div>Fetching problem</div>;
+    }
   }
 }
 
