@@ -29,6 +29,8 @@ contract TicTacToe {
     using Strings for string;
     uint constant boardSize = 3;
     address contractOwner;
+    
+    event SuccessEvent(uint ID, bool returnValue);
 
 
 
@@ -57,8 +59,11 @@ contract TicTacToe {
         bool isFinished;
         uint moveCounter;
 
+        bool isPlayerOSet;
         Player playerO;
+        bool isPlayerXSet;
         Player playerX;
+        
         Player winner;
 
         //Bet[] bets;
@@ -70,42 +75,66 @@ contract TicTacToe {
         //Player[2] players;     // players[0] = bet for X, players[1] = bet for O
     }
 
-
+    
     function createGame(string gameName, string playerName) public returns (uint gameId) {
-        Game memory myGame;
-        myGame.gameId = counter;
+        gameId = counter++;
+        Game storage myGame = games[gameId];
+        
+        myGame.gameId = gameId;
         myGame.name = gameName;
         myGame.ownerAddr = msg.sender;
 
         Player memory playerO;
         playerO.name = playerName;
         playerO.playerAddr = msg.sender;
+        
         myGame.playerO = playerO;
+        myGame.isPlayerOSet = true;
+        myGame.isPlayerXSet = false;
 
-        games[counter] = myGame;
-
-
-        return gameId = counter++;
+        openGameIds.push(gameId);
+        
+        emit SuccessEvent(gameId, true);
+        return gameId;
     }
 
     function getOpenGameIds() public view returns (uint[] gameIds) {
         return openGameIds;
     }
 
-
+    event Joined(string symbol, bool returnValue);
     function joinGame(uint gameId, string playerName) public returns (bool){
-        if(equalStrings(games[gameId].playerX.name, "")) {
-            games[gameId].playerX.name = playerName;
-            games[gameId].playerX.playerAddr = msg.sender;
+        Game storage game = games[gameId];
+        
+        Player memory player;
+        player.name = playerName;
+        player.playerAddr = msg.sender;
+        
+        if(!game.isPlayerOSet) {
+            game.playerO = player;
+            game.isPlayerOSet = true;
+            
+            emit Joined("O", true);
             return true;
         }
+        if (!game.isPlayerXSet) {
+            game.playerX = player;
+            game.isPlayerXSet = true;
+            
+            emit Joined("X", true);
+            return true;
+        }
+        emit Joined("game is full", false);
         return false;
     }
 
     function startGame(uint gameId) public returns (bool) {
-        if (games[gameId].ownerAddr == msg.sender
-        && !equalStrings(games[gameId].playerX.name, "")
-        && !equalStrings(games[gameId].playerO.name, "")) {
+        Game storage game = games[gameId];
+        
+        if (game.ownerAddr == msg.sender
+            && game.isPlayerXSet
+            && game.isPlayerOSet ) {
+            
             initialize(gameId);
             return true;
         }
