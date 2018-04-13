@@ -29,7 +29,8 @@ class App extends Component {
         web3.eth
           .getBalance(addr.toString())
           .then(bal => {
-            this.setState({ethBalance: bal});
+            var inEth = web3.utils.fromWei(bal, "ether");
+            this.setState({ethBalance: inEth});
           })
           .catch(err => {
             console.log('error getting balance' + err);
