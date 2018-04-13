@@ -8,14 +8,15 @@ const Container = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: url(loginback.jpg) no-repeat center center fixed;
+  background: url(back.jpg) no-repeat center center fixed;
   -webkit-background-size: cover;
   -moz-background-size: cover;
   -o-background-size: cover;
   background-size: cover;
+  color: white;
 `;
 
-const FieldsContainer = styled.div`
+const LoginContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -23,6 +24,7 @@ const FieldsContainer = styled.div`
   width: 600px;
   padding: 1.5rem 2.5rem;
   text-align: center;
+  margin-bottom: 5em;
 `;
 
 const LoginRow = styled.div`
@@ -30,7 +32,6 @@ const LoginRow = styled.div`
   height: 5rem;
   padding-top: 1rem;
   align-items: center;
-  justify-content: space-around;
   width: 100%;
 `;
 
@@ -38,55 +39,81 @@ const SubTitle = styled.p`
   font-size: 22px;
 `;
 
-const MySpan = styled.span`
+const InputLabel = styled.label`
   font-weight: bold;
   font-size: 18px;
-  margin-right: auto;
-  color: white; 
+  width: 100%;
+  display: flex;
+  align-items: center;
+`;
+
+const InputField = styled.input`
+  margin-left: auto;
+`;
+
+const LoginButton = styled.button`
+  margin-top: 20px;
+  margin-right: -88px;
+`;
+
+const Provider = styled.img`
+  width: 200px;
+`;
+
+const FieldsContainer = styled.div`
+  width: 100%;
+  margin-right: 88px;
 `;
 
 class Login extends Component {
   render() {
     return (
       <Container>
-        <FieldsContainer>
+        <LoginContainer>
           <h1>Welcome User</h1>
           <SubTitle>Please insert your username</SubTitle>
-          <LoginRow>
-            <MySpan>Address</MySpan>
-            <Context.Consumer>
-              {account => (
-                <input
-                  style={{backgroundColor: 'gainsboro', width: 410}}
-                  disabled
-                  value={account.ethAddress}
-                />
-              )}
-            </Context.Consumer>
-          </LoginRow>
+          {/*<Provider src="../public/metamask.jpg" />*/}
+          <FieldsContainer>
+            <LoginRow>
+              <Context.Consumer>
+                {account => (
+                  <InputLabel>
+                    Address
+                    <InputField
+                      style={{backgroundColor: 'gainsboro'}}
+                      disabled
+                      value={account.ethAddress}
+                    />
+                  </InputLabel>
+                )}
+              </Context.Consumer>
+            </LoginRow>
 
-          <LoginRow>
-            <MySpan>Balance</MySpan>
-            <Context.Consumer>
-              {account => (
-                <input
-                  style={{backgroundColor: 'gainsboro', width: 410}}
-                  disabled
-                  value={account.ethBalance}
-                />
-              )}
-            </Context.Consumer>
-          </LoginRow>
+            <LoginRow>
+              <Context.Consumer>
+                {account => (
+                  <InputLabel>
+                    {' '}
+                    Balance
+                    <InputField
+                      style={{backgroundColor: 'gainsboro'}}
+                      disabled
+                      value={account.ethBalance}
+                    />
+                  </InputLabel>
+                )}
+              </Context.Consumer>
+            </LoginRow>
 
-          <LoginRow>
-            <input placeholder={'Username'} />
-          </LoginRow>
-          {/*<LoginRow>*/}
-          {/*<input placeholder={'Password'} />*/}
-          {/*</LoginRow>*/}
-
-          <button>Login</button>
-        </FieldsContainer>
+            <LoginRow>
+              <InputLabel>
+                Username
+                <InputField placeholder={'Username'} />
+              </InputLabel>
+            </LoginRow>
+            <LoginButton>Login</LoginButton>
+          </FieldsContainer>
+        </LoginContainer>
       </Container>
     );
   }
