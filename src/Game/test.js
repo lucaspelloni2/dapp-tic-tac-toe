@@ -1,17 +1,16 @@
-import React, {Component, createContext} from 'react';
-import styled from 'styled-components';
-import Login from './Game/login';
-import './App.css';
-import Context from './Game/Context';
+import React, {Component} from 'react';
 import Web3 from 'web3';
 let web3 = window.web3;
 
-const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
+export const UserAddress = props => {
+  return <div>{props.ethAddress}</div>;
+};
 
-class App extends Component {
+export const UserBalance = props => {
+  return <div>{props.ethBalance}</div>;
+};
+
+class Web3Manager extends Component {
   constructor() {
     super();
     this.state = {ethAddress: '', ethBalance: 0};
@@ -56,14 +55,14 @@ class App extends Component {
   }
 
   render() {
-    return (
-      <Context.Provider value={this.state}>
-        <Container>
-          <Login />
-        </Container>
-      </Context.Provider>
-    );
+    if (this.props.ethAddress) {
+      return <UserAddress ethAddress={this.state.ethAddress} />;
+    } else if (this.props.ethBalance) {
+      return <UserBalance ethBalance={this.state.ethBalance} />;
+    } else {
+      return <div>Fetching problem</div>;
+    }
   }
 }
 
-export default App;
+export default Web3Manager;
