@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import Context from './Context';
+import ButtonLink from './Link';
 
 const Container = styled.div`
   display: flex;
@@ -21,7 +22,7 @@ const LoginContainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  width: 600px;
+  width: 640px;
   padding: 1.5rem 2.5rem;
   text-align: center;
   margin-bottom: 5em;
@@ -52,7 +53,7 @@ const InputField = styled.input`
   margin-left: auto;
 `;
 
-const LoginButton = styled.button`
+const ButtonLinkContainer = styled.div`
   margin-top: 20px;
   margin-right: -88px;
 `;
@@ -77,9 +78,6 @@ class Login extends Component {
 
   handleChange(e) {
     this.setState({username: e.target.value});
-  }
-
-  login() {
     localStorage.setItem('username', this.state.username);
   }
 
@@ -111,7 +109,7 @@ class Login extends Component {
                 {account => (
                   <InputLabel>
                     {' '}
-                    Balance
+                    Balance (ETH)
                     <InputField
                       style={{backgroundColor: 'gainsboro'}}
                       disabled
@@ -131,7 +129,9 @@ class Login extends Component {
                 />
               </InputLabel>
             </LoginRow>
-            <LoginButton onClick={this.login()}>Login</LoginButton>
+            <ButtonLinkContainer>
+              <ButtonLink location={'lobby'}>Login</ButtonLink>
+            </ButtonLinkContainer>
           </FieldsContainer>
         </LoginContainer>
       </Container>

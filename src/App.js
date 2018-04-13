@@ -7,6 +7,7 @@ import './App.css';
 import Context from './Game/Context';
 import Web3 from 'web3';
 import WelcomePage from './Game/WelcomePage';
+import Lobby from "./Game/lobby";
 let web3 = window.web3;
 
 const Container = styled.div`
@@ -66,6 +67,7 @@ class App extends Component {
           <BrowserRouter>
             <div>
               <Switch>
+                  <Route path="/lobby" exact component={Lobby} />
                 <Route path="/login" exact component={Login} />
                 <Route path="/" exact component={WelcomePage} />
               </Switch>
