@@ -1,6 +1,7 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
 import styled from 'styled-components';
+import ButtonLink from './Link';
 
 const Container = styled.div`
   display: flex;
@@ -34,20 +35,8 @@ const Button = () => (
 const WelcomePage = () => {
   return (
     <Container>
-      <img src="metamask.svg" width={180} />
-      <Route
-        render={({history}) => (
-          <button
-            type="button"
-            style={{marginTop: '2em'}}
-            onClick={() => {
-              history.push('/login');
-            }}
-          >
-            Get Started
-          </button>
-        )}
-      />
+      <img src="metamask.svg" width={180} style={{marginBottom: '3em'}}/>
+      <ButtonLink location={'login'}>Get started</ButtonLink>
     </Container>
   );
 };
