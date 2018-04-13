@@ -17,25 +17,10 @@ const Container = styled.div`
   color: white;
 `;
 
-const Button = () => (
-  <Route
-    render={({history}) => (
-      <button
-        type="button"
-        onClick={() => {
-          history.push('/new-location');
-        }}
-      >
-        Click Me!
-      </button>
-    )}
-  />
-);
-
 const WelcomePage = () => {
   return (
     <Container>
-      <img src="metamask.svg" width={180} style={{marginBottom: '3em'}}/>
+      <img src="metamask.svg" width={180} style={{marginBottom: '3em'}} />
       <ButtonLink location={'login'}>Get started</ButtonLink>
     </Container>
   );

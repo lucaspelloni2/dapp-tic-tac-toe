@@ -1,6 +1,5 @@
 import React from 'react';
 import {Route} from 'react-router-dom';
-import styled from 'styled-components';
 
 const ButtonLink = (props) => (
     <Route

@@ -37,7 +37,7 @@ const LoginRow = styled.div`
 
 const SubTitle = styled.p`
   font-size: 22px;
-  margin: 0 auto; 
+  margin: 0 auto;
 `;
 
 const InputLabel = styled.label`
@@ -67,6 +67,22 @@ const FieldsContainer = styled.div`
 `;
 
 class Login extends Component {
+  constructor(props) {
+    super(props);
+    localStorage.clear();
+    this.state = {
+      username: ''
+    };
+  }
+
+  handleChange(e) {
+    this.setState({username: e.target.value});
+  }
+
+  login() {
+    localStorage.setItem('username', this.state.username);
+  }
+
   render() {
     return (
       <Container>
@@ -109,10 +125,13 @@ class Login extends Component {
             <LoginRow>
               <InputLabel>
                 Username
-                <InputField placeholder={'Username'} />
+                <InputField
+                  placeholder={'Username'}
+                  onChange={this.handleChange.bind(this)}
+                />
               </InputLabel>
             </LoginRow>
-            <LoginButton>Login</LoginButton>
+            <LoginButton onClick={this.login()}>Login</LoginButton>
           </FieldsContainer>
         </LoginContainer>
       </Container>
