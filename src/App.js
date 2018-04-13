@@ -1,9 +1,12 @@
 import React, {Component, createContext} from 'react';
+import {Switch, Route} from 'react-router';
+import {BrowserRouter} from 'react-router-dom';
 import styled from 'styled-components';
 import Login from './Game/login';
 import './App.css';
 import Context from './Game/Context';
 import Web3 from 'web3';
+import WelcomePage from './Game/WelcomePage';
 let web3 = window.web3;
 
 const Container = styled.div`
@@ -59,7 +62,14 @@ class App extends Component {
     return (
       <Context.Provider value={this.state}>
         <Container>
-          <Login />
+          <BrowserRouter>
+            <div>
+              <Switch>
+                <Route path="/login" exact component={Login} />
+                <Route path="/" exact component={WelcomePage} />
+              </Switch>
+            </div>
+          </BrowserRouter>
         </Container>
       </Context.Provider>
     );
