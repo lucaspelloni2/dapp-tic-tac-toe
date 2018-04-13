@@ -60,8 +60,11 @@ button {
 }
 
 button:hover{
+    background: #e4751b;
+    border-color: #e4751b;
+    cursor: pointer;
     text-decoration: none;
-
+    outline: none;
 }
 
 button:active{

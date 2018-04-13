@@ -37,6 +37,7 @@ const LoginRow = styled.div`
 
 const SubTitle = styled.p`
   font-size: 22px;
+  margin: 0 auto; 
 `;
 
 const InputLabel = styled.label`
@@ -57,7 +58,7 @@ const LoginButton = styled.button`
 `;
 
 const Provider = styled.img`
-  width: 200px;
+  width: 100px;
 `;
 
 const FieldsContainer = styled.div`
@@ -70,9 +71,9 @@ class Login extends Component {
     return (
       <Container>
         <LoginContainer>
-          <h1>Welcome User</h1>
+          <Provider src="metamask.svg" />
+          <h1>Tic Tac Toe</h1>
           <SubTitle>Please insert your username</SubTitle>
-          {/*<Provider src="../public/metamask.jpg" />*/}
           <FieldsContainer>
             <LoginRow>
               <Context.Consumer>
