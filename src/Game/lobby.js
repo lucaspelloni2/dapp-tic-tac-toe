@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
 import ContractProps from './ContractProps';
+import MetaMaskLogo from "./MetamaskLogo";
 
 const ParentContainer = styled.div``;
 
@@ -10,7 +11,7 @@ const Container = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: -5em;
+  margin-top: -8em;
 `;
 const LobbyContainer = styled.div`
   display: flex;
@@ -106,7 +107,7 @@ class Lobby extends Component {
           </Profile>
         </UserProfileContainer>
         <Container>
-          <img src="metamask.svg" width={100} />
+          <MetaMaskLogo/>
           <h1>Lobby</h1>
           <p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>
             Please select an option

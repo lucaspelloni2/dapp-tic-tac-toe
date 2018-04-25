@@ -12,14 +12,14 @@ let viewer = ModelViewer({
 
     // Dictates whether width & height are px or multiplied
     pxNotRatio: true,
-    width: 200,
-    height: 200,
+    width: 140,
+    height: 140,
     // pxNotRatio: false,
     // width: 0.9,
     // height: 0.9,
 
     // To make the face follow the mouse.
-    followMouse: false,
+    followMouse: true,
 
     // head should slowly drift (overrides lookAt)
     slowDrift: false,
@@ -36,16 +36,18 @@ viewer.lookAt({
     y: 100,
 });
 
-// enable mouse follow
-viewer.setFollowMouse(true);
-
-// deallocate nicely
-viewer.stopAnimation();
 
 class MetaMaskLogo extends  Component{
     componentDidMount() {
         this.container.appendChild(viewer.container);
     }
+
+    componentWillUnmount() {
+        // deallocate nicely
+        viewer.stopAnimation();
+
+    }
+
     shouldComponentUpdate() {
         return false;
     }
