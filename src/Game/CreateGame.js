@@ -93,8 +93,12 @@ class CreateGame extends Component {
           ContractProps.CONTRACT_ADDRESS
       );
 
+      console.log(myContract);
+
+      // TODO: CREATE GAME WITH THE INSERTED PARAMETERS
+
       myContract.methods
-          .createGame(localStorage.getItem('username'), this.state.gameName)
+          .createGame(this.state.gameName,localStorage.getItem('username'))
           .call({from: this.props.account.ethAddress})
           .then(gameId => {
               console.log("new game created! " + gameId);
