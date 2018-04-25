@@ -78,7 +78,7 @@ class Login extends Component {
 
   handleChange(e) {
     this.setState({username: e.target.value});
-    localStorage.setItem('username', this.state.username);
+    localStorage.setItem('username', e.target.value);
   }
 
   render() {
