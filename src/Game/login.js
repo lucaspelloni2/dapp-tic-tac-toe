@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import Context from './Context';
-import ButtonLink from './Link';
+import {Redirect} from 'react-router-dom';
+import MetaMaskLogo from './MetamaskLogo';
 
 const Container = styled.div`
   display: flex;
@@ -77,15 +78,22 @@ class Login extends Component {
   }
 
   handleChange(e) {
-    this.setState({username: e.target.value});
+    this.setState({username: e.target.value, clickedLogin: false});
     localStorage.setItem('username', e.target.value);
+  }
+
+  login() {
+    if (localStorage.getItem('username')) {
+      return <Redirect to="/lobby" />;
+    }
+    return <div style={{background: 'red', marginBottom: 30}}>Please insert an username</div>;
   }
 
   render() {
     return (
       <Container>
         <LoginContainer>
-          <Provider src="metamask.svg" />
+          <MetaMaskLogo />
           <h1>Tic Tac Toe</h1>
           <SubTitle>Please insert your username</SubTitle>
           <FieldsContainer>
@@ -130,7 +138,17 @@ class Login extends Component {
               </InputLabel>
             </LoginRow>
             <ButtonLinkContainer>
-              <ButtonLink location={'lobby'}>Login</ButtonLink>
+                {this.state.clickedLogin && this.login()}
+              <button
+                onClick={() => {
+                  this.setState({
+                    clickedLogin: true
+                  });
+                }}
+              >
+                Login
+              </button>
+
             </ButtonLinkContainer>
           </FieldsContainer>
         </LoginContainer>
