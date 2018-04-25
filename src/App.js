@@ -10,6 +10,7 @@ import WelcomePage from './Game/WelcomePage';
 import Lobby from './Game/lobby';
 import ContractProps from './Game/ContractProps';
 import JoinGame from './Game/JoinGame';
+import CreateGame from "./Game/CreateGame";
 
 let web3 = window.web3;
 
@@ -75,7 +76,6 @@ class App extends Component {
                   )}
                 />
                 <Route path="/login" exact component={Login} />
-                <Route path="/" exact component={WelcomePage} />
                   <Route
                       path="/games"
                       exact
@@ -87,6 +87,19 @@ class App extends Component {
                           />
                       )}
                   />
+                  <Route
+                      path="/games/:address"
+                      exact
+                      render={props => (
+                          <CreateGame
+                              {...props}
+                              web3={this.state.web3}
+                              account={this.state}
+                          />
+                      )}
+                  />
+                <Route path="/" exact component={WelcomePage} />
+
               </Switch>
             </div>
           </BrowserRouter>

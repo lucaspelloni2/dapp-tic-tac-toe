@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
-import MetaMaskLogo from "./MetamaskLogo";
+import MetaMaskLogo from './MetamaskLogo';
+import ContractProps from './ContractProps';
 
 const ParentContainer = styled.div``;
 
@@ -78,14 +79,26 @@ const UserName = styled.p`
 class Lobby extends Component {
   constructor() {
     super();
-    // TODO redirect if no user name is stored
-    this.state ={username: localStorage.getItem('username')};
+    this.state = {
+      ids: [],
+      username: localStorage.getItem('username')
+    };
   }
+  componentDidMount() {
+    this.getAvailableGames();
+  }
+  getAvailableGames() {
+    const myContract = new this.props.web3.eth.Contract(
+      ContractProps.CONTRACT_ABI,
+      ContractProps.CONTRACT_ADDRESS
+    );
 
-  componentDidMount() {}
-
-  getGames() {
-
+    myContract.methods
+      .getOpenGameIds()
+      .call({from: this.props.account.ethAddress})
+      .then(ids => {
+        this.setState({ids: ids});
+      });
   }
 
   render(props) {
@@ -100,7 +113,7 @@ class Lobby extends Component {
           </Profile>
         </UserProfileContainer>
         <Container>
-          <MetaMaskLogo/>
+          <MetaMaskLogo />
           <h1>Lobby</h1>
           <p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>
             Please select an option
@@ -108,7 +121,9 @@ class Lobby extends Component {
           <LobbyContainer>
             <ButtonsContainer>
               <ButtonContainer>
-                <Button>Create Game</Button>
+                  <ButtonLink width={250} location={'games/' + this.props.account.ethAddress}>
+                      Create Game
+                  </ButtonLink>
               </ButtonContainer>
               <ButtonContainer>
                 <ButtonLink width={250} location={'games'}>
