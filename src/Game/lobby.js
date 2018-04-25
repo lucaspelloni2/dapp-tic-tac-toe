@@ -85,13 +85,7 @@ class Lobby extends Component {
   componentDidMount() {}
 
   getGames() {
-    // const myContract = new this.props.web3.eth.Contract(
-    //   ContractProps.CONTRACT_ABI,
-    //   ContractProps.CONTRACT_ADDRESS
-    // );
-    // console.log(
-    //   myContract.methods.getOpenGameIds().call({from: this.props.account.ethAddress})
-    // );
+
   }
 
   render(props) {

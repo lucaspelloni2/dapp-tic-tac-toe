@@ -76,7 +76,17 @@ class App extends Component {
                 />
                 <Route path="/login" exact component={Login} />
                 <Route path="/" exact component={WelcomePage} />
-                <Route path="/games" exact component={JoinGame} />
+                  <Route
+                      path="/games"
+                      exact
+                      render={props => (
+                          <JoinGame
+                              {...props}
+                              web3={this.state.web3}
+                              account={this.state}
+                          />
+                      )}
+                  />
               </Switch>
             </div>
           </BrowserRouter>
