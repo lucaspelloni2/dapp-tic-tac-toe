@@ -33,17 +33,18 @@ class App extends Component {
       console.log('new web3');
     }
     this.state = {ethAddress: '', ethBalance: 0, web3: web3Instance};
+    this.getUserAccount();
   }
 
   getUserAccount() {
-    web3.eth
+    this.state.web3.eth
       .getAccounts()
       .then(addr => {
         this.setState({ethAddress: addr.toString()});
-        web3.eth
+        this.state.web3.eth
           .getBalance(addr.toString())
           .then(bal => {
-            let inEth = web3.utils.fromWei(bal, 'ether');
+            let inEth = this.state.web3.utils.fromWei(bal, 'ether');
             this.setState({ethBalance: inEth});
           })
           .catch(err => {
