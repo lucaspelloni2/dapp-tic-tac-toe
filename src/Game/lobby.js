@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
-import ContractProps from './ContractProps';
 import MetaMaskLogo from "./MetamaskLogo";
 
 const ParentContainer = styled.div``;
