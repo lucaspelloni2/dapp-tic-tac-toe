@@ -2,6 +2,7 @@ import React from 'react';
 import {Route} from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonLink from './Link';
+import MetaMaskLogo from './MetamaskLogo';
 
 const Container = styled.div`
   display: flex;
@@ -20,8 +21,13 @@ const Container = styled.div`
 const WelcomePage = () => {
   return (
     <Container>
-      <img src="metamask.svg" width={180} style={{marginBottom: '3em'}} />
+      {/*<img src="metamask.svg" width={180} style={{marginBottom: '3em'}} />*/}
+      <MetaMaskLogo />
       <ButtonLink location={'login'}>Get started</ButtonLink>
+        <p style={{marginBottom: 0, marginTop: '5em', fontSize: 18, fontWeight: 'bold'}}>Developed by: </p>
+        <p style={{marginTop: 5, marginBottom: 0}}>Lucas Pelloni </p>
+        <p style={{marginTop: 5, marginBottom: 0}}>Severin Wullschleger</p>
+        <p style={{marginTop: 5, marginBottom: 0}}>Andreas Schafehlbuhl</p>
     </Container>
   );
 };
