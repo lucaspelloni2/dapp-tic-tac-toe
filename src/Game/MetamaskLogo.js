@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component} from 'react';
 
 let ModelViewer = require('metamask-logo');
 
@@ -22,9 +22,8 @@ let viewer = ModelViewer({
 });
 
 // add viewer to DOM
-//let container = document.getElementById('logo-container');
-let container = this.refs.Logo;
-container.appendChild(viewer.container);
+let container = document.getElementById('logo-container');
+// container.appendChild(viewer.container);
 
 // look at something on the page
 viewer.lookAt({
@@ -38,8 +37,19 @@ viewer.setFollowMouse(true);
 // deallocate nicely
 viewer.stopAnimation();
 
-const MetaMaskLogo = () => {
-    return (<div ref="Logo">logo</div>);
+class MetaMaskLogo extends  Component{
+    componentDidMount() {
+        this.container.appendChild(viewer.container);
+    }
+    shouldComponentUpdate() {
+        return false;
+    }
+    render() {
+        return (<div ref={ref => {
+            this.container = ref;
+        }}/>);
+
+    }
 };
 
 export default MetaMaskLogo;
