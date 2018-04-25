@@ -27,9 +27,10 @@ let viewer = ModelViewer({
 });
 
 // add viewer to DOM
-let container = document.getElementById('logo-container');
+viewer.container.style.display = "none";
 // container.appendChild(viewer.container);
-
+//
+// ;
 // look at something on the page
 viewer.lookAt({
     x: 100,
@@ -39,6 +40,7 @@ viewer.lookAt({
 
 class MetaMaskLogo extends  Component{
     componentDidMount() {
+        viewer.container.style.display = "block"
         this.container.appendChild(viewer.container);
     }
 
