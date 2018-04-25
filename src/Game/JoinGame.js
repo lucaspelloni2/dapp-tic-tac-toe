@@ -58,7 +58,7 @@ const Flex = styled.div`
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-  border: 2px solid #e4751b;
+     box-shadow: 0 0 3px 3px rgba(168,221,224,0.5);
   border-radius: 18px;
   flex-direction: column;
   cursor: pointer;
