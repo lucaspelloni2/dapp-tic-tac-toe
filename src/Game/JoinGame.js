@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import ContractProps from './ContractProps';
+import MetaMaskLogo from "./MetamaskLogo";
 
 const Container = styled.div`
   display: flex;
@@ -30,7 +31,7 @@ const GameIcon = styled.svg`
 `;
 
 const GameId = styled.p`
-  font-size: 18px;
+  font-size: 22px;
   font-weight: bold;
 `;
 
@@ -54,6 +55,7 @@ const JoinParagraph = styled.p`
 
 const Flex = styled.div`
   &:hover {
+   border: 2px solid #e4751b;
   }
   display: flex;
   justify-content: space-evenly;
@@ -62,6 +64,7 @@ const Flex = styled.div`
   border-radius: 18px;
   flex-direction: column;
   cursor: pointer;
+transition: all 0.2s ease-out;
 `;
 
 class JoinGame extends Component {
@@ -90,8 +93,8 @@ class JoinGame extends Component {
   render() {
     return (
       <Container>
+        <MetaMaskLogo/>
         <h1>List of available Games</h1>
-
         <GamesContainer>
           <Table>
             <tr>
