@@ -1,14 +1,19 @@
 import React, {Component} from 'react';
+import styled from 'styled-components'
 
 let ModelViewer = require('metamask-logo');
+
+const Container = styled.div`
+
+`;
 
 // To render with fixed dimensions:
 let viewer = ModelViewer({
 
     // Dictates whether width & height are px or multiplied
     pxNotRatio: true,
-    width: 500,
-    height: 400,
+    width: 200,
+    height: 200,
     // pxNotRatio: false,
     // width: 0.9,
     // height: 0.9,
@@ -45,7 +50,7 @@ class MetaMaskLogo extends  Component{
         return false;
     }
     render() {
-        return (<div ref={ref => {
+        return (<Container innerRef={ref => {
             this.container = ref;
         }}/>);
 
