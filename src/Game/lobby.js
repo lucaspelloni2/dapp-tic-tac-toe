@@ -1,5 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import ButtonLink from './Link';
+import ContractProps from './ContractProps';
 
 const Container = styled.div`
   display: flex;
@@ -40,19 +42,59 @@ const Button = styled.button`
   width: 250px;
 `;
 class Lobby extends Component {
-  render() {
+  constructor() {
+    super();
+  }
+
+  componentDidMount() {
+    this.getUserAccount();
+      console.log(this.props.web3.eth);
+  }
+
+  getGames() {
+    // const myContract = new this.props.web3.eth.Contract(
+    //   ContractProps.CONTRACT_ABI,
+    //   ContractProps.CONTRACT_ADDRESS
+    // );
+    // console.log(
+    //   myContract.methods.getOpenGameIds().call({from: this.props.account.ethAddress})
+    // );
+  }
+
+  getUserAccount() {
+    this.props.web3.eth
+      .getAccounts()
+      .then(addr => {
+        console.log(addr);
+        this.props.web3.eth
+          .getBalance(addr.toString())
+          .then(bal => {
+            console.log(bal);
+          })
+          .catch(err => {
+            console.log('error getting balance' + err);
+          });
+      })
+      .catch(err => {
+        console.log('error getting address ' + err);
+      });
+  }
+
+  render(props) {
     return (
       <Container>
         <img src="metamask.svg" width={100} />
         <h1>Lobby</h1>
-          <p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>Please select an option</p>
+        <p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>
+          Please select an option
+        </p>
         <LobbyContainer>
           <ButtonsContainer>
             <ButtonContainer>
               <Button>Create Game</Button>
             </ButtonContainer>
             <ButtonContainer>
-              <Button>Join Game</Button>
+                <ButtonLink width={250} location={'join'}>Join Game</ButtonLink>
             </ButtonContainer>
             <ButtonContainer>
               <Button>Make Bet</Button>

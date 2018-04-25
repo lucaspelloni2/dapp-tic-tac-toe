@@ -7,8 +7,9 @@ import './App.css';
 import Context from './Game/Context';
 import Web3 from 'web3';
 import WelcomePage from './Game/WelcomePage';
-import Lobby from "./Game/lobby";
+import Lobby from './Game/lobby';
 import ContractProps from './Game/ContractProps';
+import JoinGame from './Game/JoinGame';
 
 let web3 = window.web3;
 
@@ -20,12 +21,18 @@ const Container = styled.div`
 class App extends Component {
   constructor() {
     super();
-    this.state = {ethAddress: '', ethBalance: 0};
-  }
-
-  componentDidMount() {
-    this.initWeb3();
-    this.getGames();
+    let web3Instance = null;
+    if (typeof web3 !== 'undefined') {
+      this.web3Provider = web3.currentProvider;
+      web3Instance = new Web3(web3.currentProvider);
+    } else {
+      this.web3Provider = new Web3.providers.HttpProvider(
+        'http://localhost:8545'
+      );
+      web3Instance = new Web3(this.web3Provider);
+      console.log('new web3');
+    }
+    this.state = {ethAddress: '', ethBalance: 0, web3: web3Instance};
   }
 
   getUserAccount() {
@@ -36,7 +43,7 @@ class App extends Component {
         web3.eth
           .getBalance(addr.toString())
           .then(bal => {
-            let inEth = web3.utils.fromWei(bal, "ether");
+            let inEth = web3.utils.fromWei(bal, 'ether');
             this.setState({ethBalance: inEth});
           })
           .catch(err => {
@@ -48,26 +55,6 @@ class App extends Component {
       });
   }
 
-  getGames() {
-    const myContract = new web3.eth.Contract(ContractProps.CONTRACT_ABI, ContractProps.CONTRACT_ADDRESS);
-    console.log(myContract.methods.getOpenGameIds().call({from: this.state.ethAddress}));
-  }
-
-  initWeb3() {
-    if (typeof web3 !== 'undefined') {
-      this.web3Provider = web3.currentProvider;
-      web3 = new Web3(web3.currentProvider);
-      console.log('existing web3: provider ' + web3.currentProvider);
-    } else {
-      this.web3Provider = new Web3.providers.HttpProvider(
-        'http://localhost:8545'
-      );
-      web3 = new Web3(this.web3Provider);
-      console.log('new web3');
-    }
-    this.getUserAccount();
-  }
-
   render() {
     return (
       <Context.Provider value={this.state}>
@@ -75,9 +62,20 @@ class App extends Component {
           <BrowserRouter>
             <div>
               <Switch>
-                  <Route path="/lobby" exact component={Lobby}/>
+                <Route
+                  path="/lobby"
+                  exact
+                  render={props => (
+                    <Lobby
+                      {...props}
+                      web3={this.state.web3}
+                      account={this.state}
+                    />
+                  )}
+                />
                 <Route path="/login" exact component={Login} />
                 <Route path="/" exact component={WelcomePage} />
+                <Route path="/games" exact component={JoinGame} />
               </Switch>
             </div>
           </BrowserRouter>
