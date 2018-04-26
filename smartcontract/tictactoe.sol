@@ -1,4 +1,5 @@
-pragma solidity ^0.4.10;
+pragma solidity ^0.4.23;
+//pragma experimental ABIEncoderV2;
 
 library Strings {
 
@@ -40,31 +41,31 @@ contract TicTacToe {
 
 
     // Players
-    mapping(address => Player) players;        // address = key, Player is value
+    mapping(address => Player) public players;        // address = key, Player is value
 
     // Games
     uint counter = 0;
-    mapping(uint => Game) games;
+    mapping(uint => Game) public games;
     uint[] openGameIds;
 
     struct Player {
         string name;
-        address playerAddr;
     }
-
+    
     struct Game {
         uint gameId;
         string name;
         address ownerAddr;
+        bool isStarted;
         bool isFinished;
         uint moveCounter;
 
         bool isPlayerOSet;
-        Player playerO;
+        address playerOAddr;
         bool isPlayerXSet;
-        Player playerX;
+        address playerXAddr;
         
-        Player winner;
+        address winnerAddr;
 
         //Bet[] bets;
         string[boardSize][boardSize] board;
@@ -75,7 +76,7 @@ contract TicTacToe {
         //Player[2] players;     // players[0] = bet for X, players[1] = bet for O
     }
 
-    
+
     function createGame(string gameName, string playerName) public returns (uint gameId) {
         gameId = counter++;
         Game storage myGame = games[gameId];
@@ -84,11 +85,9 @@ contract TicTacToe {
         myGame.name = gameName;
         myGame.ownerAddr = msg.sender;
 
-        Player memory playerO;
-        playerO.name = playerName;
-        playerO.playerAddr = msg.sender;
-        
-        myGame.playerO = playerO;
+        myGame.playerOAddr = msg.sender;
+        players[msg.sender].name = playerName;
+
         myGame.isPlayerOSet = true;
         myGame.isPlayerXSet = false;
 
@@ -106,19 +105,17 @@ contract TicTacToe {
     function joinGame(uint gameId, string playerName) public returns (bool){
         Game storage game = games[gameId];
         
-        Player memory player;
-        player.name = playerName;
-        player.playerAddr = msg.sender;
+        players[msg.sender].name = playerName;
         
         if(!game.isPlayerOSet) {
-            game.playerO = player;
+            game.playerOAddr = msg.sender;
             game.isPlayerOSet = true;
             
             emit Joined("O", true);
             return true;
         }
         if (!game.isPlayerXSet) {
-            game.playerX = player;
+            game.playerXAddr = msg.sender;
             game.isPlayerXSet = true;
             
             emit Joined("X", true);
@@ -136,9 +133,20 @@ contract TicTacToe {
             && game.isPlayerOSet ) {
             
             initialize(gameId);
+            game.isStarted = true;
             return true;
         }
         return false;
+    }
+    
+    function initialize(uint gameId) private {
+        for (uint y = 0; y < boardSize; y++) {
+            for (uint x = 0; x < boardSize; x++) {
+                games[gameId].board[y][x] = "";
+                //TODO Ich glaube, dass ein string in Solidity immer mit "" initialisiert wird, da es kein null gibt, was meint Blockchain Entrepreneur Lucas dazu?
+            }
+        }
+        //openGameIds.push(gameId); -> already opened at createGame
     }
     
     function getBoard(uint gameId) public view returns (string boardAsString) { // apparently no string array can be returned yet in solidity
@@ -152,67 +160,59 @@ contract TicTacToe {
         return boardRepresentation;
     }
 
-    function initialize(uint gameId) private {
-        for (uint y = 0; y < 3; y++) {
-            for (uint x = 0; x < 3; x++) {
-                games[gameId].board[y][x] = "";
-                //TODO Ich glaube, dass ein string in Solidity immer mit "" initialisiert wird, da es kein null gibt, was meint Blockchain Entrepreneur Lucas dazu?
-            }
-        }
-        openGameIds.push(gameId);
-    }
-
     function playMove(uint x, uint y, uint gameId) public returns (bool) {
-        if(games[gameId].playerX.playerAddr == msg.sender
-        && games[gameId].moveCounter % 2 == 0   // host's turn?
-        && equalStrings(games[gameId].board[x][y],"")){
-            games[gameId].board[x][y] = "X";
-            games[gameId].moveCounter += 1;
-            checkForWinner(x, y, gameId, games[gameId].playerX);
+        Game storage game = games[gameId];
+        if(game.playerXAddr == msg.sender
+        && game.moveCounter % 2 == 0   // host's turn?
+        && equalStrings(game.board[x][y],"")){
+            game.board[x][y] = "X";
+            game.moveCounter += 1;
+            checkForWinner(x, y, gameId, game.playerXAddr);
 
             return true;
         }
-        else if(games[gameId].playerO.playerAddr == msg.sender
-        && games[gameId].moveCounter % 2 == 1   // guest's turn?
-        && equalStrings(games[gameId].board[x][y], "")) {
-            games[gameId].board[x][y] = "O";
-            games[gameId].moveCounter += 1;
-            checkForWinner(x, y, gameId, games[gameId].playerO);
+        else if(game.playerOAddr == msg.sender
+        && game.moveCounter % 2 == 1   // guest's turn?
+        && equalStrings(game.board[x][y], "")) {
+            game.board[x][y] = "O";
+            game.moveCounter += 1;
+            checkForWinner(x, y, gameId, game.playerOAddr);
             
             return true;
         }
         return false;
     }
 
-    function checkForWinner(uint x, uint y, uint gameId, Player currentPlayer) private {
-        if(games[gameId].moveCounter < 2*boardSize -1) {
+    function checkForWinner(uint x, uint y, uint gameId, address currentPlayer) private {
+        Game storage game = games[gameId];
+        if(game.moveCounter < 2*boardSize -1) {
             return;
         }
 
-        string [boardSize][boardSize] storage board = games[gameId].board;
-        string storage symbol = games[gameId].board[x][y];
+        string [boardSize][boardSize] storage board = game.board;
+        string storage symbol = game.board[x][y];
 
         //check column
         for (uint i = 0; i < boardSize; i++) {
-            if(!equalStrings(games[gameId].board[i][i], symbol)) {
+            if(!equalStrings(game.board[i][i], symbol)) {
                 break;
             }
             if(i == (boardSize -1)) {
-                games[gameId].winner = currentPlayer;
-                games[gameId].isFinished = true;
+                game.winnerAddr = currentPlayer;
+                game.isFinished = true;
                 return;
             }
         }
 
         //check row
         for ( i = 0; i < boardSize; i++) {
-            if(!equalStrings(games[gameId].board[i][y], symbol)) {
+            if(!equalStrings(game.board[i][y], symbol)) {
                 break;
             }
 
             if(i == (boardSize -1)) {
-                games[gameId].winner = currentPlayer;
-                games[gameId].isFinished = true;
+                game.winnerAddr = currentPlayer;
+                game.isFinished = true;
                 return;
             }
         }
@@ -220,12 +220,12 @@ contract TicTacToe {
         //check diagonal
         if(x == y) {
             for (i = 0; i < boardSize; i++) {
-                if(!equalStrings(games[gameId].board[i][i], symbol)) {
+                if(!equalStrings(game.board[i][i], symbol)) {
                     break;
                 }
                 if(i == (boardSize -1)) {
-                    games[gameId].winner = currentPlayer;
-                    games[gameId].isFinished = true;
+                    game.winnerAddr = currentPlayer;
+                    game.isFinished = true;
                     return;
                 }
             }
@@ -234,12 +234,12 @@ contract TicTacToe {
         // check anti diagonal
         if(x + y == (boardSize -1)) {
             for (i = 0; i < boardSize; i++) {
-                if(!equalStrings(games[gameId].board[x][(boardSize-1) - 1], symbol)) {
+                if(!equalStrings(game.board[x][(boardSize-1) - 1], symbol)) {
                     break;
                 }
                 if(i == (boardSize -1)) {
-                    games[gameId].winner = currentPlayer;
-                    games[gameId].isFinished = true;
+                    game.winnerAddr = currentPlayer;
+                    game.isFinished = true;
                 }
             }
         }
