@@ -76,6 +76,9 @@ const UserName = styled.p`
   margin-top: 5px;
   margin-bottom: 0;
 `;
+
+const YourGames = styled.div``;
+
 class Lobby extends Component {
   constructor() {
     super();
@@ -85,15 +88,12 @@ class Lobby extends Component {
     };
   }
   componentDidMount() {
-    this.getAvailableGames();
-  }
-  getAvailableGames() {
-    this.props.contract.methods
-      .getOpenGameIds()
-      .call({from: this.props.account.ethAddress})
-      .then(ids => {
-        this.setState({ids: ids});
-      });
+    let event = this.props.contract.events.Joined();
+    console.log(event);
+    // event.watch((err, res) => {
+    //   console.log(err);
+    //   console.log(res);
+    // });
   }
 
   render(props) {
@@ -107,6 +107,8 @@ class Lobby extends Component {
             <UserName>{this.state.username}</UserName>
           </Profile>
         </UserProfileContainer>
+
+        <YourGames />
         <Container>
           <MetaMaskLogo />
           <h1>Lobby</h1>
