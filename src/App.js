@@ -10,7 +10,7 @@ import WelcomePage from './Game/WelcomePage';
 import Lobby from './Game/lobby';
 import ContractProps from './Game/ContractProps';
 import JoinGame from './Game/JoinGame';
-import CreateGame from "./Game/CreateGame";
+import CreateGame from './Game/CreateGame';
 
 let web3 = window.web3;
 
@@ -33,7 +33,17 @@ class App extends Component {
       web3Instance = new Web3(this.web3Provider);
       console.log('new web3');
     }
-    this.state = {ethAddress: '', ethBalance: 0, web3: web3Instance};
+    const tictactoeContract = new web3Instance.eth.Contract(
+      ContractProps.CONTRACT_ABI,
+      ContractProps.CONTRACT_ADDRESS
+    );
+
+    this.state = {
+      ethAddress: '',
+      ethBalance: 0,
+      web3: web3Instance,
+      contract: tictactoeContract
+    };
     this.getUserAccount();
   }
 
@@ -70,36 +80,35 @@ class App extends Component {
                   render={props => (
                     <Lobby
                       {...props}
-                      web3={this.state.web3}
+                      contract={this.state.contract}
                       account={this.state}
                     />
                   )}
                 />
                 <Route path="/login" exact component={Login} />
-                  <Route
-                      path="/games"
-                      exact
-                      render={props => (
-                          <JoinGame
-                              {...props}
-                              web3={this.state.web3}
-                              account={this.state}
-                          />
-                      )}
-                  />
-                  <Route
-                      path="/games/:address"
-                      exact
-                      render={props => (
-                          <CreateGame
-                              {...props}
-                              web3={this.state.web3}
-                              account={this.state}
-                          />
-                      )}
-                  />
+                <Route
+                  path="/games"
+                  exact
+                  render={props => (
+                    <JoinGame
+                      {...props}
+                      contract={this.state.contract}
+                      account={this.state}
+                    />
+                  )}
+                />
+                <Route
+                  path="/games/:address"
+                  exact
+                  render={props => (
+                    <CreateGame
+                      {...props}
+                      contract={this.state.contract}
+                      account={this.state}
+                    />
+                  )}
+                />
                 <Route path="/" exact component={WelcomePage} />
-
               </Switch>
             </div>
           </BrowserRouter>

@@ -80,12 +80,7 @@ class JoinGame extends Component {
     this.getAvailableGames();
   }
   getAvailableGames() {
-    const myContract = new this.props.web3.eth.Contract(
-      ContractProps.CONTRACT_ABI,
-      ContractProps.CONTRACT_ADDRESS
-    );
-
-    myContract.methods
+    this.props.contract.methods
       .getOpenGameIds()
       .call({from: this.props.account.ethAddress})
       .then(ids => {

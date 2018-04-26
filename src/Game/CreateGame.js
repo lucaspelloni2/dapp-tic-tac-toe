@@ -88,12 +88,7 @@ class CreateGame extends Component {
   }
 
   createGame() {
-      const myContract = new this.props.web3.eth.Contract(
-          ContractProps.CONTRACT_ABI,
-          ContractProps.CONTRACT_ADDRESS
-      );
-
-      myContract.methods
+      this.props.contract.methods
           .createGame(this.state.gameName,localStorage.getItem('username'))
           .send({from: this.props.account.ethAddress})
           .on('confirmation', function(gameId){
