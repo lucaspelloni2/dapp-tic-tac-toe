@@ -76,25 +76,40 @@ const UserData = styled.p`
 class CreateGame extends Component {
   constructor() {
     super();
-      this.state = {
-          gameName: '',
-          clicked: false
-      };
+    this.state = {
+      gameName: '',
+      clicked: false
+    };
   }
 
+  componentDidMount() {}
+
   handleChange(e) {
-      this.setState({gameName: e.target.value, clicked: false});
-      localStorage.setItem('gameName', e.target.value);
+    this.setState({gameName: e.target.value, clicked: false});
+    localStorage.setItem('gameName', e.target.value);
   }
 
   createGame() {
-      this.props.contract.methods
-          .createGame(this.state.gameName,localStorage.getItem('username'))
-          .send({from: this.props.account.ethAddress})
-          .on('confirmation', function(gameId){
-            console.log("new game created! " + gameId);
-          });
+    this.props.contract.methods
+      .createGame(this.state.gameName, localStorage.getItem('username'))
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        CreateGame.addNewTx(tx);
+      })
+      .on('confirmation', function(gameId) {
+        console.log('new game created! ' + gameId);
+      });
   }
+
+  static addNewTx(tx) {
+    let txs = localStorage.getItem('txs')
+      ? JSON.parse(localStorage.getItem('txs'))
+      : [];
+    let newTx = {tx: tx, confirmed: false};
+    txs.push(newTx);
+    localStorage.setItem('txs', JSON.stringify(txs));
+  }
+
   render() {
     return (
       <Container>

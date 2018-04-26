@@ -45,6 +45,11 @@ class App extends Component {
       contract: tictactoeContract
     };
     this.getUserAccount();
+    // web3Instance.eth
+    //   .getTransaction(
+    //       '0xb773550f2d1ad8431e8d5b613124b3981a278708fa5e2062495a3342472be4cf'
+    //   )
+    //   .then(console.log);
   }
 
   getUserAccount() {
