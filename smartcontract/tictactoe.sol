@@ -1,5 +1,5 @@
 pragma solidity ^0.4.23;
-//pragma experimental ABIEncoderV2;
+pragma experimental ABIEncoderV2;
 
 library Strings {
 
@@ -47,6 +47,11 @@ contract TicTacToe {
     uint counter = 0;
     mapping(uint => Game) public games;
     uint[] openGameIds;
+    
+    // bets
+    uint betCounter = 0;
+    mapping(uint => Bet) public bets;
+    uint[] openBetIds;
 
     struct Player {
         string name;
@@ -67,13 +72,17 @@ contract TicTacToe {
         
         address winnerAddr;
 
-        //Bet[] bets;
         string[boardSize][boardSize] board;
     }
 
     struct Bet {
         uint value;
-        //Player[2] players;     // players[0] = bet for X, players[1] = bet for O
+        uint gameId;
+        bool isBettorOSet;
+        address bettorOnOAddr;
+        bool isBettorXSet;
+        address bettorOnXAddr;
+        bool isBetFilled;
     }
 
 
@@ -100,8 +109,26 @@ contract TicTacToe {
     function getOpenGameIds() public view returns (uint[] gameIds) {
         return openGameIds;
     }
+    
+    function getOpenGames() public view returns (uint[] gameIds, string[] gameNames, string[] ownerNames, string[] playerO, string[] playerX) {
+        
+        gameIds = new uint[](openGameIds.length);
+        gameNames = new string[](openGameIds.length);
+        ownerNames = new string[](openGameIds.length);
+        playerO = new string[](openGameIds.length);
+        playerX = new string[](openGameIds.length);
+        
+        for(uint i=0; i<openGameIds.length; i++) {
+            //Game memory game = games[openGameIds[i]];
+            gameIds[i] = games[openGameIds[i]].gameId;
+            gameNames[i] = games[openGameIds[i]].name;
+            ownerNames[i] = players[games[openGameIds[i]].ownerAddr].name;
+            playerO[i] = players[games[openGameIds[i]].playerOAddr].name;
+            playerX[i] = players[games[openGameIds[i]].playerXAddr].name;
+        }
+    }
 
-    event Joined(string symbol, bool returnValue);
+    event Joined(uint gameId, string symbol, bool returnValue);
     function joinGame(uint gameId, string playerName) public returns (bool){
         Game storage game = games[gameId];
         
@@ -111,18 +138,20 @@ contract TicTacToe {
             game.playerOAddr = msg.sender;
             game.isPlayerOSet = true;
             
-            emit Joined("O", true);
+            emit Joined(game.gameId,"O", true);
             return true;
         }
         if (!game.isPlayerXSet) {
             game.playerXAddr = msg.sender;
             game.isPlayerXSet = true;
             
-            emit Joined("X", true);
+            emit Joined(game.gameId, "X", true);
             return true;
         }
-        emit Joined("game is full", false);
+        emit Joined(game.gameId, "game is full", false);
         return false;
+        
+        //TODO if joined remove from openGameIds
     }
 
     function startGame(uint gameId) public returns (bool) {
