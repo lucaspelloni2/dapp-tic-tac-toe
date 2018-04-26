@@ -33,9 +33,11 @@ contract TicTacToe {
     
     event SuccessEvent(uint ID, bool returnValue);
 
+    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, ONGOING, FINISHED }
+    enum BetState { MISSING_OPPONENT, WITHDRAWN, FIXED, PAYEDOUT }
+    
 
-
-    function TicTacToe() public {
+    constructor() public {
         contractOwner = msg.sender;
     }
 
@@ -55,19 +57,19 @@ contract TicTacToe {
 
     struct Player {
         string name;
+        uint[] gameIds;
     }
     
     struct Game {
         uint gameId;
         string name;
         address ownerAddr;
-        bool isStarted;
-        bool isFinished;
+        
+        GameState state;
+        
         uint moveCounter;
 
-        bool isPlayerOSet;
         address playerOAddr;
-        bool isPlayerXSet;
         address playerXAddr;
         
         address winnerAddr;
@@ -78,6 +80,7 @@ contract TicTacToe {
     struct Bet {
         uint value;
         uint gameId;
+        BetState state;
         bool isBettorOSet;
         address bettorOnOAddr;
         bool isBettorXSet;
@@ -97,9 +100,7 @@ contract TicTacToe {
         myGame.playerOAddr = msg.sender;
         players[msg.sender].name = playerName;
 
-        myGame.isPlayerOSet = true;
-        myGame.isPlayerXSet = false;
-
+        myGame.state = GameState.WAITING_FOR_X;
         openGameIds.push(gameId);
         
         emit SuccessEvent(gameId, true);
@@ -119,12 +120,12 @@ contract TicTacToe {
         playerX = new string[](openGameIds.length);
         
         for(uint i=0; i<openGameIds.length; i++) {
-            //Game memory game = games[openGameIds[i]];
-            gameIds[i] = games[openGameIds[i]].gameId;
-            gameNames[i] = games[openGameIds[i]].name;
-            ownerNames[i] = players[games[openGameIds[i]].ownerAddr].name;
-            playerO[i] = players[games[openGameIds[i]].playerOAddr].name;
-            playerX[i] = players[games[openGameIds[i]].playerXAddr].name;
+            Game memory game = games[openGameIds[i]];
+            gameIds[i] = game.gameId;
+            gameNames[i] = game.name;
+            ownerNames[i] = players[game.ownerAddr].name;
+            playerO[i] = players[game.playerOAddr].name;
+            playerX[i] = players[game.playerXAddr].name;
         }
     }
 
@@ -134,35 +135,73 @@ contract TicTacToe {
         
         players[msg.sender].name = playerName;
         
-        if(!game.isPlayerOSet) {
+        if(game.state == GameState.EMPTY) {
             game.playerOAddr = msg.sender;
-            game.isPlayerOSet = true;
+            game.state = GameState.WAITING_FOR_X;
             
             emit Joined(game.gameId,"O", true);
             return true;
         }
-        if (!game.isPlayerXSet) {
+        else if (game.state == GameState.WAITING_FOR_X) {
             game.playerXAddr = msg.sender;
-            game.isPlayerXSet = true;
+            game.state = GameState.READY;
             
             emit Joined(game.gameId, "X", true);
             return true;
         }
-        emit Joined(game.gameId, "game is full", false);
+        else if (game.state == GameState.WAITING_FOR_O) {
+            game.playerOAddr = msg.sender;
+            game.state = GameState.READY;
+            
+            emit Joined(game.gameId, "O", true);
+            return true;
+        }
+        emit Joined(game.gameId, "not possible to join", false);
         return false;
-        
-        //TODO if joined remove from openGameIds
     }
+    
+    event Left(uint gameId, string symbol, bool returnValue);
+    function leaveGame(uint gameId) public returns (bool){
+        Game storage game = games[gameId];
+
+        if (game.state == GameState.WAITING_FOR_X
+            && game.playerOAddr == msg.sender ) {
+            game.playerOAddr = address(0);
+            game.state = GameState.EMPTY;
+            return true;
+        }
+        else if (game.state == GameState.WAITING_FOR_O
+                && game.playerXAddr == msg.sender ) {
+            game.playerXAddr = address(0);
+            game.state = GameState.EMPTY;
+            return true;
+        }
+        else if (game.state == GameState.READY
+                && game.playerXAddr == msg.sender ) {
+            game.playerXAddr = address(0);
+            game.state = GameState.WAITING_FOR_X;
+            return true;
+        }
+        else if (game.state == GameState.READY
+                && game.playerOAddr == msg.sender ) {
+            game.playerOAddr = address(0);
+            game.state = GameState.WAITING_FOR_O;
+            return true;
+        }
+        emit Left(game.gameId, "not possible to leave", false);
+        return false;
+    }
+    
+    
 
     function startGame(uint gameId) public returns (bool) {
         Game storage game = games[gameId];
         
         if (game.ownerAddr == msg.sender
-            && game.isPlayerXSet
-            && game.isPlayerOSet ) {
+            && game.state == GameState.READY ) {
             
             initialize(gameId);
-            game.isStarted = true;
+            game.state = GameState.ONGOING;
             return true;
         }
         return false;
@@ -228,7 +267,7 @@ contract TicTacToe {
             }
             if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
-                game.isFinished = true;
+                game.state = GameState.FINISHED;
                 return;
             }
         }
@@ -241,7 +280,7 @@ contract TicTacToe {
 
             if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
-                game.isFinished = true;
+                game.state = GameState.FINISHED;
                 return;
             }
         }
@@ -254,7 +293,7 @@ contract TicTacToe {
                 }
                 if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
-                    game.isFinished = true;
+                    game.state = GameState.FINISHED;
                     return;
                 }
             }
@@ -268,14 +307,14 @@ contract TicTacToe {
                 }
                 if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
-                    game.isFinished = true;
+                    game.state = GameState.FINISHED;
                 }
             }
         }
     }
 
     function isGameFinished (uint gameId) public view returns (bool) {
-        return games[gameId].isFinished;
+        return games[gameId].state == GameState.FINISHED;
     }
     function equalStrings (string a, string b) private pure returns (bool){
         return keccak256(a) == keccak256(b);
