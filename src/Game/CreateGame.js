@@ -140,6 +140,10 @@ class CreateGame extends Component {
           if (receipt.blockNumber) {
             transaction.blockNumber = receipt.blockNumber;
             transaction.confirmed = true;
+            localStorage.setItem(
+              'txs',
+              JSON.stringify(this.state.transactions)
+            );
           }
         })
         .catch(reason => {
@@ -246,7 +250,9 @@ class CreateGame extends Component {
             width={400}
             style={{
               boxShadow: 'rgba(168, 221, 224, 0.5) 0px 0px 15px 3px',
-              padding: '1em'
+              padding: '1em',
+              maxHeight: 330,
+              overflow: ' scroll'
             }}
           >
             <Table>
