@@ -1,192 +1,270 @@
 const ContractProps = {
   CONTRACT_ABI: [
     {
-      constant: true,
-      inputs: [
+      "constant": true,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "",
+          "type": "uint256"
         }
       ],
-      name: 'getBoard',
-      outputs: [
+      "name": "games",
+      "outputs": [
         {
-          name: 'boardAsString',
-          type: 'string'
-        }
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'playerName',
-          type: 'string'
-        }
-      ],
-      name: 'joinGame',
-      outputs: [
-        {
-          name: '',
-          type: 'bool'
-        }
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
-    },
-    {
-      constant: true,
-      inputs: [
-        {
-          name: 'gameId',
-          type: 'uint256'
-        }
-      ],
-      name: 'isGameFinished',
-      outputs: [
-        {
-          name: '',
-          type: 'bool'
-        }
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: 'x',
-          type: 'uint256'
+          "name": "name",
+          "type": "string"
         },
         {
-          name: 'y',
-          type: 'uint256'
+          "name": "ownerAddr",
+          "type": "address"
         },
         {
-          name: 'gameId',
-          type: 'uint256'
-        }
-      ],
-      name: 'playMove',
-      outputs: [
-        {
-          name: '',
-          type: 'bool'
-        }
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
-    },
-    {
-      constant: true,
-      inputs: [],
-      name: 'getOpenGameIds',
-      outputs: [
-        {
-          name: 'gameIds',
-          type: 'uint256[]'
-        }
-      ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: 'gameName',
-          type: 'string'
+          "name": "isStarted",
+          "type": "bool"
         },
         {
-          name: 'playerName',
-          type: 'string'
-        }
-      ],
-      name: 'createGame',
-      outputs: [
-        {
-          name: 'gameId',
-          type: 'uint256'
-        }
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
-    },
-    {
-      constant: false,
-      inputs: [
-        {
-          name: 'gameId',
-          type: 'uint256'
-        }
-      ],
-      name: 'startGame',
-      outputs: [
-        {
-          name: '',
-          type: 'bool'
-        }
-      ],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
-    },
-    {
-      inputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'constructor'
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          name: 'ID',
-          type: 'uint256'
+          "name": "isFinished",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'returnValue',
-          type: 'bool'
-        }
-      ],
-      name: 'SuccessEvent',
-      type: 'event'
-    },
-    {
-      anonymous: false,
-      inputs: [
-        {
-          indexed: false,
-          name: 'symbol',
-          type: 'string'
+          "name": "moveCounter",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'returnValue',
-          type: 'bool'
+          "name": "isPlayerOSet",
+          "type": "bool"
+        },
+        {
+          "name": "playerOAddr",
+          "type": "address"
+        },
+        {
+          "name": "isPlayerXSet",
+          "type": "bool"
+        },
+        {
+          "name": "playerXAddr",
+          "type": "address"
+        },
+        {
+          "name": "winnerAddr",
+          "type": "address"
         }
       ],
-      name: 'Joined',
-      type: 'event'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBoard",
+      "outputs": [
+        {
+          "name": "boardAsString",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "playerName",
+          "type": "string"
+        }
+      ],
+      "name": "joinGame",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "isGameFinished",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "name": "y",
+          "type": "uint256"
+        },
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "playMove",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getOpenGameIds",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameName",
+          "type": "string"
+        },
+        {
+          "name": "playerName",
+          "type": "string"
+        }
+      ],
+      "name": "createGame",
+      "outputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "players",
+      "outputs": [
+        {
+          "name": "name",
+          "type": "string"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "startGame",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "inputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "constructor"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "ID",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "returnValue",
+          "type": "bool"
+        }
+      ],
+      "name": "SuccessEvent",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "returnValue",
+          "type": "bool"
+        }
+      ],
+      "name": "Joined",
+      "type": "event"
     }
   ],
 
-  CONTRACT_ADDRESS: '0x41c195BD70e3376133bFa1bB0691D2e1428D4D16'
+  CONTRACT_ADDRESS: '0xE07F1a1601D1F2cfb59696DfB56dCD85ac136103'
 };
 
 export default ContractProps;
