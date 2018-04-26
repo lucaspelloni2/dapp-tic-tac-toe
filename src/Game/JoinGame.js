@@ -17,6 +17,8 @@ const GamesContainer = styled.div`
   box-shadow: 0 0 15px 3px rgba(168, 221, 224, 0.5);
   border-radius: 3px;
   padding: 1em;
+  max-height: 400px;
+  overflow: scroll;
 `;
 
 // const Game = styled.div`
