@@ -99,9 +99,9 @@ class CreateGame extends Component {
 
       myContract.methods
           .createGame(this.state.gameName,localStorage.getItem('username'))
-          .call({from: this.props.account.ethAddress})
-          .then(gameId => {
-              console.log("new game created! " + gameId);
+          .send({from: this.props.account.ethAddress})
+          .on('confirmation', function(gameId){
+            console.log("new game created! " + gameId);
           });
   }
   render() {
