@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import ContractProps from './ContractProps';
 import MetaMaskLogo from './MetamaskLogo';
+import Spinner from './Spinner';
 
 const Container = styled.div`
   display: flex;
@@ -21,10 +22,10 @@ const GamesContainer = styled.div`
   overflow: scroll;
 `;
 
-// const Game = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const GameIcon = styled.svg`
   width: 35px;
@@ -55,7 +56,7 @@ const JoinParagraph = styled.p`
   letter-spacing: 3px;
 `;
 
-const Flex = styled.div`
+const JoinGameButton = styled.div`
   &:hover {
     border: 2px solid #e4751b;
   }
@@ -69,11 +70,17 @@ const Flex = styled.div`
   transition: all 0.2s ease-out;
 `;
 
+const ParentContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
 class JoinGame extends Component {
   constructor() {
     super();
     this.state = {
-      ids: []
+      ids: [],
+      loading: true
     };
   }
   componentDidMount() {
@@ -84,15 +91,38 @@ class JoinGame extends Component {
       .getOpenGameIds()
       .call({from: this.props.account.ethAddress})
       .then(ids => {
-        this.setState({ids: ids});
+        this.setState({ids: ids, loading: false});
       });
   }
+
+  joinGame(id, playerName) {
+    this.props.contract.methods
+      .joinGame(id, playerName)
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        console.log(tx);
+      })
+      .on('receipt', res => {
+        console.log(res);
+      })
+      .on('confirmation', function(gameId) {
+        console.log('new game joined ' + gameId);
+      });
+
+  }
+
   render() {
     return (
+        <ParentContainer>
       <Container>
         <MetaMaskLogo />
         <h1>List of available Games</h1>
         <GamesContainer>
+          {this.state.loading ? (
+            <SpinnerContainer>
+              <Spinner width={60} height={60} />
+            </SpinnerContainer>
+          ) : null}
           <Table>
             <tbody>
               <tr>
@@ -113,7 +143,11 @@ class JoinGame extends Component {
                   </td>
                   <td>renderName</td>
                   <td style={{width: 150}}>
-                    <Flex>
+                    <JoinGameButton
+                      onClick={() => {
+                        this.joinGame(id, localStorage.getItem('username'));
+                      }}
+                    >
                       <GameIcon
                         xmlns="http://www.w3.org/2000/svg"
                         viewBox="0 0 640 512"
@@ -121,7 +155,7 @@ class JoinGame extends Component {
                         <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
                       </GameIcon>
                       <JoinParagraph>Join</JoinParagraph>
-                    </Flex>
+                    </JoinGameButton>
                   </td>
                 </tr>
               ))}
@@ -129,6 +163,7 @@ class JoinGame extends Component {
           </Table>
         </GamesContainer>
       </Container>
+        </ParentContainer>
     );
   }
 }
