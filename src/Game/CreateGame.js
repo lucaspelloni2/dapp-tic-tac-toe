@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import Context from './Context';
 import ContractProps from './ContractProps';
+import Spinner from './Spinner';
 import MetaMaskLogo from './MetamaskLogo';
 
 const CreateGameContainer = styled.div`
@@ -94,12 +95,20 @@ const GameName = styled.p`
   letter-spacing: 1px;
 `;
 
-const TxHash = styled.a`
+const TxHash = styled.a``;
 
+const Status = styled.div``;
+
+const ConfirmedIcon = styled.svg`
+  fill: #00ff31;
+  width: 30px;
+  height: 30px;
 `;
 
-const Status = styled.div`
-
+const PendingIcon = styled.svg`
+  fill: #ff5700;
+  width: 30px;
+  height: 30px;
 `;
 
 class CreateGame extends Component {
@@ -119,7 +128,27 @@ class CreateGame extends Component {
     };
   }
 
-  componentDidMount() {}
+  componentDidMount() {
+    this.fetchData();
+  }
+
+  fetchData() {
+    this.state.transactions.forEach(transaction => {
+      this.props.web3.eth
+        .getTransaction(transaction.tx)
+        .then(receipt => {
+          if (receipt.blockNumber) {
+            transaction.blockNumber = receipt.blockNumber;
+            transaction.confirmed = true;
+          }
+        })
+        .catch(reason => {
+          console.log(reason);
+        });
+    });
+
+    localStorage.setItem('txs', JSON.stringify(this.state.transactions));
+  }
 
   handleChange(e) {
     this.setState({gameName: e.target.value, clicked: false});
@@ -131,7 +160,7 @@ class CreateGame extends Component {
       .createGame(this.state.gameName, localStorage.getItem('username'))
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        CreateGame.addNewTx(tx, this.state.gameName);
+        this.addNewTx(tx, this.state.gameName);
       })
       .on('receipt', res => {
         console.log('receipt', res);
@@ -141,13 +170,14 @@ class CreateGame extends Component {
       });
   }
 
-  static addNewTx(tx, gameName) {
+  addNewTx(tx, gameName) {
     let txs = localStorage.getItem('txs')
       ? JSON.parse(localStorage.getItem('txs'))
       : [];
-    let obj = {tx: tx, confirmed: false, gameName: gameName};
+    let obj = {tx: tx, confirmed: false, gameName: gameName, blockNumber: null};
     txs.push(obj);
-     localStorage.setItem('txs', JSON.stringify(txs));
+    this.setState({transactions: txs});
+    this.fetchData();
   }
 
   render(props) {
@@ -240,9 +270,35 @@ class CreateGame extends Component {
               <tbody>
                 {this.state.transactions.map(transaction => (
                   <tr key={transaction.tx}>
-                      <td><GameName>{transaction.gameName}</GameName></td>
-                      <td><TxHash href={'https://ropsten.etherscan.io/tx/'+transaction.tx} target="_blank">{transaction.tx.toString().substr(0,10)}...</TxHash></td>
-                    <td><Status>pending</Status></td>
+                    <td>
+                      <GameName>{transaction.gameName}</GameName>
+                    </td>
+                    <td>
+                      <TxHash
+                        href={
+                          'https://ropsten.etherscan.io/tx/' + transaction.tx
+                        }
+                        target="_blank"
+                      >
+                        {transaction.tx.toString().substr(0, 14)}...
+                      </TxHash>
+                    </td>
+                    <td>
+                      <Status>
+                        {transaction.blockNumber ? (
+                          <ConfirmedIcon
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 512 512"
+                          >
+                            <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+                          </ConfirmedIcon>
+                        ) : (
+                          <div style={{marginLeft: 20}}>
+                            <Spinner width={30} height={30} />
+                          </div>
+                        )}
+                      </Status>
+                    </td>
                   </tr>
                 ))}
               </tbody>
