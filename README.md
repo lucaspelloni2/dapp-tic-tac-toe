@@ -14,3 +14,5 @@ Archive:
 
 ### Useful link
 Interact with Smart contract through web3.js: https://medium.com/zeonlab-blockchain-semantic-blog/interaction-with-solidity-using-web3-5a4f1a7166f3
+
+Return struct and struct array: https://medium.com/@bryn.bellomy/solidity-tutorial-returning-structs-from-public-functions-e78e48efb378
