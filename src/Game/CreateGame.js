@@ -129,7 +129,7 @@ class CreateGame extends Component {
   }
 
   componentDidMount() {
-      this.fetchData();
+    this.fetchData();
   }
 
   fetchData() {
