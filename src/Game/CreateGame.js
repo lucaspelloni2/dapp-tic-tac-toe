@@ -253,7 +253,8 @@ class CreateGame extends Component {
               boxShadow: 'rgba(168, 221, 224, 0.5) 0px 0px 15px 3px',
               padding: '1em',
               maxHeight: 330,
-              overflow: ' scroll'
+              overflow: ' scroll',
+                backgroundImage: 'radial-gradient(farthest-side at 212% 174px,#0177a2 0,#02b8d4 1200px)'
             }}
           >
             <Table>
