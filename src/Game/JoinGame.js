@@ -20,6 +20,11 @@ const GamesContainer = styled.div`
   padding: 1em;
   max-height: 400px;
   overflow: scroll;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #e2751b 0,
+    #016999 1200px
+  );
 `;
 
 const SpinnerContainer = styled.div`
@@ -108,62 +113,61 @@ class JoinGame extends Component {
       .on('confirmation', function(gameId) {
         console.log('new game joined ' + gameId);
       });
-
   }
 
   render() {
     return (
-        <ParentContainer>
-      <Container>
-        <MetaMaskLogo />
-        <h1>List of available Games</h1>
-        <GamesContainer>
-          {this.state.loading ? (
-            <SpinnerContainer>
-              <Spinner width={60} height={60} />
-            </SpinnerContainer>
-          ) : null}
-          <Table>
-            <tbody>
-              <tr>
-                <th>
-                  <Title>Game Id</Title>
-                </th>
-                <th>
-                  <Title>Game name</Title>
-                </th>
-                <th />
-              </tr>
-            </tbody>
-            <tbody>
-              {this.state.ids.map(id => (
-                <tr key={id}>
-                  <td>
-                    <GameId>{id}</GameId>
-                  </td>
-                  <td>renderName</td>
-                  <td style={{width: 150}}>
-                    <JoinGameButton
-                      onClick={() => {
-                        this.joinGame(id, localStorage.getItem('username'));
-                      }}
-                    >
-                      <GameIcon
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 640 512"
-                      >
-                        <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-                      </GameIcon>
-                      <JoinParagraph>Join</JoinParagraph>
-                    </JoinGameButton>
-                  </td>
+      <ParentContainer>
+        <Container>
+          <MetaMaskLogo />
+          <h1>List of available Games</h1>
+          <GamesContainer>
+            {this.state.loading ? (
+              <SpinnerContainer>
+                <Spinner width={60} height={60} />
+              </SpinnerContainer>
+            ) : null}
+            <Table>
+              <tbody>
+                <tr>
+                  <th>
+                    <Title>Game Id</Title>
+                  </th>
+                  <th>
+                    <Title>Game name</Title>
+                  </th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </GamesContainer>
-      </Container>
-        </ParentContainer>
+              </tbody>
+              <tbody>
+                {this.state.ids.map(id => (
+                  <tr key={id}>
+                    <td>
+                      <GameId>{id}</GameId>
+                    </td>
+                    <td>renderName</td>
+                    <td style={{width: 150}}>
+                      <JoinGameButton
+                        onClick={() => {
+                          this.joinGame(id, localStorage.getItem('username'));
+                        }}
+                      >
+                        <GameIcon
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 640 512"
+                        >
+                          <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                        </GameIcon>
+                        <JoinParagraph>Join</JoinParagraph>
+                      </JoinGameButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </GamesContainer>
+        </Container>
+      </ParentContainer>
     );
   }
 }

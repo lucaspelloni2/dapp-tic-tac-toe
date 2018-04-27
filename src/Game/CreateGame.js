@@ -254,7 +254,8 @@ class CreateGame extends Component {
               padding: '1em',
               maxHeight: 330,
               overflow: ' scroll',
-                backgroundImage: 'radial-gradient(farthest-side at 212% 174px,#0177a2 0,#02b8d4 1200px)'
+              backgroundImage:
+                'radial-gradient(farthest-side at 212% 174px,#0177a2 0,#02b8d4 1200px)'
             }}
           >
             <Table>
