@@ -1,10 +1,9 @@
 Welcome to the tic-tac-toe readme!
 
 ### current Smart Contract:
-[https://ropsten.etherscan.io/address/0xe07f1a1601d1f2cfb59696dfb56dcd85ac136103](https://ropsten.etherscan.io/address/0xe07f1a1601d1f2cfb59696dfb56dcd85ac136103)
 
 Address:
-`0xe07f1a1601d1f2cfb59696dfb56dcd85ac136103`
+`0xc6ce45fd3272e9b8285cc43299746a9cadcc1cc8`
 
 
 

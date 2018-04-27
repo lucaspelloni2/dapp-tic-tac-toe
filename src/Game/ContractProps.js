@@ -63,6 +63,49 @@ const ContractProps = {
       "constant": true,
       "inputs": [
         {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bets",
+      "outputs": [
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "isBettorOSet",
+          "type": "bool"
+        },
+        {
+          "name": "bettorOnOAddr",
+          "type": "address"
+        },
+        {
+          "name": "isBettorXSet",
+          "type": "bool"
+        },
+        {
+          "name": "bettorOnXAddr",
+          "type": "address"
+        },
+        {
+          "name": "isBetFilled",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "gameId",
           "type": "uint256"
         }
@@ -223,6 +266,36 @@ const ContractProps = {
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "getOpenGames",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "gameNames",
+          "type": "string[]"
+        },
+        {
+          "name": "ownerNames",
+          "type": "string[]"
+        },
+        {
+          "name": "playerO",
+          "type": "string[]"
+        },
+        {
+          "name": "playerX",
+          "type": "string[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "inputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -250,6 +323,11 @@ const ContractProps = {
       "inputs": [
         {
           "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
           "name": "symbol",
           "type": "string"
         },
@@ -264,7 +342,7 @@ const ContractProps = {
     }
   ],
 
-  CONTRACT_ADDRESS: '0xE07F1a1601D1F2cfb59696DfB56dCD85ac136103'
+  CONTRACT_ADDRESS: '0xc6ce45fd3272e9b8285cc43299746a9cadcc1cc8'
 };
 
 export default ContractProps;
