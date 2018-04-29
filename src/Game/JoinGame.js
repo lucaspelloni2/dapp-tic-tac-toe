@@ -93,7 +93,7 @@ class JoinGame extends Component {
   }
   getAvailableGames() {
     this.props.contract.methods
-      .getOpenGameIds()
+      .getGameIds()
       .call({from: this.props.account.ethAddress})
       .then(ids => {
         this.setState({ids: ids, loading: false});
