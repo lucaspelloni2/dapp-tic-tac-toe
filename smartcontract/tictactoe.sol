@@ -84,6 +84,20 @@ contract TicTacToe {
         return openGameIds;
     }
     
+    function getGameIds() public view returns (uint[] gameIds) {
+        return openGameIds;
+    }
+    
+    function getGameIdsWithState(GameState state) public view returns (uint[] gameIds) {
+        uint[] memory ids;
+        uint index = 0;
+        for (uint i=0; i < openGameIds.length; i++) {
+            if (games[openGameIds[i]].state == state)
+                ids[index] = openGameIds[i];
+        }
+        return ids;
+    }
+    
     /*function getOpenGames() public view returns (uint[] gameIds, string[] gameNames, string[] ownerNames, string[] playerO, string[] playerX) {
         
         gameIds = new uint[](openGameIds.length);
