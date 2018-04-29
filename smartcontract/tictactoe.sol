@@ -228,8 +228,8 @@ contract TicTacToe {
             && game.board[y][x] == SquareState.EMPTY ) {        //equalStrings(game.board[y][x],"")) {
             game.board[y][x] = SquareState.X;
             game.moveCounter += 1;
-            checkForWinner(x, y, gameId, game.playerXAddr);
             game.state = GameState.O_HAS_TURN;
+            checkForWinner(x, y, gameId, game.playerXAddr);
             return true;
         }
         else if (game.state == GameState.O_HAS_TURN
@@ -238,8 +238,8 @@ contract TicTacToe {
                 && game.board[y][x] == SquareState.EMPTY ) {    //equalStrings(game.board[y][x], "")) {
             game.board[y][x] = SquareState.O;
             game.moveCounter += 1;
-            checkForWinner(x, y, gameId, game.playerOAddr);
             game.state = GameState.X_HAS_TURN;
+            checkForWinner(x, y, gameId, game.playerOAddr);
             return true;
         }
         return false;
@@ -253,14 +253,14 @@ contract TicTacToe {
         }*/
 
         SquareState[boardSize][boardSize] memory board = game.board;
-        SquareState symbol = game.board[x][y];
+        SquareState symbol = game.board[y][x];
 
         //check column
         for (uint i = 0; i < boardSize; i++) {
             if (board[i][i] != symbol)  {         //!equalStrings(board[i][i], symbol)) {
-                break;
+                //break;
             }
-            if(i == (boardSize -1)) {
+            else if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
                 return;
@@ -270,10 +270,10 @@ contract TicTacToe {
         //check row
         for (i = 0; i < boardSize; i++) {
             if(board[i][y] != symbol) {
-                break;
+                //break;
             }
 
-            if(i == (boardSize -1)) {
+            else if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
                 return;
@@ -284,9 +284,9 @@ contract TicTacToe {
         if(x == y) {
             for (i = 0; i < boardSize; i++) {
                 if(board[i][i] != symbol) {
-                    break;
+                    //break;
                 }
-                if(i == (boardSize -1)) {
+                else if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
                     return;
@@ -298,9 +298,9 @@ contract TicTacToe {
         if(x + y == (boardSize -1)) {
             for (i = 0; i < boardSize; i++) {
                 if(board[x][boardSize-1-1] != symbol) {            //!equalStrings(board[x][(boardSize-1) - 1], symbol)) {
-                    break;
+                    //break;
                 }
-                if(i == (boardSize -1)) {
+                else if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
                     return;
