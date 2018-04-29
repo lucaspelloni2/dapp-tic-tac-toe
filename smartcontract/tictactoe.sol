@@ -4,8 +4,6 @@ pragma solidity ^0.4.23;
 contract TicTacToe {
     uint constant boardSize = 3;
     address contractOwner;
-    
-    event SuccessEvent(uint ID, bool returnValue);
 
     enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
     enum BetState { MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
@@ -63,7 +61,7 @@ contract TicTacToe {
         bool isBetFilled;
     }
 
-
+    event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
     function createGame(string gameName, string playerName) public returns (uint gameId) {
         gameId = counter++;
         Game storage myGame = games[gameId];
@@ -78,7 +76,7 @@ contract TicTacToe {
         myGame.state = GameState.WAITING_FOR_X;
         openGameIds.push(gameId);
         
-        emit SuccessEvent(gameId, true);
+        emit GameCreated(true, gameId, myGame.state, "created");
         return gameId;
     }
 
@@ -315,7 +313,7 @@ contract TicTacToe {
                 
     }
     
-    function getGameState(SquareState symbol) private returns (GameState state) {
+    function getGameState(SquareState symbol) private pure returns (GameState state) {
         if (symbol == SquareState.X)
             return GameState.WINNER_X;
         else
