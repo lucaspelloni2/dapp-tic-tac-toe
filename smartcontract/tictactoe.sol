@@ -78,10 +78,6 @@ contract TicTacToe {
         emit GameCreated(true, gameId, myGame.state, "created");
         return gameId;
     }
-
-    function getOpenGameIds() public view returns (uint[] gameIds) {
-        return openGameIds;
-    }
     
     function getGameIds() public view returns (uint[] gameIds) {
         return openGameIds;
