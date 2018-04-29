@@ -309,7 +309,7 @@ contract TicTacToe {
         }
         
         //check for draw
-        if (game.moveCounter == 2*boardSize) {
+        if (game.moveCounter == boardSize*boardSize) {
             game.state = GameState.DRAW;
         }
                 
