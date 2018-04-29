@@ -227,6 +227,7 @@ contract TicTacToe {
             game.board[y][x] = SquareState.X;
             game.moveCounter += 1;
             checkForWinner(x, y, gameId, game.playerXAddr);
+            game.state = GameState.O_HAS_TURN;
             return true;
         }
         else if (game.state == GameState.O_HAS_TURN
@@ -236,6 +237,7 @@ contract TicTacToe {
             game.board[y][x] = SquareState.O;
             game.moveCounter += 1;
             checkForWinner(x, y, gameId, game.playerOAddr);
+            game.state = GameState.X_HAS_TURN;
             return true;
         }
         return false;
