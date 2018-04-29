@@ -3,11 +3,12 @@ Welcome to the tic-tac-toe readme!
 ### current Smart Contract:
 
 Address:
-`0x5220a7ae2143f780F72486EDd4C072a455ff3Ba9`
+`0xC745cF52Dc3C0F983C3785949f7A658C674F1811`
 
 
 
 Archive:
+`0x5220a7ae2143f780F72486EDd4C072a455ff3Ba9`
 `0xc6ce45fd3272e9b8285cc43299746a9cadcc1cc8`
 `0x41c195bd70e3376133bfa1bb0691d2e1428d4d16`
 
