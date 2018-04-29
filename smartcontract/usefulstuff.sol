@@ -22,3 +22,10 @@
         for (i = 0; i < _bb.length; i++) bab[k++] = _bb[i];
         return string(bab);
     }
+	
+	
+	
+    function equalStrings (string a, string b) private pure returns (bool){
+        return keccak256(a) == keccak256(b);
+    }
+    

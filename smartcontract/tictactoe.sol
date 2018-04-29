@@ -335,10 +335,4 @@ contract TicTacToe {
         else
             return GameState.WINNER_O;
     }
-    
-    function equalStrings (string a, string b) private pure returns (bool){
-        return keccak256(a) == keccak256(b);
-    }
-    
-
 }
