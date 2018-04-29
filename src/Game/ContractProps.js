@@ -23,28 +23,16 @@ const ContractProps = {
           "type": "address"
         },
         {
-          "name": "isStarted",
-          "type": "bool"
-        },
-        {
-          "name": "isFinished",
-          "type": "bool"
+          "name": "state",
+          "type": "uint8"
         },
         {
           "name": "moveCounter",
           "type": "uint256"
         },
         {
-          "name": "isPlayerOSet",
-          "type": "bool"
-        },
-        {
           "name": "playerOAddr",
           "type": "address"
-        },
-        {
-          "name": "isPlayerXSet",
-          "type": "bool"
         },
         {
           "name": "playerXAddr",
@@ -78,6 +66,10 @@ const ContractProps = {
           "type": "uint256"
         },
         {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
           "name": "isBettorOSet",
           "type": "bool"
         },
@@ -103,6 +95,25 @@ const ContractProps = {
       "type": "function"
     },
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "leaveGame",
+      "outputs": [
+        {
+          "name": "",
+          "type": "bool"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": true,
       "inputs": [
         {
@@ -113,8 +124,8 @@ const ContractProps = {
       "name": "getBoard",
       "outputs": [
         {
-          "name": "boardAsString",
-          "type": "string"
+          "name": "",
+          "type": "uint8[9]"
         }
       ],
       "payable": false,
@@ -145,37 +156,18 @@ const ContractProps = {
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
       "inputs": [
         {
           "name": "gameId",
           "type": "uint256"
-        }
-      ],
-      "name": "isGameFinished",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
+        },
         {
           "name": "x",
           "type": "uint256"
         },
         {
           "name": "y",
-          "type": "uint256"
-        },
-        {
-          "name": "gameId",
           "type": "uint256"
         }
       ],
@@ -266,36 +258,6 @@ const ContractProps = {
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [],
-      "name": "getOpenGames",
-      "outputs": [
-        {
-          "name": "gameIds",
-          "type": "uint256[]"
-        },
-        {
-          "name": "gameNames",
-          "type": "string[]"
-        },
-        {
-          "name": "ownerNames",
-          "type": "string[]"
-        },
-        {
-          "name": "playerO",
-          "type": "string[]"
-        },
-        {
-          "name": "playerX",
-          "type": "string[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "inputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
@@ -339,10 +301,32 @@ const ContractProps = {
       ],
       "name": "Joined",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "returnValue",
+          "type": "bool"
+        }
+      ],
+      "name": "Left",
+      "type": "event"
     }
   ],
 
-  CONTRACT_ADDRESS: '0xc6ce45fd3272e9b8285cc43299746a9cadcc1cc8'
+  CONTRACT_ADDRESS: '0x5220a7ae2143f780F72486EDd4C072a455ff3Ba9'
 };
 
 export default ContractProps;
