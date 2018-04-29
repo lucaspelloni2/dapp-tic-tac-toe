@@ -5,7 +5,7 @@ contract TicTacToe {
     uint constant boardSize = 3;
     address contractOwner;
 
-    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
+    enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
     enum BetState { MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
     enum SquareState { EMPTY, X, O }
     
@@ -69,11 +69,10 @@ contract TicTacToe {
         myGame.gameId = gameId;
         myGame.name = gameName;
         myGame.ownerAddr = msg.sender;
+        myGame.state = GameState.EMPTY;
 
-        myGame.playerOAddr = msg.sender;
-        players[msg.sender].name = playerName;
-
-        myGame.state = GameState.WAITING_FOR_X;
+        joinGame(gameId, playerName);
+        
         openGameIds.push(gameId);
         
         emit GameCreated(true, gameId, myGame.state, "created");
@@ -118,9 +117,12 @@ contract TicTacToe {
         return (gameIds, gameNames, ownerNames, playerO, playerX);
     }*/
 
-    event Joined(uint gameId, string symbol, bool returnValue);
-    function joinGame(uint gameId, string playerName) public returns (bool){
+    event Joined(bool wasSuccess, uint gameId, GameState state, string playerName, string symbol);
+    function joinGame(uint gameId, string playerName) public {
         Game storage game = games[gameId];
+        
+        require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
+        require(game.state < GameState.READY, "The game is full." );
         
         players[msg.sender].name = playerName;
         
@@ -128,74 +130,72 @@ contract TicTacToe {
             game.playerOAddr = msg.sender;
             game.state = GameState.WAITING_FOR_X;
             
-            emit Joined(game.gameId,"O", true);
-            return true;
+            emit Joined(true, game.gameId,game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
-                //&& game.playerOAddr != msg.sender) {
+            //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+            
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
             
-            emit Joined(game.gameId, "X", true);
-            return true;
+            emit Joined(true, game.gameId,game.state, playerName, "X");
         }
         else if (game.state == GameState.WAITING_FOR_O) {
-                //&& game.playerXAddr != msg.sender) {
+            //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
+            
             game.playerOAddr = msg.sender;
             game.state = GameState.READY;
             
-            emit Joined(game.gameId, "O", true);
-            return true;
+            emit Joined(true, game.gameId,game.state, playerName, "O");
         }
-        emit Joined(game.gameId, "not possible to join", false);
-        return false;
     }
     
-    event Left(uint gameId, string symbol, bool returnValue);
-    function leaveGame(uint gameId) public returns (bool){
+    event Left(bool wasSuccess, uint gameId, GameState state, string playerName, string symbol);
+    function leaveGame(uint gameId) public {
         Game storage game = games[gameId];
+        
+        require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
+        require(game.state <= GameState.READY, "The game is already started." );
+        require(game.playerOAddr == msg.sender || game.playerXAddr == msg.sender, "Player is not part of this game.");
 
         if (game.state == GameState.WAITING_FOR_X
             && game.playerOAddr == msg.sender ) {
             game.playerOAddr = address(0);
             game.state = GameState.EMPTY;
-            return true;
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
         }
         else if (game.state == GameState.WAITING_FOR_O
                 && game.playerXAddr == msg.sender ) {
             game.playerXAddr = address(0);
             game.state = GameState.EMPTY;
-            return true;
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
         }
         else if (game.state == GameState.READY
                 && game.playerXAddr == msg.sender ) {
             game.playerXAddr = address(0);
             game.state = GameState.WAITING_FOR_X;
-            return true;
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
         }
         else if (game.state == GameState.READY
                 && game.playerOAddr == msg.sender ) {
             game.playerOAddr = address(0);
             game.state = GameState.WAITING_FOR_O;
-            return true;
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
         }
-        emit Left(game.gameId, "not possible to leave", false);
-        return false;
     }
-    
-    
 
-    function startGame(uint gameId) public returns (bool) {
+    event GameStarted(bool wasSuccess, uint gameId, GameState state, string message);
+    function startGame(uint gameId) public {
         Game storage game = games[gameId];
         
-        if (game.ownerAddr == msg.sender
-            && game.state == GameState.READY ) {
-            
-            initialize(gameId);
-            game.state = GameState.X_HAS_TURN;
-            return true;
-        }
-        return false;
+        require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
+        require(game.state == GameState.READY, "Not enough players to start the game.");
+        require(game.ownerAddr == msg.sender, "Only the game owner can start the game.");
+        
+        initialize(gameId);
+        game.state = GameState.X_HAS_TURN;
+        
+        emit GameStarted(true, gameId, game.state, "game has been started.");
     }
     
     function initialize(uint gameId) private {
@@ -232,29 +232,35 @@ contract TicTacToe {
         return boardRep;
     }
 
-    function playMove(uint gameId, uint x, uint y) public returns (bool) {
+    event MoveMade(bool success, uint gameId, GameState state, uint x, uint y, string symbol);
+    function playMove(uint gameId, uint x, uint y) public {
         Game storage game = games[gameId];
-        if (game.state == GameState.X_HAS_TURN
-            && game.playerXAddr == msg.sender
-        //&& game.moveCounter % 2 == 0   // host's turn?
-            && game.board[y][x] == SquareState.EMPTY ) {        //equalStrings(game.board[y][x],"")) {
+        
+        require(game.state >= GameState.X_HAS_TURN, "The game is not started yet.");
+        require(game.state < GameState.WINNER_X, "The game is already finished.");
+        
+        if (game.state == GameState.X_HAS_TURN) {
+            require(game.playerXAddr == msg.sender, "Sender not equal player X");
+            require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
+            
             game.board[y][x] = SquareState.X;
             game.moveCounter += 1;
             game.state = GameState.O_HAS_TURN;
             checkForWinner(x, y, gameId, game.playerXAddr);
-            return true;
+            
+            emit MoveMade(true, gameId, game.state, x, y, "X");
         }
-        else if (game.state == GameState.O_HAS_TURN
-                && game.playerOAddr == msg.sender
-                //&& game.moveCounter % 2 == 1   // guest's turn?
-                && game.board[y][x] == SquareState.EMPTY ) {    //equalStrings(game.board[y][x], "")) {
+        else {
+            require(game.playerOAddr == msg.sender, "Sender not equal player O");
+            require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
+            
             game.board[y][x] = SquareState.O;
             game.moveCounter += 1;
             game.state = GameState.X_HAS_TURN;
             checkForWinner(x, y, gameId, game.playerOAddr);
-            return true;
+            
+            emit MoveMade(true, gameId, game.state, x, y, "O");
         }
-        return false;
     }
 
     function checkForWinner(uint x, uint y, uint gameId, address currentPlayer) private {
