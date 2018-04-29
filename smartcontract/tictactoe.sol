@@ -120,6 +120,7 @@ contract TicTacToe {
             return true;
         }
         else if (game.state == GameState.WAITING_FOR_X) {
+                //&& game.playerOAddr != msg.sender) {
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
             
@@ -127,6 +128,7 @@ contract TicTacToe {
             return true;
         }
         else if (game.state == GameState.WAITING_FOR_O) {
+                //&& game.playerXAddr != msg.sender) {
             game.playerOAddr = msg.sender;
             game.state = GameState.READY;
             
