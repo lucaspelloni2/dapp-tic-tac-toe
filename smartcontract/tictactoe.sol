@@ -7,7 +7,7 @@ contract TicTacToe {
     
     event SuccessEvent(uint ID, bool returnValue);
 
-    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, FINISHED }
+    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
     enum BetState { MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
     enum SquareState { EMPTY, X, O }
     
@@ -246,7 +246,7 @@ contract TicTacToe {
     }
 
     function checkForWinner(uint x, uint y, uint gameId, address currentPlayer) private {
-        Game memory game = games[gameId];
+        Game storage game = games[gameId];
         
         /*if(game.moveCounter < 2*boardSize -1) {           //what is reason for that?
             return;
@@ -262,7 +262,7 @@ contract TicTacToe {
             }
             if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
-                game.state = GameState.FINISHED;
+                game.state = getGameState(symbol);
                 return;
             }
         }
@@ -275,7 +275,7 @@ contract TicTacToe {
 
             if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
-                game.state = GameState.FINISHED;
+                game.state = getGameState(symbol);
                 return;
             }
         }
@@ -288,7 +288,7 @@ contract TicTacToe {
                 }
                 if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
-                    game.state = GameState.FINISHED;
+                    game.state = getGameState(symbol);
                     return;
                 }
             }
@@ -302,19 +302,26 @@ contract TicTacToe {
                 }
                 if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
-                    game.state = GameState.FINISHED;
+                    game.state = getGameState(symbol);
+                    return;
                 }
             }
         }
         
         //check for draw
-        if (game.moveCounter == 2*boardSize) {}
+        if (game.moveCounter == 2*boardSize) {
+            game.state = GameState.DRAW;
+        }
                 
     }
-
-    function isGameFinished (uint gameId) public view returns (bool) {
-        return games[gameId].state == GameState.FINISHED;
+    
+    function getGameState(SquareState symbol) private returns (GameState state) {
+        if (symbol == SquareState.X)
+            return GameState.WINNER_X;
+        else
+            return GameState.WINNER_O;
     }
+    
     function equalStrings (string a, string b) private pure returns (bool){
         return keccak256(a) == keccak256(b);
     }
