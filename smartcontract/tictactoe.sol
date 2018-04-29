@@ -1,40 +1,15 @@
 pragma solidity ^0.4.23;
-pragma experimental ABIEncoderV2;
-
-library Strings {
-
-    function concat(string _base, string _value) internal pure returns (string) {
-        bytes memory _baseBytes = bytes(_base);
-        bytes memory _valueBytes = bytes(_value);
-
-        string memory _tmpValue = new string(_baseBytes.length + _valueBytes.length);
-        bytes memory _newValue = bytes(_tmpValue);
-
-        uint i;
-        uint j;
-
-        for(i=0; i<_baseBytes.length; i++) {
-            _newValue[j++] = _baseBytes[i];
-        }
-
-        for(i=0; i<_valueBytes.length; i++) {
-            _newValue[j++] = _valueBytes[i++];
-        }
-
-        return string(_newValue);
-    }
-
-}
+//pragma experimental ABIEncoderV2;
 
 contract TicTacToe {
-    using Strings for string;
     uint constant boardSize = 3;
     address contractOwner;
     
     event SuccessEvent(uint ID, bool returnValue);
 
-    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, ONGOING, FINISHED }
-    enum BetState { MISSING_OPPONENT, WITHDRAWN, FIXED, PAYEDOUT }
+    enum GameState { EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, FINISHED }
+    enum BetState { MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
+    enum SquareState { EMPTY, X, O }
     
 
     constructor() public {
@@ -73,8 +48,8 @@ contract TicTacToe {
         address playerXAddr;
         
         address winnerAddr;
-
-        string[boardSize][boardSize] board;
+        
+        SquareState[boardSize][boardSize] board;
     }
 
     struct Bet {
@@ -111,7 +86,7 @@ contract TicTacToe {
         return openGameIds;
     }
     
-    function getOpenGames() public view returns (uint[] gameIds, string[] gameNames, string[] ownerNames, string[] playerO, string[] playerX) {
+    /*function getOpenGames() public view returns (uint[] gameIds, string[] gameNames, string[] ownerNames, string[] playerO, string[] playerX) {
         
         gameIds = new uint[](openGameIds.length);
         gameNames = new string[](openGameIds.length);
@@ -127,7 +102,9 @@ contract TicTacToe {
             playerO[i] = players[game.playerOAddr].name;
             playerX[i] = players[game.playerXAddr].name;
         }
-    }
+        
+        return (gameIds, gameNames, ownerNames, playerO, playerX);
+    }*/
 
     event Joined(uint gameId, string symbol, bool returnValue);
     function joinGame(uint gameId, string playerName) public returns (bool){
@@ -201,68 +178,82 @@ contract TicTacToe {
             && game.state == GameState.READY ) {
             
             initialize(gameId);
-            game.state = GameState.ONGOING;
+            game.state = GameState.X_HAS_TURN;
             return true;
         }
         return false;
     }
     
     function initialize(uint gameId) private {
+        SquareState[boardSize][boardSize] storage board = games[gameId].board;
         for (uint y = 0; y < boardSize; y++) {
             for (uint x = 0; x < boardSize; x++) {
-                games[gameId].board[y][x] = "";
-                //TODO Ich glaube, dass ein string in Solidity immer mit "" initialisiert wird, da es kein null gibt, was meint Blockchain Entrepreneur Lucas dazu?
+                board[y][x] = SquareState.EMPTY;
             }
         }
-        //openGameIds.push(gameId); -> already opened at createGame
     }
     
-    function getBoard(uint gameId) public view returns (string boardAsString) { // apparently no string array can be returned yet in solidity
-        string storage boardRepresentation;
-        for(uint i = 0; i < boardSize; i++) {
-            for(uint j = 0; j < boardSize; j++) {
-                boardRepresentation.concat(games[gameId].board[i][j]);
+    /*function getBoard(uint gameId) public view returns (bytes boardRep) { // apparently no string array can be returned yet in solidity
+        string[boardSize][boardSize] storage board = games[gameId].board;
+        string memory boardRepresentation;
+        for(uint y = 0; y < boardSize; y++) {
+            for(uint x = 0; x < boardSize; x++) {
+                boardRepresentation = strConcat(boardRepresentation,board[y][x]);
             }
-            boardRepresentation.concat("%n");
+            boardRepresentation = strConcat(boardRepresentation,"\n");
         }
-        return boardRepresentation;
+        return bytes(boardRepresentation);
+        
+    }*/
+    
+    function getBoard(uint gameId) public view returns (SquareState[boardSize*boardSize]) { // apparently no string array can be returned yet in solidity
+        SquareState[boardSize][boardSize] memory board = games[gameId].board;
+        SquareState[boardSize*boardSize] memory boardRep;
+        uint i=0;
+        for(uint y = 0; y < boardSize; y++) {
+            for(uint x = 0; x < boardSize; x++) {
+                boardRep[i++] = board[y][x];
+            }
+        }
+        return boardRep;
     }
 
-    function playMove(uint x, uint y, uint gameId) public returns (bool) {
+    function playMove(uint gameId, uint x, uint y) public returns (bool) {
         Game storage game = games[gameId];
-        if(game.playerXAddr == msg.sender
-        && game.moveCounter % 2 == 0   // host's turn?
-        && equalStrings(game.board[x][y],"")){
-            game.board[x][y] = "X";
+        if (game.state == GameState.X_HAS_TURN
+            && game.playerXAddr == msg.sender
+        //&& game.moveCounter % 2 == 0   // host's turn?
+            && game.board[y][x] == SquareState.EMPTY ) {        //equalStrings(game.board[y][x],"")) {
+            game.board[y][x] = SquareState.X;
             game.moveCounter += 1;
             checkForWinner(x, y, gameId, game.playerXAddr);
-
             return true;
         }
-        else if(game.playerOAddr == msg.sender
-        && game.moveCounter % 2 == 1   // guest's turn?
-        && equalStrings(game.board[x][y], "")) {
-            game.board[x][y] = "O";
+        else if (game.state == GameState.O_HAS_TURN
+                && game.playerOAddr == msg.sender
+                //&& game.moveCounter % 2 == 1   // guest's turn?
+                && game.board[y][x] == SquareState.EMPTY ) {    //equalStrings(game.board[y][x], "")) {
+            game.board[y][x] = SquareState.O;
             game.moveCounter += 1;
             checkForWinner(x, y, gameId, game.playerOAddr);
-            
             return true;
         }
         return false;
     }
 
     function checkForWinner(uint x, uint y, uint gameId, address currentPlayer) private {
-        Game storage game = games[gameId];
-        if(game.moveCounter < 2*boardSize -1) {
+        Game memory game = games[gameId];
+        
+        /*if(game.moveCounter < 2*boardSize -1) {           //what is reason for that?
             return;
-        }
+        }*/
 
-        string [boardSize][boardSize] storage board = game.board;
-        string storage symbol = game.board[x][y];
+        SquareState[boardSize][boardSize] memory board = game.board;
+        SquareState symbol = game.board[x][y];
 
         //check column
         for (uint i = 0; i < boardSize; i++) {
-            if(!equalStrings(game.board[i][i], symbol)) {
+            if (board[i][i] != symbol)  {         //!equalStrings(board[i][i], symbol)) {
                 break;
             }
             if(i == (boardSize -1)) {
@@ -273,8 +264,8 @@ contract TicTacToe {
         }
 
         //check row
-        for ( i = 0; i < boardSize; i++) {
-            if(!equalStrings(game.board[i][y], symbol)) {
+        for (i = 0; i < boardSize; i++) {
+            if(board[i][y] != symbol) {
                 break;
             }
 
@@ -288,7 +279,7 @@ contract TicTacToe {
         //check diagonal
         if(x == y) {
             for (i = 0; i < boardSize; i++) {
-                if(!equalStrings(game.board[i][i], symbol)) {
+                if(board[i][i] != symbol) {
                     break;
                 }
                 if(i == (boardSize -1)) {
@@ -302,7 +293,7 @@ contract TicTacToe {
         // check anti diagonal
         if(x + y == (boardSize -1)) {
             for (i = 0; i < boardSize; i++) {
-                if(!equalStrings(game.board[x][(boardSize-1) - 1], symbol)) {
+                if(board[x][boardSize-1-1] != symbol) {            //!equalStrings(board[x][(boardSize-1) - 1], symbol)) {
                     break;
                 }
                 if(i == (boardSize -1)) {
@@ -311,6 +302,10 @@ contract TicTacToe {
                 }
             }
         }
+        
+        //check for draw
+        if (game.moveCounter == 2*boardSize) {}
+                
     }
 
     function isGameFinished (uint gameId) public view returns (bool) {
@@ -319,4 +314,6 @@ contract TicTacToe {
     function equalStrings (string a, string b) private pure returns (bool){
         return keccak256(a) == keccak256(b);
     }
+    
+
 }
