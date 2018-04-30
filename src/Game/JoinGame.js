@@ -109,9 +109,14 @@ class JoinGame extends Component {
       })
       .on('receipt', res => {
         console.log(res);
+        if (res.status == "0x1")
+          console.log(res.events.Joined.returnValues[3] + " joined game " + res.events.Joined.returnValues[1] + " and has symbol " + res.events.Joined.returnValues[4]);
+        else
+          console.log("not possible to join");
       })
-      .on('confirmation', function(gameId) {
-        console.log('new game joined ' + gameId);
+      .on('confirmation', function(confirmationNr) {
+        // is returned for the first 24 block confirmations
+        //console.log('new game joined ' + confirmationNr);
       });
   }
 
