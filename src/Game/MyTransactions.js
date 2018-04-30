@@ -73,10 +73,7 @@ class MyTransactions extends Component {
           if (receipt.blockNumber) {
             transaction.blockNumber = receipt.blockNumber;
             transaction.confirmed = true;
-            localStorage.setItem(
-              'txs',
-              JSON.stringify(this.state.transactions)
-            );
+            localStorage.setItem('txs', JSON.stringify(transactions));
           }
         })
         .catch(reason => {
