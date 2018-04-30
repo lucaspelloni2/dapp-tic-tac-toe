@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import ContractProps from './ContractProps';
 import MetaMaskLogo from './MetamaskLogo';
+import Spinner from './Spinner';
 
 const Container = styled.div`
   display: flex;
@@ -19,12 +20,17 @@ const GamesContainer = styled.div`
   padding: 1em;
   max-height: 400px;
   overflow: scroll;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #e2751b 0,
+    #016999 1200px
+  );
 `;
 
-// const Game = styled.div`
-//   display: flex;
-//   align-items: center;
-// `;
+const SpinnerContainer = styled.div`
+  display: flex;
+  justify-content: center;
+`;
 
 const GameIcon = styled.svg`
   width: 35px;
@@ -55,7 +61,7 @@ const JoinParagraph = styled.p`
   letter-spacing: 3px;
 `;
 
-const Flex = styled.div`
+const JoinGameButton = styled.div`
   &:hover {
     border: 2px solid #e4751b;
   }
@@ -69,11 +75,17 @@ const Flex = styled.div`
   transition: all 0.2s ease-out;
 `;
 
+const ParentContainer = styled.div`
+  display: flex;
+  justify-content: space-evenly;
+`;
+
 class JoinGame extends Component {
   constructor() {
     super();
     this.state = {
-      ids: []
+      ids: [],
+      loading: true
     };
   }
   componentDidMount() {
@@ -81,54 +93,86 @@ class JoinGame extends Component {
   }
   getAvailableGames() {
     this.props.contract.methods
-      .getOpenGameIds()
+      .getGameIds()
       .call({from: this.props.account.ethAddress})
       .then(ids => {
-        this.setState({ids: ids});
+        this.setState({ids: ids, loading: false});
       });
   }
+
+  joinGame(id, playerName) {
+    this.props.contract.methods
+      .joinGame(id, playerName)
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        console.log(tx);
+      })
+      .on('receipt', res => {
+        console.log(res);
+        if (res.status === "0x1")
+          console.log(res.events.Joined.returnValues[3] + " joined game " + res.events.Joined.returnValues[1] + " and has symbol " + res.events.Joined.returnValues[4]);
+        else
+          console.log("not possible to join");
+      })
+      .on('confirmation', function(confirmationNr) {
+        // is returned for the first 24 block confirmations
+        //console.log('new game joined ' + confirmationNr);
+      });
+  }
+
   render() {
     return (
-      <Container>
-        <MetaMaskLogo />
-        <h1>List of available Games</h1>
-        <GamesContainer>
-          <Table>
-            <tbody>
-              <tr>
-                <th>
-                  <Title>Game Id</Title>
-                </th>
-                <th>
-                  <Title>Game name</Title>
-                </th>
-                <th />
-              </tr>
-            </tbody>
-            <tbody>
-              {this.state.ids.map(id => (
-                <tr key={id}>
-                  <td>
-                    <GameId>{id}</GameId>
-                  </td>
-                  <td>renderName</td>
-                  <td style={{width: 150}}>
-                    <Flex>
-                      <GameIcon
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 640 512"
-                      >
-                        <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-                      </GameIcon>
-                      <JoinParagraph>Join</JoinParagraph>
-                    </Flex>
-                  </td>
+      <ParentContainer>
+        <Container>
+          <MetaMaskLogo />
+          <h1>List of available Games</h1>
+          <GamesContainer>
+            {this.state.loading ? (
+              <SpinnerContainer>
+                <Spinner width={60} height={60} />
+              </SpinnerContainer>
+            ) : null}
+            <Table>
+              <tbody>
+                <tr>
+                  <th>
+                    <Title>Game Id</Title>
+                  </th>
+                  <th>
+                    <Title>Game name</Title>
+                  </th>
+                  <th />
                 </tr>
-              ))}
-            </tbody>
-          </Table>
-        </GamesContainer>
-      </Container>
+              </tbody>
+              <tbody>
+                {this.state.ids.map(id => (
+                  <tr key={id}>
+                    <td>
+                      <GameId>{id}</GameId>
+                    </td>
+                    <td>renderName</td>
+                    <td style={{width: 150}}>
+                      <JoinGameButton
+                        onClick={() => {
+                          this.joinGame(id, localStorage.getItem('username'));
+                        }}
+                      >
+                        <GameIcon
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 640 512"
+                        >
+                          <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                        </GameIcon>
+                        <JoinParagraph>Join</JoinParagraph>
+                      </JoinGameButton>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </Table>
+          </GamesContainer>
+        </Container>
+      </ParentContainer>
     );
   }
 }

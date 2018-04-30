@@ -23,28 +23,16 @@ const ContractProps = {
           "type": "address"
         },
         {
-          "name": "isStarted",
-          "type": "bool"
-        },
-        {
-          "name": "isFinished",
-          "type": "bool"
+          "name": "state",
+          "type": "uint8"
         },
         {
           "name": "moveCounter",
           "type": "uint256"
         },
         {
-          "name": "isPlayerOSet",
-          "type": "bool"
-        },
-        {
           "name": "playerOAddr",
           "type": "address"
-        },
-        {
-          "name": "isPlayerXSet",
-          "type": "bool"
         },
         {
           "name": "playerXAddr",
@@ -63,6 +51,55 @@ const ContractProps = {
       "constant": true,
       "inputs": [
         {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bets",
+      "outputs": [
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "name": "bettorOnOAddr",
+          "type": "address"
+        },
+        {
+          "name": "bettorOnXAddr",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "leaveGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
           "name": "gameId",
           "type": "uint256"
         }
@@ -70,8 +107,8 @@ const ContractProps = {
       "name": "getBoard",
       "outputs": [
         {
-          "name": "boardAsString",
-          "type": "string"
+          "name": "",
+          "type": "uint8[9]"
         }
       ],
       "payable": false,
@@ -91,38 +128,18 @@ const ContractProps = {
         }
       ],
       "name": "joinGame",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
     },
     {
-      "constant": true,
+      "constant": false,
       "inputs": [
         {
           "name": "gameId",
           "type": "uint256"
-        }
-      ],
-      "name": "isGameFinished",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
+        },
         {
           "name": "x",
           "type": "uint256"
@@ -130,19 +147,10 @@ const ContractProps = {
         {
           "name": "y",
           "type": "uint256"
-        },
-        {
-          "name": "gameId",
-          "type": "uint256"
         }
       ],
       "name": "playMove",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -150,11 +158,41 @@ const ContractProps = {
     {
       "constant": true,
       "inputs": [],
-      "name": "getOpenGameIds",
+      "name": "getGameIds",
       "outputs": [
         {
           "name": "gameIds",
           "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getGames",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "gameStates",
+          "type": "uint8[]"
+        },
+        {
+          "name": "owners",
+          "type": "address[]"
+        },
+        {
+          "name": "playerXs",
+          "type": "address[]"
+        },
+        {
+          "name": "playerOs",
+          "type": "address[]"
         }
       ],
       "payable": false,
@@ -212,12 +250,7 @@ const ContractProps = {
         }
       ],
       "name": "startGame",
-      "outputs": [
-        {
-          "name": "",
-          "type": "bool"
-        }
-      ],
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -233,16 +266,26 @@ const ContractProps = {
       "inputs": [
         {
           "indexed": false,
-          "name": "ID",
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
           "type": "uint256"
         },
         {
           "indexed": false,
-          "name": "returnValue",
-          "type": "bool"
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
         }
       ],
-      "name": "SuccessEvent",
+      "name": "GameCreated",
       "type": "event"
     },
     {
@@ -250,21 +293,132 @@ const ContractProps = {
       "inputs": [
         {
           "indexed": false,
-          "name": "symbol",
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "playerName",
           "type": "string"
         },
         {
           "indexed": false,
-          "name": "returnValue",
-          "type": "bool"
+          "name": "symbol",
+          "type": "string"
         }
       ],
       "name": "Joined",
       "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "playerName",
+          "type": "string"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "Left",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "name": "GameStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "success",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "y",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "MoveMade",
+      "type": "event"
     }
   ],
 
-  CONTRACT_ADDRESS: '0xE07F1a1601D1F2cfb59696DfB56dCD85ac136103'
+  CONTRACT_ADDRESS: '0x3Ef591C2a47F7d3E2f4D16A9F791df7B29E5a3C4'
 };
 
 export default ContractProps;

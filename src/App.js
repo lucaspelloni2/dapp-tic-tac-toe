@@ -93,6 +93,7 @@ class App extends Component {
                   render={props => (
                     <JoinGame
                       {...props}
+                      web3={this.state.web3}
                       contract={this.state.contract}
                       account={this.state}
                     />

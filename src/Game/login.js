@@ -71,7 +71,6 @@ const FieldsContainer = styled.div`
 class Login extends Component {
   constructor(props) {
     super(props);
-    localStorage.clear();
     this.state = {
       username: ''
     };
