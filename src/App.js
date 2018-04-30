@@ -11,7 +11,6 @@ import Lobby from './Game/lobby';
 import ContractProps from './Game/ContractProps';
 import JoinGame from './Game/JoinGame';
 import CreateGame from './Game/CreateGame';
-import GameBoard from "./Game/GameBoard/GameBoard";
 
 let web3 = window.web3;
 
@@ -111,14 +110,7 @@ class App extends Component {
                     />
                   )}
                 />
-                <Route
-                  // path="/games/:address/:gameId"
-                  path="/board"
-                  exact
-                  component={GameBoard}
-                />
                 <Route path="/" exact component={WelcomePage} />
-
               </Switch>
             </div>
           </BrowserRouter>

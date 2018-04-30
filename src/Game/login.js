@@ -59,6 +59,10 @@ const ButtonLinkContainer = styled.div`
   margin-right: -88px;
 `;
 
+const Provider = styled.img`
+  width: 100px;
+`;
+
 const FieldsContainer = styled.div`
   width: 100%;
   margin-right: 88px;

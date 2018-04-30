@@ -3,9 +3,6 @@ import styled from 'styled-components';
 import Context from './Context';
 import MyTransactions from './MyTransactions';
 import MetaMaskLogo from './MetamaskLogo';
-import Status from './Status';
-import Transaction from './Transaction';
-import ArrowWithPath from './ArrowWithPath';
 
 const CreateGameContainer = styled.div`
   display: flex;
@@ -13,6 +10,8 @@ const CreateGameContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+
 
 const Container = styled.div`
   display: flex;
@@ -22,6 +21,7 @@ const Container = styled.div`
   width: ${props => props.width}px;
   padding: 1.5rem 2.5rem;
   text-align: center;
+  margin-bottom: 5em;
 `;
 
 const LoginRow = styled.div`
@@ -54,6 +54,10 @@ const ButtonLinkContainer = styled.div`
   margin-right: -88px;
 `;
 
+const Provider = styled.img`
+  width: 100px;
+`;
+
 const FieldsContainer = styled.div`
   width: 100%;
   margin-right: 88px;
@@ -70,6 +74,8 @@ const ParentContainer = styled.div`
   justify-content: space-evenly;
 `;
 
+
+
 class CreateGame extends Component {
   constructor() {
     super();
@@ -78,6 +84,8 @@ class CreateGame extends Component {
       clicked: false
     };
   }
+
+
 
   handleChange(e) {
     this.setState({gameName: e.target.value, clicked: false});
@@ -92,6 +100,7 @@ class CreateGame extends Component {
         this.addNewTx(tx, this.state.gameName);
       })
       .on('receipt', res => {
+        // TODO: recall the this.state function to the the state to true
         console.log('receipt', res);
       })
       .on('confirmation', function(gameId) {
@@ -100,89 +109,78 @@ class CreateGame extends Component {
   }
 
   addNewTx(tx, gameName) {
-    let transaction = new Transaction({
-      tx: tx,
-      confirmed: false,
-      gameName: gameName,
-      blockNumber: null,
-      status: Status.GAME_CREATED
-    });
+    let obj = {tx: tx, confirmed: false, gameName: gameName, blockNumber: null};
     let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.push(transaction);
+    transactions.push(obj);
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
   render(props) {
     return (
-      <div>
-        <ParentContainer>
-          <CreateGameContainer>
-            <Container width={640}>
-              <MetaMaskLogo />
-              <h1>Create a new Game</h1>
-              <SubTitle>Please fill the form below</SubTitle>
-              <FieldsContainer>
-                <LoginRow>
-                  <Context.Consumer>
-                    {account => (
-                      <InputLabel>
-                        Address
-                        <UserData>{account.ethAddress}</UserData>
-                      </InputLabel>
-                    )}
-                  </Context.Consumer>
-                </LoginRow>
+      <ParentContainer>
+        <CreateGameContainer>
+          <Container width={640}>
+            <MetaMaskLogo />
+            <h1>Create a new Game</h1>
+            <SubTitle>Please fill the form below</SubTitle>
+            <FieldsContainer>
+              <LoginRow>
+                <Context.Consumer>
+                  {account => (
+                    <InputLabel>
+                      Address
+                      <UserData>{account.ethAddress}</UserData>
+                    </InputLabel>
+                  )}
+                </Context.Consumer>
+              </LoginRow>
 
-                <LoginRow>
-                  <Context.Consumer>
-                    {account => (
-                      <InputLabel>
-                        {' '}
-                        Balance (ETH)
-                        <UserData>{account.ethBalance}</UserData>
-                      </InputLabel>
-                    )}
-                  </Context.Consumer>
-                </LoginRow>
+              <LoginRow>
+                <Context.Consumer>
+                  {account => (
+                    <InputLabel>
+                      {' '}
+                      Balance (ETH)
+                      <UserData>{account.ethBalance}</UserData>
+                    </InputLabel>
+                  )}
+                </Context.Consumer>
+              </LoginRow>
 
-                <LoginRow>
-                  <InputLabel>
-                    Player name
-                    <UserData>{localStorage.getItem('username')}</UserData>
-                  </InputLabel>
-                </LoginRow>
+              <LoginRow>
+                <InputLabel>
+                  Player name
+                  <UserData>{localStorage.getItem('username')}</UserData>
+                </InputLabel>
+              </LoginRow>
 
-                <LoginRow>
-                  <InputLabel>
-                    Game name
-                    <InputField
-                      placeholder={'Game name'}
-                      onChange={this.handleChange.bind(this)}
-                    />
-                  </InputLabel>
-                </LoginRow>
+              <LoginRow>
+                <InputLabel>
+                  Game name
+                  <InputField
+                    placeholder={'Game name'}
+                    onChange={this.handleChange.bind(this)}
+                  />
+                </InputLabel>
+              </LoginRow>
 
-                <ButtonLinkContainer>
-                  {this.state.clicked && this.createGame()}
-                  <button
-                    onClick={() => {
-                      this.setState({
-                        clicked: true
-                      });
-                    }}
-                  >
-                    Create Game
-                  </button>
-                </ButtonLinkContainer>
-              </FieldsContainer>
-            </Container>
-          </CreateGameContainer>
-          <MyTransactions web3={this.props.web3} />
-        </ParentContainer>
-        <ArrowWithPath location={'/games'}>
-          Join a game!
-        </ArrowWithPath>
-      </div>
+              <ButtonLinkContainer>
+                {this.state.clicked && this.createGame()}
+                <button
+                  onClick={() => {
+                    this.setState({
+                      clicked: true
+                    });
+                  }}
+                >
+                  Create Game
+                </button>
+              </ButtonLinkContainer>
+            </FieldsContainer>
+          </Container>
+        </CreateGameContainer>
+        <MyTransactions web3={this.props.web3}/>
+      </ParentContainer>
     );
   }
 }

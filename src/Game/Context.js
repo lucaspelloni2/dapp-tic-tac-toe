@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Component, createContext} from 'react';
 
 const myAccount = {
   ethAddress: '',

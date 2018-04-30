@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
+import ContractProps from './ContractProps';
 
 const ParentContainer = styled.div``;
 
@@ -26,6 +27,12 @@ const ButtonsContainer = styled.div`
   justify-content: space-evenly;
 `;
 
+const TicImage = styled.img`
+  height: 250px;
+  transform: rotate(15deg);
+  align-self: center;
+`;
+
 const ButtonContainer = styled.div``;
 
 const UserProfileContainer = styled.div`
@@ -35,6 +42,12 @@ const UserProfileContainer = styled.div`
   margin-top: 2em;
 `;
 
+const UserProfile = styled.div`
+  width: 50px;
+  height: 50px;
+  border: 1px solid black;
+  border-radius: 50%;
+`;
 
 const Button = styled.button`
   width: 250px;
