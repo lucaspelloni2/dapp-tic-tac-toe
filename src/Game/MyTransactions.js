@@ -3,14 +3,18 @@ import styled from 'styled-components';
 import Spinner from './Spinner';
 
 const Container = styled.div`
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  width: ${props => props.width}px;
   padding: 1.5rem 2.5rem;
   text-align: center;
-  margin-bottom: 5em;
+  width: 600px;
+  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
+  max-height: 350px;
+  overflow: scroll;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #02b8d4 1200px
+  );
+  
 `;
 
 const Table = styled.table`
@@ -29,8 +33,17 @@ const GameName = styled.p`
 `;
 
 const TxHash = styled.a``;
-
-const Status = styled.div``;
+const StatusContainer = styled.div`
+  border: 1px solid #02b8d4;
+  border-radius: 4px;
+  padding: 4px;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #02b8d4 1200px
+  );
+`;
+const TxConfirmation = styled.div``;
 
 const ConfirmedIcon = styled.svg`
   fill: #00ff31;
@@ -48,6 +61,7 @@ const TransactionCointainer = styled.div`
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-top: ${props => (props.marginTop ? props.marginTop : '0')}px;
 `;
 
 class MyTransactions extends Component {
@@ -57,23 +71,34 @@ class MyTransactions extends Component {
     if (!localStorage.getItem('txs')) {
       transactions = [];
       localStorage.setItem('txs', JSON.stringify(transactions));
+    } else {
+      transactions = JSON.parse(localStorage.getItem('txs'));
     }
+
+    this.state = {
+      transactions: transactions
+    };
   }
 
   componentDidMount() {
-    this.fetchData();
+    setInterval(() => {
+      this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
+      this.fetchData();
+    }, 200);
   }
 
   fetchData() {
-    let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.forEach(transaction => {
+    this.state.transactions.forEach(transaction => {
       this.props.web3.eth
         .getTransaction(transaction.tx)
         .then(receipt => {
           if (receipt.blockNumber) {
             transaction.blockNumber = receipt.blockNumber;
             transaction.confirmed = true;
-            localStorage.setItem('txs', JSON.stringify(transactions));
+            localStorage.setItem(
+              'txs',
+              JSON.stringify(this.state.transactions)
+            );
           }
         })
         .catch(reason => {
@@ -84,19 +109,9 @@ class MyTransactions extends Component {
 
   render(props) {
     return (
-      <TransactionCointainer>
+      <TransactionCointainer {...props}>
         <h1>Your Transactions</h1>
-        <Container
-          width={400}
-          style={{
-            boxShadow: 'rgba(168, 221, 224, 0.5) 0px 0px 15px 3px',
-            padding: '1em',
-            maxHeight: 330,
-            overflow: ' scroll',
-            backgroundImage:
-              'radial-gradient(farthest-side at 212% 174px,#0177a2 0,#02b8d4 1200px)'
-          }}
-        >
+        <Container>
           <Table>
             <tbody>
               <tr>
@@ -107,15 +122,18 @@ class MyTransactions extends Component {
                   <Title>Tx Hash</Title>
                 </th>
                 <th>
+                  <Title>Action Type</Title>
+                </th>
+                <th>
                   <Title>Status</Title>
                 </th>
               </tr>
             </tbody>
             <tbody>
-              {JSON.parse(localStorage.getItem('txs')).map(transaction => (
+              {this.state.transactions.map(transaction => (
                 <tr key={transaction.tx}>
                   <td>
-                    <GameName>{transaction.gameName}</GameName>
+                    <GameName>{transaction.gameName.substr(0, 10)}</GameName>
                   </td>
                   <td>
                     <TxHash
@@ -126,7 +144,10 @@ class MyTransactions extends Component {
                     </TxHash>
                   </td>
                   <td>
-                    <Status>
+                    <StatusContainer>{transaction.status}</StatusContainer>
+                  </td>
+                  <td>
+                    <TxConfirmation>
                       {transaction.blockNumber ? (
                         <ConfirmedIcon
                           xmlns="http://www.w3.org/2000/svg"
@@ -139,7 +160,7 @@ class MyTransactions extends Component {
                           <Spinner width={30} height={30} />
                         </SpinnerContainer>
                       )}
-                    </Status>
+                    </TxConfirmation>
                   </td>
                 </tr>
               ))}
