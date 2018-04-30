@@ -109,8 +109,9 @@ class JoinGame extends Component {
       })
       .on('receipt', res => {
         console.log(res);
+        const returnValues = res.events.Joined.returnValues;
         if (res.status === "0x1")
-          console.log(res.events.Joined.returnValues[3] + " joined game " + res.events.Joined.returnValues[1] + " and has symbol " + res.events.Joined.returnValues[4]);
+          console.log(this.props.web3.utils.toAscii(returnValues.playerName) + " joined game " + returnValues.gameId + " and has symbol " + returnValues.symbol);
         else
           console.log("not possible to join");
       })
