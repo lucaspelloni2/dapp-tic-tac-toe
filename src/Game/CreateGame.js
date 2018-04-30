@@ -92,7 +92,6 @@ class CreateGame extends Component {
         this.addNewTx(tx, this.state.gameName);
       })
       .on('receipt', res => {
-        // TODO: recall the this.state function to the the state to true
         console.log('receipt', res);
       })
       .on('confirmation', function(gameId) {

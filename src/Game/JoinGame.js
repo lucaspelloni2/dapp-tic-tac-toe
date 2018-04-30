@@ -31,6 +31,7 @@ const GamesContainer = styled.div`
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
+      margin-right: -2em;
 `;
 
 const GameIcon = styled.svg`
@@ -125,13 +126,12 @@ class JoinGame extends Component {
             let game = {
               id: res.gameIds[i],
               status: this.renderStatus(status),
-              owner: res.owners[i]
+              owner: res.owners[i],
+              joining: false
             };
             games.push(game);
           }
         }
-        console.log(res);
-        console.log(this.state.games);
         this.setState({games: games, loading: false});
       })
       .catch(err => {
@@ -176,16 +176,23 @@ class JoinGame extends Component {
     return status;
   }
 
-  joinGame(id, playerName) {
+  joinGame(game, playerName) {
     this.props.contract.methods
-      .joinGame(id, playerName)
+      .joinGame(game.id, playerName)
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        this.addNewTx(tx, id);
+        this.addNewTx(tx, game.id);
+        this.state.games.forEach(g => {
+          if (game.id === g.id) {
+            g.joining = true;
+            console.log(game);
+          }
+        });
+        this.setState({games: this.state.games});
       })
       .on('receipt', res => {
         console.log(res);
-        if (res.status === '0x1')
+        if (res.status === '0x1') {
           console.log(
             res.events.Joined.returnValues[3] +
               ' joined game ' +
@@ -193,7 +200,13 @@ class JoinGame extends Component {
               ' and has symbol ' +
               res.events.Joined.returnValues[4]
           );
-        else console.log('not possible to join');
+          this.state.games.forEach(g => {
+            if (game.id === g.id) {
+              g.joining = false;
+            }
+            this.setState({games: this.state.games});
+          });
+        } else console.log('not possible to join');
       })
       .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
@@ -252,7 +265,8 @@ class JoinGame extends Component {
                     </td>
                     <td>renderName</td>
                     <td>
-                      <a style={{marginRight: 10}}
+                      <a
+                        style={{marginRight: 10}}
                         href={
                           'https://ropsten.etherscan.io/address/' + game.owner
                         }
@@ -264,23 +278,29 @@ class JoinGame extends Component {
                     <td>
                       <StatusContainer>{game.status}</StatusContainer>
                     </td>
-                    <td style={{width: 150}}>
-                      <JoinGameButton
-                        onClick={() => {
-                          this.joinGame(
-                            game.id,
-                            localStorage.getItem('username')
-                          );
-                        }}
-                      >
-                        <GameIcon
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 640 512"
+                    <td style={{width: 120}}>
+                      {game.joining ? (
+                          <SpinnerContainer>
+                              <Spinner width={30} height={30} />
+                          </SpinnerContainer>
+                      ) : (
+                        <JoinGameButton
+                          onClick={() => {
+                            this.joinGame(
+                              game,
+                              localStorage.getItem('username')
+                            );
+                          }}
                         >
-                          <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-                        </GameIcon>
-                        <JoinParagraph>Join</JoinParagraph>
-                      </JoinGameButton>
+                          <GameIcon
+                            xmlns="http://www.w3.org/2000/svg"
+                            viewBox="0 0 640 512"
+                          >
+                            <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                          </GameIcon>
+                          <JoinParagraph>Join</JoinParagraph>
+                        </JoinGameButton>
+                      )}
                     </td>
                   </tr>
                 ))}
