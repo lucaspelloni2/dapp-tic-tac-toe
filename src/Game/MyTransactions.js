@@ -54,15 +54,10 @@ class MyTransactions extends Component {
   constructor() {
     super();
     let transactions;
-
-    if (localStorage.getItem('txs')) {
-      transactions = JSON.parse(localStorage.getItem('txs'));
-    } else {
+    if (!localStorage.getItem('txs')) {
       transactions = [];
+      localStorage.setItem('txs', JSON.stringify(transactions));
     }
-    this.state = {
-      transactions: transactions
-    };
   }
 
   componentDidMount() {
@@ -71,8 +66,7 @@ class MyTransactions extends Component {
 
   fetchData() {
     let transactions = JSON.parse(localStorage.getItem('txs'));
-    this.setState({transactions: transactions});
-    this.state.transactions.forEach(transaction => {
+    transactions.forEach(transaction => {
       this.props.web3.eth
         .getTransaction(transaction.tx)
         .then(receipt => {
@@ -121,7 +115,7 @@ class MyTransactions extends Component {
               </tr>
             </tbody>
             <tbody>
-              {this.state.transactions.map(transaction => (
+              {JSON.parse(localStorage.getItem('txs')).map(transaction => (
                 <tr key={transaction.tx}>
                   <td>
                     <GameName>{transaction.gameName}</GameName>
