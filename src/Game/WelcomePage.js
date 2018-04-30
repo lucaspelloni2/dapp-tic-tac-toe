@@ -1,5 +1,4 @@
 import React from 'react';
-import {Route} from 'react-router-dom';
 import styled from 'styled-components';
 import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
