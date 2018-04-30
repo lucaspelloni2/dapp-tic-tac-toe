@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import Context from './Context';
 import MyTransactions from './MyTransactions';
 import MetaMaskLogo from './MetamaskLogo';
+import Status from './Status';
+import Transaction from './Transaction';
 
 const CreateGameContainer = styled.div`
   display: flex;
@@ -10,8 +12,6 @@ const CreateGameContainer = styled.div`
   justify-content: center;
   align-items: center;
 `;
-
-
 
 const Container = styled.div`
   display: flex;
@@ -74,8 +74,6 @@ const ParentContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-
-
 class CreateGame extends Component {
   constructor() {
     super();
@@ -84,8 +82,6 @@ class CreateGame extends Component {
       clicked: false
     };
   }
-
-
 
   handleChange(e) {
     this.setState({gameName: e.target.value, clicked: false});
@@ -109,9 +105,15 @@ class CreateGame extends Component {
   }
 
   addNewTx(tx, gameName) {
-    let obj = {tx: tx, confirmed: false, gameName: gameName, blockNumber: null};
+    let transaction = new Transaction({
+        tx: tx,
+        confirmed: false,
+        gameName: gameName,
+        blockNumber: null,
+        status: Status.GAME_CREATED
+    });
     let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.push(obj);
+    transactions.push(transaction);
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
@@ -179,7 +181,7 @@ class CreateGame extends Component {
             </FieldsContainer>
           </Container>
         </CreateGameContainer>
-        <MyTransactions web3={this.props.web3}/>
+        <MyTransactions web3={this.props.web3} />
       </ParentContainer>
     );
   }

@@ -1,0 +1,6 @@
+const STATUS = {
+  GAME_CREATED: 'GAME_CREATED',
+  GAME_JOINED: 'GAME_JOINED'
+};
+
+export default STATUS;

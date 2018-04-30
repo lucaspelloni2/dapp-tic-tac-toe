@@ -57,23 +57,32 @@ class MyTransactions extends Component {
     if (!localStorage.getItem('txs')) {
       transactions = [];
       localStorage.setItem('txs', JSON.stringify(transactions));
+    } else {
+      transactions = JSON.parse(localStorage.getItem('txs'));
     }
+
+    this.state = {
+      transactions: transactions
+    };
   }
 
   componentDidMount() {
-    this.fetchData();
+    setInterval(() => {
+      this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
+      this.fetchData();
+      console.log('fetching....');
+    }, 2000);
   }
 
   fetchData() {
-    let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.forEach(transaction => {
+    this.state.transactions.forEach(transaction => {
       this.props.web3.eth
         .getTransaction(transaction.tx)
         .then(receipt => {
           if (receipt.blockNumber) {
             transaction.blockNumber = receipt.blockNumber;
             transaction.confirmed = true;
-            localStorage.setItem('txs', JSON.stringify(transactions));
+            localStorage.setItem('txs', JSON.stringify(this.state.transactions));
           }
         })
         .catch(reason => {
@@ -112,7 +121,7 @@ class MyTransactions extends Component {
               </tr>
             </tbody>
             <tbody>
-              {JSON.parse(localStorage.getItem('txs')).map(transaction => (
+              {this.state.transactions.map(transaction => (
                 <tr key={transaction.tx}>
                   <td>
                     <GameName>{transaction.gameName}</GameName>
