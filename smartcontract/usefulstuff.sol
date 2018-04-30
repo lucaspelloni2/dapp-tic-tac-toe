@@ -28,4 +28,23 @@
     function equalStrings (string a, string b) private pure returns (bool){
         return keccak256(a) == keccak256(b);
     }
+
+
+
+
+    function getGameIdsWithState(GameState state) public view returns (uint[] gameIds) {
+        // must be done like that because dynamic arrays only possible in storage and then the method becomes payable
+        uint count = 0;
+        for (uint i=0; i < openGameIds.length; i++)
+            if (games[openGameIds[i]].state == state)
+                count++;
+
+        uint[] memory ids = new uint[](count);
+        count = 0;
+        for (i=0; i < openGameIds.length; i++)
+            if (games[openGameIds[i]].state == state)
+                ids[count++] = openGameIds[i];
+
+        return ids;
+    }
     

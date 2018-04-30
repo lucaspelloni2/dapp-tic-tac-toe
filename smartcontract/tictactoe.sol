@@ -8,7 +8,7 @@ contract TicTacToe {
     enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
     enum BetState { NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
     enum SquareState { EMPTY, X, O }
-    
+
 
     constructor() public {
         contractOwner = msg.sender;
@@ -22,7 +22,7 @@ contract TicTacToe {
     uint counter = 0;
     mapping(uint => Game) public games;
     uint[] openGameIds;
-    
+
     // bets
     uint betCounter = 0;
     mapping(uint => Bet) public bets;
@@ -32,21 +32,21 @@ contract TicTacToe {
         string name;
         uint[] gameIds;
     }
-    
+
     struct Game {
         uint gameId;
         string name;
         address ownerAddr;
-        
+
         GameState state;
-        
+
         uint moveCounter;
 
         address playerOAddr;
         address playerXAddr;
-        
+
         address winnerAddr;
-        
+
         SquareState[boardSize][boardSize] board;
     }
 
@@ -62,53 +62,43 @@ contract TicTacToe {
     function createGame(string gameName, string playerName) public returns (uint gameId) {
         gameId = counter++;
         Game storage myGame = games[gameId];
-        
+
         myGame.gameId = gameId;
         myGame.name = gameName;
         myGame.ownerAddr = msg.sender;
         myGame.state = GameState.EMPTY;
 
         joinGame(gameId, playerName);
-        
+
         openGameIds.push(gameId);
-        
+
         emit GameCreated(true, gameId, myGame.state, "created");
         return gameId;
     }
-    
+
     function getGameIds() public view returns (uint[] gameIds) {
         return openGameIds;
     }
-    
-    function getGameIdsWithState(GameState state) public view returns (uint[] gameIds) {
-        uint[] memory ids;
-        uint index = 0;
-        for (uint i=0; i < openGameIds.length; i++) {
-            if (games[openGameIds[i]].state == state)
-                ids[index] = openGameIds[i];
-        }
-        return ids;
-    }
-    
-    /*function getOpenGames() public view returns (uint[] gameIds, string[] gameNames, string[] ownerNames, string[] playerO, string[] playerX) {
-        
+
+    function getGames() public view returns (uint[] gameIds, GameState[] gameStates, address[] owners, address[] playerXs, address[] playerOs) {
+
         gameIds = new uint[](openGameIds.length);
-        gameNames = new string[](openGameIds.length);
-        ownerNames = new string[](openGameIds.length);
-        playerO = new string[](openGameIds.length);
-        playerX = new string[](openGameIds.length);
-        
+        gameStates = new GameState[](openGameIds.length);
+        owners = new address[](openGameIds.length);
+        playerXs = new address[](openGameIds.length);
+        playerOs = new address[](openGameIds.length);
+
         for(uint i=0; i<openGameIds.length; i++) {
             Game memory game = games[openGameIds[i]];
             gameIds[i] = game.gameId;
-            gameNames[i] = game.name;
-            ownerNames[i] = players[game.ownerAddr].name;
-            playerO[i] = players[game.playerOAddr].name;
-            playerX[i] = players[game.playerXAddr].name;
+            gameStates[i] = game.state;
+            owners[i] = game.ownerAddr;
+            playerXs[i] = game.playerXAddr;
+            playerOs[i] = game.playerOAddr;
         }
-        
-        return (gameIds, gameNames, ownerNames, playerO, playerX);
-    }*/
+
+        return (gameIds, gameStates, owners, playerXs, playerOs);
+    }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, string playerName, string symbol);
     function joinGame(uint gameId, string playerName) public {
