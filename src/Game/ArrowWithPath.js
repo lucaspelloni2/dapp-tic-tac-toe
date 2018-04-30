@@ -9,7 +9,6 @@ const Container = styled.div`
   width: 200px;
   align-items: center;
   cursor: pointer;
-  margin-top: -20px;
 `;
 
 const Arrow = styled.svg`
