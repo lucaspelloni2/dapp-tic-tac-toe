@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const GamesContainer = styled.div`
-  width: 500px;
+  width: 600px;
   border: 1px solid transparent;
   box-shadow: 0 0 15px 3px rgba(168, 221, 224, 0.5);
   border-radius: 3px;
@@ -74,6 +74,7 @@ const JoinGameButton = styled.div`
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease-out;
+  margin-left: 2em;
 `;
 
 const ParentContainer = styled.div`
@@ -82,11 +83,24 @@ const ParentContainer = styled.div`
   justify-content: space-evenly;
 `;
 
+const StatusContainer = styled.div`
+  border: 1px solid #02b8d4;
+  border-radius: 4px;
+  padding: 4px;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #02b8d4 1200px
+  );
+`;
+
 class JoinGame extends Component {
   constructor() {
     super();
+
+    //   NOT_EXISTING 0, EMPTY 1, WAITING_FOR_O 2, WAITING_FOR_X 3, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW
     this.state = {
-      ids: [],
+      games: [],
       loading: true
     };
   }
@@ -94,12 +108,72 @@ class JoinGame extends Component {
     this.getAvailableGames();
   }
   getAvailableGames() {
+    // this.props.contract.methods
+    //   .getGameIds()
+    //   .call({from: this.props.account.ethAddress})
+    //   .then(ids => {
+    //     this.setState({ids: ids, loading: false});
+    //   });
+    let games = this.state.games;
     this.props.contract.methods
-      .getGameIds()
+      .getGames()
       .call({from: this.props.account.ethAddress})
-      .then(ids => {
-        this.setState({ids: ids, loading: false});
+      .then(res => {
+        for (let i = 0; i < res.gameIds.length; i++) {
+          let status = res.gameStates[i];
+          if (status === '1' || status === '2' || status === '3') {
+            let game = {
+              id: res.gameIds[i],
+              status: this.renderStatus(status),
+              owner: res.owners[i]
+            };
+            games.push(game);
+          }
+        }
+        console.log(res);
+        console.log(this.state.games);
+        this.setState({games: games, loading: false});
+      })
+      .catch(err => {
+        console.log('error getting games ' + err);
       });
+  }
+
+  renderStatus(id) {
+    let status = '';
+    switch (id) {
+      case '0':
+        status = 'NOT_EXISTING';
+        break;
+      case '1':
+        status = 'EMPTY';
+        break;
+      case '2':
+        status = 'WAITING_FOR_O';
+        break;
+      case '3':
+        status = 'WAITING_FOR_X';
+        break;
+      case '4':
+        status = 'READY';
+        break;
+      case '5':
+        status = 'X_HAS_TURN';
+        break;
+      case '6':
+        status = 'O_HAS_TURN';
+        break;
+      case '7':
+        status = 'WINNER_X';
+        break;
+      case '8':
+        status = 'WINNER_O';
+        break;
+      case '9':
+        status = 'DRAW';
+        break;
+    }
+    return status;
   }
 
   joinGame(id, playerName) {
@@ -161,20 +235,29 @@ class JoinGame extends Component {
                   <th>
                     <Title>Game name</Title>
                   </th>
+                  <th>
+                    <Title>Status</Title>
+                  </th>
                   <th />
                 </tr>
               </tbody>
               <tbody>
-                {this.state.ids.map(id => (
-                  <tr key={id}>
+                {this.state.games.map(game => (
+                  <tr key={game.id}>
                     <td>
-                      <GameId>{id}</GameId>
+                      <GameId>{game.id}</GameId>
                     </td>
                     <td>renderName</td>
+                    <td>
+                      <StatusContainer>{game.status}</StatusContainer>
+                    </td>
                     <td style={{width: 150}}>
                       <JoinGameButton
                         onClick={() => {
-                          this.joinGame(id, localStorage.getItem('username'));
+                          this.joinGame(
+                            game.id,
+                            localStorage.getItem('username')
+                          );
                         }}
                       >
                         <GameIcon
