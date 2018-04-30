@@ -14,7 +14,7 @@ const Container = styled.div`
 `;
 
 const GamesContainer = styled.div`
-  width: 600px;
+  width: 700px;
   border: 1px solid transparent;
   box-shadow: 0 0 15px 3px rgba(168, 221, 224, 0.5);
   border-radius: 3px;
@@ -236,6 +236,9 @@ class JoinGame extends Component {
                     <Title>Game name</Title>
                   </th>
                   <th>
+                    <Title>Owner</Title>
+                  </th>
+                  <th>
                     <Title>Status</Title>
                   </th>
                   <th />
@@ -248,6 +251,16 @@ class JoinGame extends Component {
                       <GameId>{game.id}</GameId>
                     </td>
                     <td>renderName</td>
+                    <td>
+                      <a style={{marginRight: 10}}
+                        href={
+                          'https://ropsten.etherscan.io/address/' + game.owner
+                        }
+                        target="_blank"
+                      >
+                        {game.owner.toString().substr(0, 8)}
+                      </a>
+                    </td>
                     <td>
                       <StatusContainer>{game.status}</StatusContainer>
                     </td>
