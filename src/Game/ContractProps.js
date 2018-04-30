@@ -70,24 +70,12 @@ const ContractProps = {
           "type": "uint8"
         },
         {
-          "name": "isBettorOSet",
-          "type": "bool"
-        },
-        {
           "name": "bettorOnOAddr",
           "type": "address"
         },
         {
-          "name": "isBettorXSet",
-          "type": "bool"
-        },
-        {
           "name": "bettorOnXAddr",
           "type": "address"
-        },
-        {
-          "name": "isBetFilled",
-          "type": "bool"
         }
       ],
       "payable": false,
@@ -146,25 +134,6 @@ const ContractProps = {
       "type": "function"
     },
     {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "state",
-          "type": "uint8"
-        }
-      ],
-      "name": "getGameIdsWithState",
-      "outputs": [
-        {
-          "name": "gameIds",
-          "type": "uint256[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -194,6 +163,36 @@ const ContractProps = {
         {
           "name": "gameIds",
           "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getGames",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "gameStates",
+          "type": "uint8[]"
+        },
+        {
+          "name": "owners",
+          "type": "address[]"
+        },
+        {
+          "name": "playerXs",
+          "type": "address[]"
+        },
+        {
+          "name": "playerOs",
+          "type": "address[]"
         }
       ],
       "payable": false,
@@ -419,7 +418,7 @@ const ContractProps = {
     }
   ],
 
-  CONTRACT_ADDRESS: '0xC745cF52Dc3C0F983C3785949f7A658C674F1811'
+  CONTRACT_ADDRESS: '0x3Ef591C2a47F7d3E2f4D16A9F791df7B29E5a3C4'
 };
 
 export default ContractProps;
