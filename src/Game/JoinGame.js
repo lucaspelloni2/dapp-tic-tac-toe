@@ -127,7 +127,9 @@ class JoinGame extends Component {
             let game = {
               id: res.gameIds[i],
               status: this.renderStatus(status),
+              name: this.props.web3.utils.hexToAscii(res.gameNames[i]).replace(/\u0000/g, ''),
               owner: res.owners[i],
+              ownerName: this.props.web3.utils.hexToAscii(res.ownerNames[i]).replace(/\u0000/g, ''),
               joining: false
             };
             games.push(game);
@@ -273,7 +275,7 @@ class JoinGame extends Component {
                       <td>
                         <GameId>{game.id}</GameId>
                       </td>
-                      <td>renderName</td>
+                      <td>{game.name}</td>
                       <td>
                         <a
                           style={{marginRight: 10}}
@@ -282,7 +284,7 @@ class JoinGame extends Component {
                           }
                           target="_blank"
                         >
-                          {game.owner.toString().substr(0, 8)}
+                          {game.ownerName}
                         </a>
                       </td>
                       <td>
