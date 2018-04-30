@@ -109,7 +109,7 @@ class JoinGame extends Component {
       })
       .on('receipt', res => {
         console.log(res);
-        if (res.status == "0x1")
+        if (res.status === "0x1")
           console.log(res.events.Joined.returnValues[3] + " joined game " + res.events.Joined.returnValues[1] + " and has symbol " + res.events.Joined.returnValues[4]);
         else
           console.log("not possible to join");
