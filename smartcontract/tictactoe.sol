@@ -6,7 +6,7 @@ contract TicTacToe {
     address contractOwner;
 
     enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
-    enum BetState { MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
+    enum BetState { NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
     enum SquareState { EMPTY, X, O }
     
 
@@ -54,11 +54,8 @@ contract TicTacToe {
         uint value;
         uint gameId;
         BetState state;
-        bool isBettorOSet;
         address bettorOnOAddr;
-        bool isBettorXSet;
         address bettorOnXAddr;
-        bool isBetFilled;
     }
 
     event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
