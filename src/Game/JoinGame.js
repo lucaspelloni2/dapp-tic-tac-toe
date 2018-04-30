@@ -2,7 +2,9 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import MetaMaskLogo from './MetamaskLogo';
 import Spinner from './Spinner';
-import MyTransactions from "./MyTransactions";
+import MyTransactions from './MyTransactions';
+import Transaction from './Transaction';
+import Status from './Status';
 
 const Container = styled.div`
   display: flex;
@@ -105,19 +107,37 @@ class JoinGame extends Component {
       .joinGame(id, playerName)
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        console.log(tx);
+        this.addNewTx(tx, id);
       })
       .on('receipt', res => {
         console.log(res);
-        if (res.status === "0x1")
-          console.log(res.events.Joined.returnValues[3] + " joined game " + res.events.Joined.returnValues[1] + " and has symbol " + res.events.Joined.returnValues[4]);
-        else
-          console.log("not possible to join");
+        if (res.status === '0x1')
+          console.log(
+            res.events.Joined.returnValues[3] +
+              ' joined game ' +
+              res.events.Joined.returnValues[1] +
+              ' and has symbol ' +
+              res.events.Joined.returnValues[4]
+          );
+        else console.log('not possible to join');
       })
       .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
+  }
+
+  addNewTx(tx, gameId) {
+    let transaction = new Transaction({
+      tx: tx,
+      confirmed: false,
+      gameName: gameId,
+      blockNumber: null,
+      status: Status.GAME_JOINED
+    });
+    let transactions = JSON.parse(localStorage.getItem('txs'));
+    transactions.push(transaction);
+    localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
   render() {
@@ -172,7 +192,7 @@ class JoinGame extends Component {
             </Table>
           </GamesContainer>
         </Container>
-        <MyTransactions marginTop={5} web3={this.props.web3}/>
+        <MyTransactions marginTop={5} web3={this.props.web3} />
       </ParentContainer>
     );
   }
