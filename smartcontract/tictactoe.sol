@@ -29,13 +29,13 @@ contract TicTacToe {
     uint[] openBetIds;
 
     struct Player {
-        string name;
+        bytes32 name;
         uint[] gameIds;
     }
 
     struct Game {
         uint gameId;
-        string name;
+        bytes32 name;
         address ownerAddr;
 
         GameState state;
@@ -59,7 +59,7 @@ contract TicTacToe {
     }
 
     event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
-    function createGame(string gameName, string playerName) public returns (uint gameId) {
+    function createGame(bytes32 gameName, bytes32 playerName) public returns (uint gameId) {
         gameId = counter++;
         Game storage myGame = games[gameId];
 
@@ -80,11 +80,13 @@ contract TicTacToe {
         return openGameIds;
     }
 
-    function getGames() public view returns (uint[] gameIds, GameState[] gameStates, address[] owners, address[] playerXs, address[] playerOs) {
+    function getGames() public view returns (uint[] gameIds, GameState[] gameStates, bytes32[] gameNames, address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
 
         gameIds = new uint[](openGameIds.length);
         gameStates = new GameState[](openGameIds.length);
+        gameNames = new bytes32[](openGameIds.length);
         owners = new address[](openGameIds.length);
+        ownerNames = new bytes32[](openGameIds.length);
         playerXs = new address[](openGameIds.length);
         playerOs = new address[](openGameIds.length);
 
@@ -92,51 +94,53 @@ contract TicTacToe {
             Game memory game = games[openGameIds[i]];
             gameIds[i] = game.gameId;
             gameStates[i] = game.state;
+            gameNames[i] = game.name;
             owners[i] = game.ownerAddr;
+            ownerNames[i] = players[game.ownerAddr].name;
             playerXs[i] = game.playerXAddr;
             playerOs[i] = game.playerOAddr;
         }
 
-        return (gameIds, gameStates, owners, playerXs, playerOs);
+        return (gameIds, gameStates, gameNames, owners, ownerNames, playerXs, playerOs);
     }
 
-    event Joined(bool wasSuccess, uint gameId, GameState state, string playerName, string symbol);
-    function joinGame(uint gameId, string playerName) public {
+    event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
+    function joinGame(uint gameId, bytes32 playerName) public {
         Game storage game = games[gameId];
-        
+
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
         require(game.state < GameState.READY, "The game is full." );
-        
+
         players[msg.sender].name = playerName;
-        
+
         if(game.state == GameState.EMPTY) {
             game.playerOAddr = msg.sender;
             game.state = GameState.WAITING_FOR_X;
-            
+
             emit Joined(true, game.gameId,game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
             //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
-            
+
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
-            
+
             emit Joined(true, game.gameId,game.state, playerName, "X");
         }
         else if (game.state == GameState.WAITING_FOR_O) {
             //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
-            
+
             game.playerOAddr = msg.sender;
             game.state = GameState.READY;
-            
+
             emit Joined(true, game.gameId,game.state, playerName, "O");
         }
     }
-    
-    event Left(bool wasSuccess, uint gameId, GameState state, string playerName, string symbol);
+
+    event Left(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
     function leaveGame(uint gameId) public {
         Game storage game = games[gameId];
-        
+
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
         require(game.state <= GameState.READY, "The game is already started." );
         require(game.playerOAddr == msg.sender || game.playerXAddr == msg.sender, "Player is not part of this game.");
@@ -170,17 +174,17 @@ contract TicTacToe {
     event GameStarted(bool wasSuccess, uint gameId, GameState state, string message);
     function startGame(uint gameId) public {
         Game storage game = games[gameId];
-        
+
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
         require(game.state == GameState.READY, "Not enough players to start the game.");
         require(game.ownerAddr == msg.sender, "Only the game owner can start the game.");
-        
+
         initialize(gameId);
         game.state = GameState.X_HAS_TURN;
-        
+
         emit GameStarted(true, gameId, game.state, "game has been started.");
     }
-    
+
     function initialize(uint gameId) private {
         SquareState[boardSize][boardSize] storage board = games[gameId].board;
         for (uint y = 0; y < boardSize; y++) {
@@ -189,19 +193,6 @@ contract TicTacToe {
             }
         }
     }
-    
-    /*function getBoard(uint gameId) public view returns (bytes boardRep) { // apparently no string array can be returned yet in solidity
-        string[boardSize][boardSize] storage board = games[gameId].board;
-        string memory boardRepresentation;
-        for(uint y = 0; y < boardSize; y++) {
-            for(uint x = 0; x < boardSize; x++) {
-                boardRepresentation = strConcat(boardRepresentation,board[y][x]);
-            }
-            boardRepresentation = strConcat(boardRepresentation,"\n");
-        }
-        return bytes(boardRepresentation);
-        
-    }*/
     
     function getBoard(uint gameId) public view returns (SquareState[boardSize*boardSize]) { // apparently no string array can be returned yet in solidity
         SquareState[boardSize][boardSize] memory board = games[gameId].board;
