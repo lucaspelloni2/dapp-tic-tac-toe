@@ -102,7 +102,7 @@ class JoinGame extends Component {
 
   joinGame(id, playerName) {
     this.props.contract.methods
-      .joinGame(id, playerName)
+      .joinGame(id, this.props.web3.utils.fromAscii(playerName))
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         console.log(tx);

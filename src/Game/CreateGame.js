@@ -94,7 +94,7 @@ class CreateGame extends Component {
 
   createGame() {
     this.props.contract.methods
-      .createGame(this.state.gameName, localStorage.getItem('username'))
+      .createGame(this.props.web3.utils.fromAscii(this.state.gameName), this.props.web3.utils.fromAscii(localStorage.getItem('username')))
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.gameName);
