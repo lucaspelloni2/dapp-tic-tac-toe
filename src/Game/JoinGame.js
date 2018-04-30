@@ -5,6 +5,7 @@ import Spinner from './Spinner';
 import MyTransactions from './MyTransactions';
 import Transaction from './Transaction';
 import Status from './Status';
+import ArrowWithPath from'./ArrowWithPath';
 
 const Container = styled.div`
   display: flex;
@@ -31,7 +32,7 @@ const GamesContainer = styled.div`
 const SpinnerContainer = styled.div`
   display: flex;
   justify-content: center;
-      margin-right: -2em;
+  margin-right: -2em;
 `;
 
 const GameIcon = styled.svg`
@@ -229,87 +230,93 @@ class JoinGame extends Component {
 
   render() {
     return (
-      <ParentContainer>
-        <Container>
-          <MetaMaskLogo />
-          <h1>List of available Games</h1>
-          <GamesContainer>
-            {this.state.loading ? (
-              <SpinnerContainer>
-                <Spinner width={60} height={60} />
-              </SpinnerContainer>
-            ) : null}
-            <Table>
-              <tbody>
-                <tr>
-                  <th>
-                    <Title>Game Id</Title>
-                  </th>
-                  <th>
-                    <Title>Game name</Title>
-                  </th>
-                  <th>
-                    <Title>Owner</Title>
-                  </th>
-                  <th>
-                    <Title>Status</Title>
-                  </th>
-                  <th />
-                </tr>
-              </tbody>
-              <tbody>
-                {this.state.games.map(game => (
-                  <tr key={game.id}>
-                    <td>
-                      <GameId>{game.id}</GameId>
-                    </td>
-                    <td>renderName</td>
-                    <td>
-                      <a
-                        style={{marginRight: 10}}
-                        href={
-                          'https://ropsten.etherscan.io/address/' + game.owner
-                        }
-                        target="_blank"
-                      >
-                        {game.owner.toString().substr(0, 8)}
-                      </a>
-                    </td>
-                    <td>
-                      <StatusContainer>{game.status}</StatusContainer>
-                    </td>
-                    <td style={{width: 120}}>
-                      {game.joining ? (
-                          <SpinnerContainer>
-                              <Spinner width={30} height={30} />
-                          </SpinnerContainer>
-                      ) : (
-                        <JoinGameButton
-                          onClick={() => {
-                            this.joinGame(
-                              game,
-                              localStorage.getItem('username')
-                            );
-                          }}
-                        >
-                          <GameIcon
-                            xmlns="http://www.w3.org/2000/svg"
-                            viewBox="0 0 640 512"
-                          >
-                            <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-                          </GameIcon>
-                          <JoinParagraph>Join</JoinParagraph>
-                        </JoinGameButton>
-                      )}
-                    </td>
+      <div>
+        <ParentContainer>
+          <Container>
+            <MetaMaskLogo />
+            <h1>List of available Games</h1>
+            <GamesContainer>
+              {this.state.loading ? (
+                <SpinnerContainer>
+                  <Spinner width={60} height={60} />
+                </SpinnerContainer>
+              ) : null}
+              <Table>
+                <tbody>
+                  <tr>
+                    <th>
+                      <Title>Game Id</Title>
+                    </th>
+                    <th>
+                      <Title>Game name</Title>
+                    </th>
+                    <th>
+                      <Title>Owner</Title>
+                    </th>
+                    <th>
+                      <Title>Status</Title>
+                    </th>
+                    <th />
                   </tr>
-                ))}
-              </tbody>
-            </Table>
-          </GamesContainer>
-        </Container>
-        <MyTransactions marginTop={5} web3={this.props.web3} />
-      </ParentContainer>
+                </tbody>
+                <tbody>
+                  {this.state.games.map(game => (
+                    <tr key={game.id}>
+                      <td>
+                        <GameId>{game.id}</GameId>
+                      </td>
+                      <td>renderName</td>
+                      <td>
+                        <a
+                          style={{marginRight: 10}}
+                          href={
+                            'https://ropsten.etherscan.io/address/' + game.owner
+                          }
+                          target="_blank"
+                        >
+                          {game.owner.toString().substr(0, 8)}
+                        </a>
+                      </td>
+                      <td>
+                        <StatusContainer>{game.status}</StatusContainer>
+                      </td>
+                      <td style={{width: 120}}>
+                        {game.joining ? (
+                          <SpinnerContainer>
+                            <Spinner width={30} height={30} />
+                          </SpinnerContainer>
+                        ) : (
+                          <JoinGameButton
+                            onClick={() => {
+                              this.joinGame(
+                                game,
+                                localStorage.getItem('username')
+                              );
+                            }}
+                          >
+                            <GameIcon
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 640 512"
+                            >
+                              <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+                            </GameIcon>
+                            <JoinParagraph>Join</JoinParagraph>
+                          </JoinGameButton>
+                        )}
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </Table>
+            </GamesContainer>
+          </Container>
+          <MyTransactions marginTop={5} web3={this.props.web3} />
+        </ParentContainer>
+
+        <ArrowWithPath location={'/games/' + this.props.account.ethAddress}>
+          Create a game!
+        </ArrowWithPath>
+      </div>
     );
   }
 }
