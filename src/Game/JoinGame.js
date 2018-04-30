@@ -1,15 +1,14 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import ContractProps from './ContractProps';
 import MetaMaskLogo from './MetamaskLogo';
 import Spinner from './Spinner';
+import MyTransactions from "./MyTransactions";
 
 const Container = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
-  margin-top: 4em;
 `;
 
 const GamesContainer = styled.div`
@@ -77,6 +76,7 @@ const JoinGameButton = styled.div`
 
 const ParentContainer = styled.div`
   display: flex;
+  align-items: center;
   justify-content: space-evenly;
 `;
 
@@ -172,6 +172,7 @@ class JoinGame extends Component {
             </Table>
           </GamesContainer>
         </Container>
+        <MyTransactions marginTop={5} web3={this.props.web3}/>
       </ParentContainer>
     );
   }
