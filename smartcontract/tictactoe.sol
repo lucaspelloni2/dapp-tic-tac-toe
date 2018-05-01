@@ -53,6 +53,7 @@ SquareState[boardSize][boardSize] board;
 struct Bet {
 uint value;
 uint gameId;
+uint betId;
 BetState state;
 address bettorOnOAddr;
 address bettorOnXAddr;
@@ -72,9 +73,10 @@ joinGame(gameId, playerName);
 
 openGameIds.push(gameId);
 
-emit GameCreated(true, gameId, myGame.state, "created");
+emit GameCreated(true, gameId, myGame.state, "Game created");
 return gameId;
 }
+
 
 function getGameIds() public view returns (uint[] gameIds) {
 return openGameIds;
@@ -136,6 +138,7 @@ game.state = GameState.READY;
 emit Joined(true, game.gameId,game.state, playerName, "O");
 }
 }
+
 
 event Left(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
 function leaveGame(uint gameId) public {
@@ -313,4 +316,59 @@ return GameState.WINNER_X;
 else
 return GameState.WINNER_O;
 }
+
+event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
+function createBet(uint gameId, bool bettingOnX) public payable returns (uint betId){
+
+betId = betCounter++;
+Bet storage myBet = bets[betId];
+
+myBet.betId = betId;
+myBet.gameId = gameId;
+myBet.value = msg.value;
+
+// x-betting
+if(bettingOnX) {
+myBet.bettorOnXAddr = msg.sender;
+myBet.state = BetState.MISSING_O_BETTOR;
+} else {
+myBet.bettorOnOAddr = msg.sender;
+myBet.state = BetState.MISSING_X_BETTOR;
 }
+
+openBetIds.push(betId);
+
+emit BetCreated(true, betId, myBet.state, "Bet created");
+return betId;
+}
+
+function getBetIds() public view returns (uint[] betIds) {
+return openBetIds;
+}
+
+event JoinedBet(bool wasSuccess, uint betId, BetState state, string symbol);
+function joinBet(uint betId) payable public {
+Bet storage bet = bets[betId];
+if(msg.value != bet.value) {
+emit JoinedBet(false, betId, bet.state, "Not equal amount of value");
+}else if (msg.sender == bet.bettorOnXAddr || msg.sender == bet.bettorOnOAddr){
+emit JoinedBet(false, betId, bet.state, "Same address on both sides");
+} else if (games[bet.gameId].state >= GameState.WINNER_X){
+emit JoinedBet(false, betId, bet.state, "Game is already finished");
+}
+else {
+if(bet.state == BetState.MISSING_X_BETTOR) {
+bet.bettorOnXAddr = msg.sender;
+} else {
+bet.bettorOnOAddr = msg.sender;
+}
+bet.state = BetState.WITHDRAWN;
+emit JoinedBet(true, betId, bet.state, "Joined Bet");
+}
+}
+
+
+
+}
+
+
