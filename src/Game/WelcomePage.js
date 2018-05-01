@@ -21,7 +21,7 @@ const WelcomePage = () => {
   return (
     <Container>
       {/*<img src="metamask.svg" width={180} style={{marginBottom: '3em'}} />*/}
-      <div style={{marginBottom: 20}}>
+      <div style={{marginBottom: 80}}>
         <MetaMaskLogo />
       </div>
       <ButtonLink location={'login'}>Get started</ButtonLink>
