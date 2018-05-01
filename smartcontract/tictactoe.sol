@@ -365,6 +365,8 @@ contract TicTacToe {
         } else {
             bet.bettorOnOAddr = msg.sender;
         }
+        bet.state = BetState.FIXED;
+        emit JoinedBet(true, betId, bet.state, "Joined Bet");
     }
 
     function getBalance() public view returns (uint) {
