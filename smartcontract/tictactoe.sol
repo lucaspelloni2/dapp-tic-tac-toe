@@ -369,14 +369,14 @@ contract TicTacToe {
     function payoutBet(uint gameId) internal {
         for (uint i = 0; i < openBetIds.length; i++) {
             Bet storage iBet = bets[openBetIds[i]];
-            if(iBet.gameId == gameId && iBet.state == BetState.WITHDRAWN) {
+            if(iBet.gameId == gameId) {
                 if(games[gameId].state == GameState.WINNER_X) {
-                    iBet.bettorOnXAddr.transfer(2*(iBet.value));
+                    (iBet.bettorOnXAddr).transfer(2*(iBet.value));
                 } else if(games[gameId].state == GameState.WINNER_O){
-                    iBet.bettorOnOAddr.transfer(2*(iBet.value));
+                    (iBet.bettorOnOAddr).transfer(2*(iBet.value));
                 } else {
-                    iBet.bettorOnOAddr.transfer(iBet.value);
-                    iBet.bettorOnXAddr.transfer(iBet.value);
+                    (iBet.bettorOnOAddr).transfer(iBet.value);
+                    (iBet.bettorOnXAddr).transfer(iBet.value);
                 }
             }
         }
