@@ -81,7 +81,7 @@ const ParentContainer = styled.div`
 `;
 
 const StatusContainer = styled.div`
-  border: 1px solid ${props => props.color};
+  border: 1px solid ${props => (props.border ? props.border : props.color)};
   border-radius: 4px;
   padding: 4px;
   background-image: radial-gradient(
@@ -94,8 +94,6 @@ const StatusContainer = styled.div`
 class JoinGame extends Component {
   constructor() {
     super();
-
-    //   NOT_EXISTING 0, EMPTY 1, WAITING_FOR_O 2, WAITING_FOR_X 3, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW
     this.state = {
       games: [],
       loading: true
@@ -141,11 +139,11 @@ class JoinGame extends Component {
         id: res.gameIds[i],
         status: JoinGame.renderStatus(status),
         name: this.hexToAscii(res.gameNames[i]),
-        owner: res.owners[i],
+        owner,
         ownerName: this.hexToAscii(res.ownerNames[i]),
         joiningStatus: JOINING_STATE.NOT_JOINING,
-        playerX: playerX,
-        playerO: playerO
+        playerX,
+        playerO
       };
     }
 
@@ -285,7 +283,7 @@ class JoinGame extends Component {
           this.startGame(game);
         }}
       >
-        <GameIcon icon={'join'} />
+        <GameIcon icon={'play'} />
         <JoinParagraph>{text}</JoinParagraph>
       </Button>
     );
@@ -307,7 +305,7 @@ class JoinGame extends Component {
   renderBetButton(game, text) {
     return (
       <Button>
-        <GameIcon icon={'join'} />
+        <GameIcon icon={'bet'} />
         <JoinParagraph>{text}</JoinParagraph>
       </Button>
     );
@@ -346,9 +344,17 @@ class JoinGame extends Component {
       case GAME_STATUS.WAITING_FOR_X:
         return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
       case GAME_STATUS.X_HAS_TURN:
-        return <StatusContainer color={'#d48500'}>{status}</StatusContainer>;
+        return (
+          <StatusContainer color={'#9c2a2a'} border={'#03b8d4'}>
+            {status}
+          </StatusContainer>
+        );
       case GAME_STATUS.O_HAS_TURN:
-        return <StatusContainer color={'#d48500'}>{status}</StatusContainer>;
+        return (
+          <StatusContainer color={'#9c2a2a'} border={'#03b8d4'}>
+            {status}
+          </StatusContainer>
+        );
       default:
         return <StatusContainer color={'#d42517'}>default</StatusContainer>;
     }
