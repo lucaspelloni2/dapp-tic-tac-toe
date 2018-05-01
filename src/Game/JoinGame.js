@@ -263,7 +263,7 @@ class JoinGame extends Component {
   getGameStatus(status) {
     switch (status) {
       case GAME_STATUS.READY:
-        return <StatusContainer color={'green'}>{status}</StatusContainer>;
+        return <StatusContainer color={'#00ff31'}>{status}</StatusContainer>;
       case GAME_STATUS.WAITING_FOR_O:
         return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
       case GAME_STATUS.WAITING_FOR_X:
