@@ -79,6 +79,36 @@ const JoinGameButton = styled.div`
   margin-left: 2em;
 `;
 
+const StartGameButton = styled.div`
+  &:hover {
+    border: 2px solid #e4751b;
+  }
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
+  border-radius: 18px;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  margin-left: 2em;
+`;
+
+const PlayGameButton = styled.div`
+  &:hover {
+    border: 2px solid #e4751b;
+  }
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
+  border-radius: 18px;
+  flex-direction: column;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  margin-left: 2em;
+`;
+
 const ParentContainer = styled.div`
   display: flex;
   align-items: center;
@@ -154,7 +184,9 @@ class JoinGame extends Component {
         status === '1' ||
         status === '2' ||
         status === '3' ||
-        status === '4'
+        status === '4' ||
+        status === '5' ||
+        status === '6'
       ) {
         game = {
           id: res.gameIds[i],
@@ -162,7 +194,9 @@ class JoinGame extends Component {
           name: this.hexToAscii(res.gameNames[i]),
           owner: res.owners[i],
           ownerName: this.hexToAscii(res.ownerNames[i]),
-          joiningStatus: JOINING_STATE.NOT_JOINING
+          joiningStatus: JOINING_STATE.NOT_JOINING,
+          playerX: playerX,
+          playerO: playerO
         };
       }
     }
@@ -251,9 +285,113 @@ class JoinGame extends Component {
       });
   }
 
+  startGame(game) {
+    this.props.contract.methods
+      .startGame(game.id)
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        // this.addNewTx(tx, game.id);
+        // this.state.games.forEach(g => {
+        //   if (game.id === g.id) {
+        //     g.joining = true;
+        //     console.log(game);
+        //   }
+        // });
+        // this.setState({games: this.state.games});
+      })
+      .on('receipt', res => {
+        console.log(res);
+        if (res.status === '0x1') {
+          console.log('game started successfully'
+          );
+        } else console.log('not possible to start game');
+      })
+      .on('confirmation', function (confirmationNr) {
+        // is returned for the first 24 block confirmations
+        //console.log('new game joined ' + confirmationNr);
+      });
+  }
+
   getJoiningStatus(game, joiningState) {
     switch (joiningState) {
       case JOINING_STATE.NOT_JOINING:
+        return this.getButton(game);
+
+      case JOINING_STATE.JOINING:
+        return (
+          <SpinnerContainer>
+            <Spinner width={30} height={30} />
+          </SpinnerContainer>
+        );
+      case JOINING_STATE.JOINED: {
+        // TODO gameStatus aktualisieren
+        return this.getButton(game);
+      }
+    }
+  }
+
+  getButton(game) {
+    if (game.status === 'READY')
+      if (game.owner === this.props.account.ethAddress)
+        return (<StartGameButton
+          onClick={() => {
+            this.startGame(
+              game
+            );
+          }}
+        >
+          <GameIcon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+          </GameIcon>
+          <JoinParagraph>Start</JoinParagraph>
+        </StartGameButton>);
+      else
+        return (<PlayGameButton
+          onClick={() => {
+            this.startGame(
+              game
+            );
+          }}
+        >
+          <GameIcon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+          </GameIcon>
+          <JoinParagraph>Bet</JoinParagraph>
+        </PlayGameButton>);
+
+    if (game.status === 'X_HAS_TURN' || game.status === 'O_HAS_TURN')
+      if (game.playerX === this.props.account.ethAddress || game.playerO === this.props.account.ethAddress)
+        return (<PlayGameButton>
+          <GameIcon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+          </GameIcon>
+          <JoinParagraph>Play/Bet</JoinParagraph>
+        </PlayGameButton>);
+      else
+        return (<PlayGameButton>
+          <GameIcon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 640 512"
+          >
+            <path
+              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
+          </GameIcon>
+          <JoinParagraph>Bet</JoinParagraph>
+        </PlayGameButton>);
+
+      if(game.status === 'WAITING_FOR_X' || game.status === 'WAITING_FOR_O')
         return (
           <JoinGameButton
             onClick={() => {
@@ -266,15 +404,6 @@ class JoinGame extends Component {
             <JoinParagraph>Join</JoinParagraph>
           </JoinGameButton>
         );
-      case JOINING_STATE.JOINING:
-        return (
-          <SpinnerContainer>
-            <Spinner width={30} height={30} />
-          </SpinnerContainer>
-        );
-      case JOINING_STATE.JOINED:
-        return <JStatusContainer>READY</JStatusContainer>;
-    }
   }
 
   getGameStatus(status) {
@@ -285,6 +414,10 @@ class JoinGame extends Component {
         return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
       case GAME_STATUS.WAITING_FOR_X:
         return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
+      case GAME_STATUS.X_HAS_TURN:
+        return <StatusContainer color={'#d48500'}>{status}</StatusContainer>;
+      case GAME_STATUS.O_HAS_TURN:
+        return <StatusContainer color={'#d48500'}>{status}</StatusContainer>;
       default:
         return <StatusContainer color={'#d42517'}>default</StatusContainer>;
     }
