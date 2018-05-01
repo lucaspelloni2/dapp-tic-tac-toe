@@ -197,7 +197,7 @@ class JoinGame extends Component {
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        this.addNewTx(tx, game.id);
+        this.addNewTx(tx, game.id, Status.GAME_JOINED);
         this.state.games.forEach(g => {
           if (game.id === g.id) {
             g.joiningStatus = JOINING_STATE.JOINING;
@@ -242,6 +242,7 @@ class JoinGame extends Component {
       .startGame(game.id)
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
+          this.addNewTx(tx, game.id, Status.GAME_STARTED);
         // this.addNewTx(tx, game.id);
         // this.state.games.forEach(g => {
         //   if (game.id === g.id) {
@@ -275,7 +276,6 @@ class JoinGame extends Component {
           </SpinnerContainer>
         );
       case JOINING_STATE.JOINED: {
-        // TODO gameStatus aktualisieren
         return this.getButton(game);
       }
     }
@@ -365,13 +365,13 @@ class JoinGame extends Component {
     }
   }
 
-  addNewTx(tx, gameId) {
+  addNewTx(tx, gameId, status) {
     let transaction = new Transaction({
       tx: tx,
       confirmed: false,
       gameName: gameId,
       blockNumber: null,
-      status: Status.GAME_JOINED
+      status
     });
     let transactions = JSON.parse(localStorage.getItem('txs'));
     transactions.push(transaction);
