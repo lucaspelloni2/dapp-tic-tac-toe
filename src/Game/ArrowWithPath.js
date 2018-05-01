@@ -9,6 +9,7 @@ const Container = styled.div`
   width: 200px;
   align-items: center;
   cursor: pointer;
+  margin-top: ${props => (props.top ? props.top : 0)}px;
 `;
 
 const Arrow = styled.svg`
@@ -32,9 +33,6 @@ const Decoration = styled.div`
     #e4741b 0,
     #0175a4 1200px
   );
-
-
-
 `;
 
 const ArrowWithPath = props => {
@@ -42,7 +40,7 @@ const ArrowWithPath = props => {
     <div>
       <Route
         render={({history}) => (
-          <Container
+          <Container {...props}
             onClick={() => {
               history.push(props.location.toString());
             }}

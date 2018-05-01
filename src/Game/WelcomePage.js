@@ -21,12 +21,23 @@ const WelcomePage = () => {
   return (
     <Container>
       {/*<img src="metamask.svg" width={180} style={{marginBottom: '3em'}} />*/}
-      <MetaMaskLogo />
+      <div style={{marginBottom: 80}}>
+        <MetaMaskLogo />
+      </div>
       <ButtonLink location={'login'}>Get started</ButtonLink>
-        <p style={{marginBottom: 0, marginTop: '5em', fontSize: 18, fontWeight: 'bold'}}>Developed by: </p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Lucas Pelloni </p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Severin Wullschleger</p>
-        <p style={{marginTop: 5, marginBottom: 0}}>Andreas Schafehlbuhl</p>
+      <p
+        style={{
+          marginBottom: 0,
+          marginTop: '5em',
+          fontSize: 18,
+          fontWeight: 'bold'
+        }}
+      >
+        Developed by:{' '}
+      </p>
+      <p style={{marginTop: 5, marginBottom: 0}}>Lucas Pelloni </p>
+      <p style={{marginTop: 5, marginBottom: 0}}>Severin Wullschleger</p>
+      <p style={{marginTop: 5, marginBottom: 0}}>Andreas Schafehlbuhl</p>
     </Container>
   );
 };

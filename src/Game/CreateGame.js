@@ -86,7 +86,10 @@ class CreateGame extends Component {
 
   createGame() {
     this.props.contract.methods
-      .createGame(this.props.web3.utils.fromAscii(this.state.gameName), this.props.web3.utils.fromAscii(localStorage.getItem('username')))
+      .createGame(
+        this.props.web3.utils.fromAscii(this.state.gameName),
+        this.props.web3.utils.fromAscii(localStorage.getItem('username'))
+      )
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.gameName);
@@ -115,10 +118,10 @@ class CreateGame extends Component {
   render(props) {
     return (
       <div>
+        <MetaMaskLogo />
         <ParentContainer>
           <CreateGameContainer>
             <Container width={640}>
-              <MetaMaskLogo />
               <h1>Create a new Game</h1>
               <SubTitle>Please fill the form below</SubTitle>
               <FieldsContainer>
@@ -179,9 +182,7 @@ class CreateGame extends Component {
           </CreateGameContainer>
           <MyTransactions web3={this.props.web3} />
         </ParentContainer>
-        <ArrowWithPath location={'/games'}>
-          Join a game!
-        </ArrowWithPath>
+        <ArrowWithPath location={'/games'}>Join a game!</ArrowWithPath>
       </div>
     );
   }
