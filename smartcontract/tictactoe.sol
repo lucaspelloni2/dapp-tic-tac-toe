@@ -317,6 +317,10 @@ contract TicTacToe {
     event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
     function createBet(uint gameId, bool bettingOnX) public payable returns (uint betId){
 
+        Game memory game = games[gameId];
+        require(game.state >= GameState.EMPTY, "The game does not exist.");
+        require(game.state < GameState.WINNER_X, "The game is already finished.");
+
         betId = betCounter++;
         Bet storage myBet = bets[betId];
 
@@ -345,7 +349,12 @@ contract TicTacToe {
 
     event JoinedBet(bool wasSuccess, uint betId, BetState state, string symbol);
     function joinBet(uint betId) payable public {
+
         Bet storage bet = bets[betId];
+
+        require(bet.state != BetState.NOT_EXISTING, "The bet does not exist.");
+        require(bet.state < BetState.WITHDRAWN, "Not possible to join this bet.");
+
         if(msg.value != bet.value) {
             emit JoinedBet(false, betId, bet.state, "Not equal amount of value");
         }else if (msg.sender == bet.bettorOnXAddr || msg.sender == bet.bettorOnOAddr){
@@ -369,6 +378,8 @@ contract TicTacToe {
     }
 
     function payoutBet(uint gameId) internal {
+
+
         for (uint i = 0; i < openBetIds.length; i++) {
             Bet storage iBet = bets[openBetIds[i]];
             if(iBet.gameId == gameId) {
@@ -384,5 +395,3 @@ contract TicTacToe {
         }
     }
 }
-
-
