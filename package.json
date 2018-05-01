@@ -14,6 +14,7 @@
     "react-notification-system": "0.2.x",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
+    "react-toastify": "^4.0.0-rc.5",
     "react-web3": "^0.4.5",
     "styled-components": "^3.2.5",
     "web3": "^1.0.0-beta.33"
