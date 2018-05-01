@@ -127,38 +127,46 @@ class JoinGame extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         for (let i = 0; i < res.gameIds.length; i++) {
-          let owner = res.owners[i];
-          let playerX = res.playerXs[i];
-          let playerO = res.playerOs[i];
-          let status = res.gameStates[i];
-          if (
-            owner === this.props.account.ethAddress ||
-            playerX === this.props.account.ethAddress ||
-            playerO === this.props.account.ethAddress
-          ) {
-            if (
-              status === '1' ||
-              status === '2' ||
-              status === '3' ||
-              status === '4'
-            ) {
-              let game = {
-                id: res.gameIds[i],
-                status: JoinGame.renderStatus(status),
-                name: this.hexToAscii(res.gameNames[i]),
-                owner: res.owners[i],
-                ownerName: this.hexToAscii(res.ownerNames[i]),
-                joiningStatus: JOINING_STATE.NOT_JOINING
-              };
-              games.push(game);
-            }
+          let game = this.createGame(res, i);
+          if (game !== null) {
+            games.push(game);
           }
-          this.setState({games: games, loading: false});
         }
+        this.setState({games: games, loading: false});
       })
       .catch(err => {
         console.log('error getting games ' + err);
       });
+  }
+
+  createGame(res, i) {
+    let game = null;
+    let owner = res.owners[i];
+    let playerX = res.playerXs[i];
+    let playerO = res.playerOs[i];
+    let status = res.gameStates[i];
+    if (
+      owner === this.props.account.ethAddress ||
+      playerX === this.props.account.ethAddress ||
+      playerO === this.props.account.ethAddress
+    ) {
+      if (
+        status === '1' ||
+        status === '2' ||
+        status === '3' ||
+        status === '4'
+      ) {
+        game = {
+          id: res.gameIds[i],
+          status: JoinGame.renderStatus(status),
+          name: this.hexToAscii(res.gameNames[i]),
+          owner: res.owners[i],
+          ownerName: this.hexToAscii(res.ownerNames[i]),
+          joiningStatus: JOINING_STATE.NOT_JOINING
+        };
+      }
+    }
+    return game;
   }
 
   static renderStatus(id) {
@@ -278,7 +286,7 @@ class JoinGame extends Component {
       case GAME_STATUS.WAITING_FOR_X:
         return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
       default:
-        return <StatusContainer color={'#02b8d4'}>default</StatusContainer>;
+        return <StatusContainer color={'#d42517'}>default</StatusContainer>;
     }
   }
 
