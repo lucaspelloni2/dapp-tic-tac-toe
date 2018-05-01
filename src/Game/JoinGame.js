@@ -100,9 +100,10 @@ class JoinGame extends Component {
     };
   }
   componentDidMount() {
-    this.getAvailableGames();
+    this.fetchData();
   }
-  getAvailableGames() {
+  fetchData() {
+    console.log('fetching data..');
     let games = this.state.games;
     this.props.contract.methods
       .getGames()
@@ -216,12 +217,16 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
-          this.state.games.forEach(g => {
-            if (game.id === g.id) {
-              g.joiningStatus = JOINING_STATE.JOINED;
-            }
-            this.setState({games: this.state.games});
-          });
+          // this.state.games.forEach(g => {
+          //   if (game.id === g.id) {
+          //     g.joiningStatus = JOINING_STATE.JOINED;
+          //   }
+          //
+          //   this.getAvailableGames();
+          // });
+
+          this.setState({games: [], loading: true});
+          this.fetchData();
         } else {
           console.log('not possible to join');
         }
