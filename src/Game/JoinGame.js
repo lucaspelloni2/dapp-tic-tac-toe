@@ -96,6 +96,17 @@ const StatusContainer = styled.div`
   );
 `;
 
+const JStatusContainer = styled.div`
+  border: 1px solid #02b8d4;
+  border-radius: 4px;
+  padding: 4px;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #02b8d4 1200px
+  );
+`;
+
 class JoinGame extends Component {
   constructor() {
     super();
@@ -117,7 +128,12 @@ class JoinGame extends Component {
       .then(res => {
         for (let i = 0; i < res.gameIds.length; i++) {
           let status = res.gameStates[i];
-          if (status === '1' || status === '2' || status === '3') {
+          if (
+            status === '1' ||
+            status === '2' ||
+            status === '3' ||
+            status === '4'
+          ) {
             let game = {
               id: res.gameIds[i],
               status: JoinGame.renderStatus(status),
@@ -140,34 +156,34 @@ class JoinGame extends Component {
     let status = '';
     switch (id) {
       case '0':
-        status = 'NOT_EXISTING';
+        status = GAME_STATUS.NOT_EXISTING;
         break;
       case '1':
-        status = 'EMPTY';
+        status = GAME_STATUS.EMPTY;
         break;
       case '2':
-        status = 'WAITING_FOR_O';
+        status = GAME_STATUS.WAITING_FOR_O;
         break;
       case '3':
-        status = 'WAITING_FOR_X';
+        status = GAME_STATUS.WAITING_FOR_X;
         break;
       case '4':
-        status = 'READY';
+        status = GAME_STATUS.READY;
         break;
       case '5':
-        status = 'X_HAS_TURN';
+        status = GAME_STATUS.X_HAS_TURN;
         break;
       case '6':
-        status = 'O_HAS_TURN';
+        status = GAME_STATUS.O_HAS_TURN;
         break;
       case '7':
-        status = 'WINNER_X';
+        status = GAME_STATUS.WINNER_X;
         break;
       case '8':
-        status = 'WINNER_O';
+        status = GAME_STATUS.WINNER_O;
         break;
       case '9':
-        status = 'DRAW';
+        status = GAME_STATUS.DRAW;
         break;
     }
     return status;
@@ -240,7 +256,7 @@ class JoinGame extends Component {
           </SpinnerContainer>
         );
       case JOINING_STATE.JOINED:
-        return <div>READY!!!!</div>;
+        return <JStatusContainer>READY</JStatusContainer>;
     }
   }
 
@@ -338,4 +354,16 @@ const JOINING_STATE = {
   JOINED: 'JOINED'
 };
 
+const GAME_STATUS = {
+  NOT_EXISTING: 'NOT_EXISTING',
+  EMPTY: 'EMPTY',
+  WAITING_FOR_O: 'WAITING_FOR_O',
+  WAITING_FOR_X: 'WAITING_FOR_X',
+  READY: 'READY',
+  X_HAS_TURN: 'X_HAS_TURN',
+  O_HAS_TURN: 'O_HAS_TURN',
+  WINNER_X: 'WINNER_X',
+  WINNER_O: 'WINNER_O',
+  DRAW: 'DRAW'
+};
 export default JoinGame;
