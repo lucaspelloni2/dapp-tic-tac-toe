@@ -127,25 +127,34 @@ class JoinGame extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         for (let i = 0; i < res.gameIds.length; i++) {
+          let owner = res.owners[i];
+          let playerX = res.playerXs[i];
+          let playerO = res.playerOs[i];
           let status = res.gameStates[i];
           if (
-            status === '1' ||
-            status === '2' ||
-            status === '3' ||
-            status === '4'
+            owner === this.props.account.ethAddress ||
+            playerX === this.props.account.ethAddress ||
+            playerO === this.props.account.ethAddress
           ) {
-            let game = {
-              id: res.gameIds[i],
-              status: JoinGame.renderStatus(status),
-              name: this.hexToAscii(res.gameNames[i]),
-              owner: res.owners[i],
-              ownerName: this.hexToAscii(res.ownerNames[i]),
-              joiningStatus: JOINING_STATE.NOT_JOINING
-            };
-            games.push(game);
+            if (
+              status === '1' ||
+              status === '2' ||
+              status === '3' ||
+              status === '4'
+            ) {
+              let game = {
+                id: res.gameIds[i],
+                status: JoinGame.renderStatus(status),
+                name: this.hexToAscii(res.gameNames[i]),
+                owner: res.owners[i],
+                ownerName: this.hexToAscii(res.ownerNames[i]),
+                joiningStatus: JOINING_STATE.NOT_JOINING
+              };
+              games.push(game);
+            }
           }
+          this.setState({games: games, loading: false});
         }
-        this.setState({games: games, loading: false});
       })
       .catch(err => {
         console.log('error getting games ' + err);
