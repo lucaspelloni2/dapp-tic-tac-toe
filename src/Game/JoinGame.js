@@ -121,14 +121,10 @@ class JoinGame extends Component {
             let game = {
               id: res.gameIds[i],
               status: JoinGame.renderStatus(status),
-              name: this.props.web3.utils
-                .hexToAscii(res.gameNames[i])
-                .replace(/\u0000/g, ''),
+              name: this.hexToAscii(res.gameNames[i]),
               owner: res.owners[i],
-              ownerName: this.props.web3.utils
-                .hexToAscii(res.ownerNames[i])
-                .replace(/\u0000/g, ''),
-              joining: false
+              ownerName: this.hexToAscii(res.ownerNames[i]),
+              joiningStatus: JOINING_STATE.NOT_JOINING
             };
             games.push(game);
           }
@@ -177,6 +173,10 @@ class JoinGame extends Component {
     return status;
   }
 
+  hexToAscii(byte32) {
+    return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
+  }
+
   joinGame(game, playerName) {
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
@@ -185,7 +185,7 @@ class JoinGame extends Component {
         this.addNewTx(tx, game.id);
         this.state.games.forEach(g => {
           if (game.id === g.id) {
-            g.joining = true;
+            g.joiningStatus = JOINING_STATE.JOINING;
             console.log(game);
           }
         });
@@ -196,13 +196,6 @@ class JoinGame extends Component {
         const returnValues = res.events.Joined.returnValues;
         if (res.status === '0x1') {
           console.log(
-            res.events.Joined.returnValues[3] +
-              ' joined game ' +
-              res.events.Joined.returnValues[1] +
-              ' and has symbol ' +
-              res.events.Joined.returnValues[4]
-          );
-          console.log(
             this.props.web3.utils.toAscii(returnValues.playerName) +
               ' joined game ' +
               returnValues.gameId +
@@ -211,7 +204,7 @@ class JoinGame extends Component {
           );
           this.state.games.forEach(g => {
             if (game.id === g.id) {
-              g.joining = false;
+              g.joiningStatus = JOINING_STATE.JOINED;
             }
             this.setState({games: this.state.games});
           });
@@ -223,6 +216,32 @@ class JoinGame extends Component {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
+  }
+
+  getJoiningStatus(game, joiningState) {
+    switch (joiningState) {
+      case JOINING_STATE.NOT_JOINING:
+        return (
+          <JoinGameButton
+            onClick={() => {
+              this.joinGame(game, localStorage.getItem('username'));
+            }}
+          >
+            <GameIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+              <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
+            </GameIcon>
+            <JoinParagraph>Join</JoinParagraph>
+          </JoinGameButton>
+        );
+      case JOINING_STATE.JOINING:
+        return (
+          <SpinnerContainer>
+            <Spinner width={30} height={30} />
+          </SpinnerContainer>
+        );
+      case JOINING_STATE.JOINED:
+        return <div>READY!!!!</div>;
+    }
   }
 
   addNewTx(tx, gameId) {
@@ -291,28 +310,7 @@ class JoinGame extends Component {
                         <StatusContainer>{game.status}</StatusContainer>
                       </td>
                       <td style={{width: 120}}>
-                        {game.joining ? (
-                          <SpinnerContainer>
-                            <Spinner width={30} height={30} />
-                          </SpinnerContainer>
-                        ) : (
-                          <JoinGameButton
-                            onClick={() => {
-                              this.joinGame(
-                                game,
-                                localStorage.getItem('username')
-                              );
-                            }}
-                          >
-                            <GameIcon
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 640 512"
-                            >
-                              <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-                            </GameIcon>
-                            <JoinParagraph>Join</JoinParagraph>
-                          </JoinGameButton>
-                        )}
+                        {this.getJoiningStatus(game, game.joiningStatus)}
                       </td>
                     </tr>
                   ))}
@@ -323,12 +321,21 @@ class JoinGame extends Component {
           <MyTransactions marginTop={5} web3={this.props.web3} />
         </ParentContainer>
 
-        <ArrowWithPath top={50} location={'/games/' + this.props.account.ethAddress}>
+        <ArrowWithPath
+          top={50}
+          location={'/games/' + this.props.account.ethAddress}
+        >
           Create a game!
         </ArrowWithPath>
       </div>
     );
   }
 }
+
+const JOINING_STATE = {
+  NOT_JOINING: 'NOT_JOINING',
+  JOINING: 'JOINING',
+  JOINED: 'JOINED'
+};
 
 export default JoinGame;

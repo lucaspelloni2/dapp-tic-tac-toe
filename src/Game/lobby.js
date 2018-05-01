@@ -97,7 +97,7 @@ class Lobby extends Component {
               <UserName>{this.state.username}</UserName>
             </Profile>
           </UserProfileContainer>
-          <div style={{marginTop: -122, marginBottom: 122}}>
+          <div style={{marginTop: -110, marginBottom: 122}}>
             <MetaMaskLogo />
           </div>
           <Container>
