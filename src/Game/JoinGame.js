@@ -142,7 +142,7 @@ class JoinGame extends Component {
         name: this.hexToAscii(res.gameNames[i]),
         owner,
         ownerName: this.hexToAscii(res.ownerNames[i]),
-        joiningStatus: JOINING_STATE.NOT_JOINING,
+        isLoading: false,
         playerX,
         playerO
       };
@@ -198,13 +198,7 @@ class JoinGame extends Component {
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_JOINED);
-        this.state.games.forEach(g => {
-          if (game.id === g.id) {
-            g.joiningStatus = JOINING_STATE.JOINING;
-            console.log(game);
-          }
-        });
-        this.setState({games: this.state.games});
+        this.setLoadingToTrue(game);
       })
       .on('receipt', res => {
         console.log(res);
@@ -217,14 +211,6 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
-          // this.state.games.forEach(g => {
-          //   if (game.id === g.id) {
-          //     g.joiningStatus = JOINING_STATE.JOINED;
-          //   }
-          //
-          //   this.getAvailableGames();
-          // });
-
           this.setState({games: [], loading: true});
           this.fetchData();
         } else {
@@ -242,21 +228,18 @@ class JoinGame extends Component {
       .startGame(game.id)
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-          this.addNewTx(tx, game.id, Status.GAME_STARTED);
-        // this.addNewTx(tx, game.id);
-        // this.state.games.forEach(g => {
-        //   if (game.id === g.id) {
-        //     g.joining = true;
-        //     console.log(game);
-        //   }
-        // });
-        // this.setState({games: this.state.games});
+        this.addNewTx(tx, game.id, Status.GAME_STARTED);
+        this.setLoadingToTrue(game);
       })
       .on('receipt', res => {
         console.log(res);
         if (res.status === '0x1') {
           console.log('game started successfully');
-        } else console.log('not possible to start game');
+          this.setState({games: [], loading: true});
+          this.fetchData();
+        } else {
+          console.log('not possible to start game');
+        }
       })
       .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
@@ -264,20 +247,26 @@ class JoinGame extends Component {
       });
   }
 
-  getJoiningStatus(game, joiningState) {
-    switch (joiningState) {
-      case JOINING_STATE.NOT_JOINING:
+  setLoadingToTrue(game) {
+    this.state.games.forEach(g => {
+      if (game.id === g.id) {
+        g.isLoading = true;
+      }
+    });
+    this.setState({games: this.state.games});
+  }
+
+  getJoiningStatus(game) {
+    switch (game.isLoading) {
+      case false:
         return this.getButton(game);
 
-      case JOINING_STATE.JOINING:
+      case true:
         return (
           <SpinnerContainer>
             <Spinner width={30} height={30} />
           </SpinnerContainer>
         );
-      case JOINING_STATE.JOINED: {
-        return this.getButton(game);
-      }
     }
   }
 
@@ -450,13 +439,6 @@ class JoinGame extends Component {
     );
   }
 }
-
-const JOINING_STATE = {
-  NOT_JOINING: 'NOT_JOINING',
-  JOINING: 'JOINING',
-  JOINED: 'JOINED'
-};
-
 const GAME_STATUS = {
   NOT_EXISTING: 'NOT_EXISTING',
   EMPTY: 'EMPTY',
@@ -469,4 +451,5 @@ const GAME_STATUS = {
   WINNER_O: 'WINNER_O',
   DRAW: 'DRAW'
 };
+
 export default JoinGame;
