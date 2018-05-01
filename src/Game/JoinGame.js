@@ -130,30 +130,25 @@ class JoinGame extends Component {
     let playerO = res.playerOs[i];
     let status = res.gameStates[i];
     if (
-      owner === this.props.account.ethAddress ||
-      playerX === this.props.account.ethAddress ||
-      playerO === this.props.account.ethAddress
+      status === '1' ||
+      status === '2' ||
+      status === '3' ||
+      status === '4' ||
+      status === '5' ||
+      status === '6'
     ) {
-      if (
-        status === '1' ||
-        status === '2' ||
-        status === '3' ||
-        status === '4' ||
-        status === '5' ||
-        status === '6'
-      ) {
-        game = {
-          id: res.gameIds[i],
-          status: JoinGame.renderStatus(status),
-          name: this.hexToAscii(res.gameNames[i]),
-          owner: res.owners[i],
-          ownerName: this.hexToAscii(res.ownerNames[i]),
-          joiningStatus: JOINING_STATE.NOT_JOINING,
-          playerX: playerX,
-          playerO: playerO
-        };
-      }
+      game = {
+        id: res.gameIds[i],
+        status: JoinGame.renderStatus(status),
+        name: this.hexToAscii(res.gameNames[i]),
+        owner: res.owners[i],
+        ownerName: this.hexToAscii(res.ownerNames[i]),
+        joiningStatus: JOINING_STATE.NOT_JOINING,
+        playerX: playerX,
+        playerO: playerO
+      };
     }
+
     return game;
   }
 
