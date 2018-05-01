@@ -86,13 +86,13 @@ const ParentContainer = styled.div`
 `;
 
 const StatusContainer = styled.div`
-  border: 1px solid #02b8d4;
+  border: 1px solid ${props => props.color};
   border-radius: 4px;
   padding: 4px;
   background-image: radial-gradient(
     farthest-side at 212% 174px,
     #0177a2 0,
-    #02b8d4 1200px
+    ${props => props.color} 1200px
   );
 `;
 
@@ -260,6 +260,19 @@ class JoinGame extends Component {
     }
   }
 
+  getGameStatus(status) {
+    switch (status) {
+      case GAME_STATUS.READY:
+        return <StatusContainer color={'green'}>{status}</StatusContainer>;
+      case GAME_STATUS.WAITING_FOR_O:
+        return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
+      case GAME_STATUS.WAITING_FOR_X:
+        return <StatusContainer color={'#02b8d4'}>{status}</StatusContainer>;
+      default:
+        return <StatusContainer color={'#02b8d4'}>default</StatusContainer>;
+    }
+  }
+
   addNewTx(tx, gameId) {
     let transaction = new Transaction({
       tx: tx,
@@ -322,9 +335,7 @@ class JoinGame extends Component {
                           {game.ownerName}
                         </a>
                       </td>
-                      <td>
-                        <StatusContainer>{game.status}</StatusContainer>
-                      </td>
+                      <td>{this.getGameStatus(game.status)}</td>
                       <td style={{width: 120}}>
                         {this.getJoiningStatus(game, game.joiningStatus)}
                       </td>
