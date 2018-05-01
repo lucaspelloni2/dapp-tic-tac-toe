@@ -6,6 +6,7 @@ import MyTransactions from './MyTransactions';
 import Transaction from './Transaction';
 import Status from './Status';
 import ArrowWithPath from './ArrowWithPath';
+import GameIcon from './GameIcon';
 
 const Container = styled.div`
   display: flex;
@@ -35,12 +36,6 @@ const SpinnerContainer = styled.div`
   margin-right: -2em;
 `;
 
-const GameIcon = styled.svg`
-  width: 35px;
-  height: 35px;
-  fill: #e4751b;
-`;
-
 const GameId = styled.p`
   font-size: 22px;
   font-weight: bold;
@@ -64,7 +59,7 @@ const JoinParagraph = styled.p`
   letter-spacing: 3px;
 `;
 
-const JoinGameButton = styled.div`
+const Button = styled.div`
   &:hover {
     border: 2px solid #e4751b;
   }
@@ -76,37 +71,7 @@ const JoinGameButton = styled.div`
   flex-direction: column;
   cursor: pointer;
   transition: all 0.2s ease-out;
-  margin-left: 2em;
-`;
-
-const StartGameButton = styled.div`
-  &:hover {
-    border: 2px solid #e4751b;
-  }
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
-  border-radius: 18px;
-  flex-direction: column;
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-  margin-left: 2em;
-`;
-
-const PlayGameButton = styled.div`
-  &:hover {
-    border: 2px solid #e4751b;
-  }
-  display: flex;
-  justify-content: space-evenly;
-  align-items: center;
-  box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
-  border-radius: 18px;
-  flex-direction: column;
-  cursor: pointer;
-  transition: all 0.2s ease-out;
-  margin-left: 2em;
+  margin-left: 1em;
 `;
 
 const ParentContainer = styled.div`
@@ -123,17 +88,6 @@ const StatusContainer = styled.div`
     farthest-side at 212% 174px,
     #0177a2 0,
     ${props => props.color} 1200px
-  );
-`;
-
-const JStatusContainer = styled.div`
-  border: 1px solid #02b8d4;
-  border-radius: 4px;
-  padding: 4px;
-  background-image: radial-gradient(
-    farthest-side at 212% 174px,
-    #0177a2 0,
-    #02b8d4 1200px
   );
 `;
 
@@ -302,11 +256,10 @@ class JoinGame extends Component {
       .on('receipt', res => {
         console.log(res);
         if (res.status === '0x1') {
-          console.log('game started successfully'
-          );
+          console.log('game started successfully');
         } else console.log('not possible to start game');
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
@@ -330,80 +283,63 @@ class JoinGame extends Component {
     }
   }
 
+  renderStartButton(game, text) {
+    return (
+      <Button
+        onClick={() => {
+          this.startGame(game);
+        }}
+      >
+        <GameIcon icon={'join'} />
+        <JoinParagraph>{text}</JoinParagraph>
+      </Button>
+    );
+  }
+
+  renderJoinButton(game, text) {
+    return (
+      <Button
+        onClick={() => {
+          this.joinGame(game, localStorage.getItem('username'));
+        }}
+      >
+        <GameIcon icon={'join'} />
+        <JoinParagraph>{text}</JoinParagraph>
+      </Button>
+    );
+  }
+
+  renderBetButton(game, text) {
+    return (
+      <Button>
+        <GameIcon icon={'join'} />
+        <JoinParagraph>{text}</JoinParagraph>
+      </Button>
+    );
+  }
+
   getButton(game) {
-    if (game.status === 'READY')
-      if (game.owner === this.props.account.ethAddress)
-        return (<StartGameButton
-          onClick={() => {
-            this.startGame(
-              game
-            );
-          }}
-        >
-          <GameIcon
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-          >
-            <path
-              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-          </GameIcon>
-          <JoinParagraph>Start</JoinParagraph>
-        </StartGameButton>);
-      else
-        return (<PlayGameButton
-          onClick={() => {
-            this.startGame(
-              game
-            );
-          }}
-        >
-          <GameIcon
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-          >
-            <path
-              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-          </GameIcon>
-          <JoinParagraph>Bet</JoinParagraph>
-        </PlayGameButton>);
+    if (game.status === GAME_STATUS.READY) {
+      if (game.owner === this.props.account.ethAddress) {
+        return this.renderStartButton(game, 'Start');
+      } else {
+        return this.renderBetButton(game, 'Bet');
+      }
+    }
 
-    if (game.status === 'X_HAS_TURN' || game.status === 'O_HAS_TURN')
-      if (game.playerX === this.props.account.ethAddress || game.playerO === this.props.account.ethAddress)
-        return (<PlayGameButton>
-          <GameIcon
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-          >
-            <path
-              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-          </GameIcon>
-          <JoinParagraph>Play/Bet</JoinParagraph>
-        </PlayGameButton>);
-      else
-        return (<PlayGameButton>
-          <GameIcon
-            xmlns="http://www.w3.org/2000/svg"
-            viewBox="0 0 640 512"
-          >
-            <path
-              d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z"/>
-          </GameIcon>
-          <JoinParagraph>Bet</JoinParagraph>
-        </PlayGameButton>);
+    if (
+      game.status === GAME_STATUS.X_HAS_TURN ||
+      game.status === GAME_STATUS.O_HAS_TURN
+    )
+      if (
+        game.playerX === this.props.account.ethAddress ||
+        game.playerO === this.props.account.ethAddress
+      )
+        return this.renderBetButton(game, 'Play/Bet');
+      else return this.renderBetButton(game, 'Bet');
 
-      if(game.status === 'WAITING_FOR_X' || game.status === 'WAITING_FOR_O')
-        return (
-          <JoinGameButton
-            onClick={() => {
-              this.joinGame(game, localStorage.getItem('username'));
-            }}
-          >
-            <GameIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
-              <path d="M480 96H160C71.6 96 0 167.6 0 256s71.6 160 160 160c44.8 0 85.2-18.4 114.2-48h91.5c29 29.6 69.5 48 114.2 48 88.4 0 160-71.6 160-160S568.4 96 480 96zM256 276c0 6.6-5.4 12-12 12h-52v52c0 6.6-5.4 12-12 12h-40c-6.6 0-12-5.4-12-12v-52H76c-6.6 0-12-5.4-12-12v-40c0-6.6 5.4-12 12-12h52v-52c0-6.6 5.4-12 12-12h40c6.6 0 12 5.4 12 12v52h52c6.6 0 12 5.4 12 12v40zm184 68c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48zm80-80c-26.5 0-48-21.5-48-48s21.5-48 48-48 48 21.5 48 48-21.5 48-48 48z" />
-            </GameIcon>
-            <JoinParagraph>Join</JoinParagraph>
-          </JoinGameButton>
-        );
+    if (game.status === 'WAITING_FOR_X' || game.status === 'WAITING_FOR_O')
+      return this.renderJoinButton(game, 'Join');
   }
 
   getGameStatus(status) {
