@@ -110,12 +110,6 @@ class JoinGame extends Component {
     this.getAvailableGames();
   }
   getAvailableGames() {
-    // this.props.contract.methods
-    //   .getGameIds()
-    //   .call({from: this.props.account.ethAddress})
-    //   .then(ids => {
-    //     this.setState({ids: ids, loading: false});
-    //   });
     let games = this.state.games;
     this.props.contract.methods
       .getGames()
@@ -126,10 +120,14 @@ class JoinGame extends Component {
           if (status === '1' || status === '2' || status === '3') {
             let game = {
               id: res.gameIds[i],
-              status: this.renderStatus(status),
-              name: this.props.web3.utils.hexToAscii(res.gameNames[i]).replace(/\u0000/g, ''),
+              status: JoinGame.renderStatus(status),
+              name: this.props.web3.utils
+                .hexToAscii(res.gameNames[i])
+                .replace(/\u0000/g, ''),
               owner: res.owners[i],
-              ownerName: this.props.web3.utils.hexToAscii(res.ownerNames[i]).replace(/\u0000/g, ''),
+              ownerName: this.props.web3.utils
+                .hexToAscii(res.ownerNames[i])
+                .replace(/\u0000/g, ''),
               joining: false
             };
             games.push(game);
@@ -142,7 +140,7 @@ class JoinGame extends Component {
       });
   }
 
-  renderStatus(id) {
+  static renderStatus(id) {
     let status = '';
     switch (id) {
       case '0':
@@ -217,7 +215,9 @@ class JoinGame extends Component {
             }
             this.setState({games: this.state.games});
           });
-        } else console.log('not possible to join');
+        } else {
+          console.log('not possible to join');
+        }
       })
       .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
@@ -241,9 +241,9 @@ class JoinGame extends Component {
   render() {
     return (
       <div>
+        <MetaMaskLogo />
         <ParentContainer>
           <Container>
-            <MetaMaskLogo />
             <h1>List of available Games</h1>
             <GamesContainer>
               {this.state.loading ? (
@@ -323,7 +323,7 @@ class JoinGame extends Component {
           <MyTransactions marginTop={5} web3={this.props.web3} />
         </ParentContainer>
 
-        <ArrowWithPath location={'/games/' + this.props.account.ethAddress}>
+        <ArrowWithPath top={50} location={'/games/' + this.props.account.ethAddress}>
           Create a game!
         </ArrowWithPath>
       </div>

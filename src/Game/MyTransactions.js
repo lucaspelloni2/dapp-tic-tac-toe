@@ -7,7 +7,7 @@ const Container = styled.div`
   text-align: center;
   width: 600px;
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-  max-height: 350px;
+  max-height: 400px;
   overflow: scroll;
   background-image: radial-gradient(
     farthest-side at 212% 174px,
