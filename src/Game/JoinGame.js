@@ -61,7 +61,7 @@ const JoinParagraph = styled.p`
 
 const Button = styled.div`
   &:hover {
-    border: 2px solid #e4751b;
+    border: 2px solid ${props => props.hoverColor};
   }
   display: flex;
   justify-content: space-evenly;
@@ -103,7 +103,6 @@ class JoinGame extends Component {
     this.fetchData();
   }
   fetchData() {
-    console.log('fetching data..');
     let games = this.state.games;
     this.props.contract.methods
       .getGames()
@@ -273,6 +272,7 @@ class JoinGame extends Component {
   renderStartButton(game, text) {
     return (
       <Button
+        hoverColor={'#02ff31'}
         onClick={() => {
           this.startGame(game);
         }}
@@ -286,6 +286,7 @@ class JoinGame extends Component {
   renderJoinButton(game, text) {
     return (
       <Button
+        hoverColor={'#e4751b'}
         onClick={() => {
           this.joinGame(game, localStorage.getItem('username'));
         }}
@@ -297,8 +298,9 @@ class JoinGame extends Component {
   }
 
   renderBetButton(game, text) {
+    // TODO: implement BET CALLS
     return (
-      <Button>
+      <Button hoverColor={'#03b8d4'}>
         <GameIcon icon={'bet'} />
         <JoinParagraph>{text}</JoinParagraph>
       </Button>

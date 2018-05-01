@@ -74,12 +74,6 @@ class Lobby extends Component {
     };
   }
   componentDidMount() {
-    let event = this.props.contract.events.Joined();
-    console.log(event);
-    // event.watch((err, res) => {
-    //   console.log(err);
-    //   console.log(res);
-    // });
   }
 
   render(props) {
