@@ -355,21 +355,15 @@ contract TicTacToe {
         require(bet.state != BetState.NOT_EXISTING, "The bet does not exist.");
         require(bet.state < BetState.WITHDRAWN, "Not possible to join this bet.");
 
-        if(msg.value != bet.value) {
-            emit JoinedBet(false, betId, bet.state, "Not equal amount of value");
-        }else if (msg.sender == bet.bettorOnXAddr || msg.sender == bet.bettorOnOAddr){
-            emit JoinedBet(false, betId, bet.state, "Same address on both sides");
-        } else if (games[bet.gameId].state >= GameState.WINNER_X){
-            emit JoinedBet(false, betId, bet.state, "Game is already finished");
-        }
-        else {
-            if(bet.state == BetState.MISSING_X_BETTOR) {
-                bet.bettorOnXAddr = msg.sender;
-            } else {
-                bet.bettorOnOAddr = msg.sender;
-            }
-            bet.state = BetState.WITHDRAWN;
-            emit JoinedBet(true, betId, bet.state, "Joined Bet");
+        require(msg.value == bet.value, "Not equal amount of value.");
+        require(msg.sender != bet.bettorOnXAddr
+                || msg.sender != bet.bettorOnOAddr, "Same address on both sides.");
+        require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
+
+        if(bet.state == BetState.MISSING_X_BETTOR) {
+            bet.bettorOnXAddr = msg.sender;
+        } else {
+            bet.bettorOnOAddr = msg.sender;
         }
     }
 
