@@ -29,60 +29,62 @@ contract TicTacToe {
     uint[] openBetIds;
 
     struct Player {
-    bytes32 name;
-    uint[] gameIds;
+        bytes32 name;
+        uint[] gameIds;
     }
 
     struct Game {
-    uint gameId;
-    bytes32 name;
-    address ownerAddr;
+        uint gameId;
+        bytes32 name;
+        address ownerAddr;
 
-    GameState state;
+        GameState state;
 
-    uint moveCounter;
+        uint moveCounter;
 
-    address playerOAddr;
-    address playerXAddr;
+        address playerOAddr;
+        address playerXAddr;
 
-    address winnerAddr;
+        address winnerAddr;
 
-    SquareState[boardSize][boardSize] board;
+        SquareState[boardSize][boardSize] board;
     }
 
     struct Bet {
-    uint value;
-    uint gameId;
-    uint betId;
-    BetState state;
-    address bettorOnOAddr;
-    address bettorOnXAddr;
+        uint value;
+        uint gameId;
+        uint betId;
+        BetState state;
+        address bettorOnOAddr;
+        address bettorOnXAddr;
     }
 
     event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
     function createGame(bytes32 gameName, bytes32 playerName) public returns (uint gameId) {
-    gameId = counter++;
-    Game storage myGame = games[gameId];
+        gameId = counter++;
+        Game storage myGame = games[gameId];
 
-    myGame.gameId = gameId;
-    myGame.name = gameName;
-    myGame.ownerAddr = msg.sender;
-    myGame.state = GameState.EMPTY;
+        myGame.gameId = gameId;
+        myGame.name = gameName;
+        myGame.ownerAddr = msg.sender;
+        myGame.state = GameState.EMPTY;
 
-    joinGame(gameId, playerName);
+        joinGame(gameId, playerName);
 
-    openGameIds.push(gameId);
+        openGameIds.push(gameId);
 
-    emit GameCreated(true, gameId, myGame.state, "Game created");
-    return gameId;
+        emit GameCreated(true, gameId, myGame.state, "Game created");
+        return gameId;
     }
 
 
     function getGameIds() public view returns (uint[] gameIds) {
-    return openGameIds;
+        return openGameIds;
     }
 
-    function getGames() public view returns (uint[] gameIds, GameState[] gameStates, bytes32[] gameNames, address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
+    function getGames() public view returns (uint[] gameIds, GameState[] gameStates, bytes32[] gameNames
+            , address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
+
         gameIds = new uint[](openGameIds.length);
         gameStates = new GameState[](openGameIds.length);
         gameNames = new bytes32[](openGameIds.length);
@@ -92,20 +94,20 @@ contract TicTacToe {
         playerOs = new address[](openGameIds.length);
 
         for(uint i=0; i<openGameIds.length; i++) {
-        Game memory game = games[openGameIds[i]];
-        gameIds[i] = game.gameId;
-        gameStates[i] = game.state;
-        gameNames[i] = game.name;
-        owners[i] = game.ownerAddr;
-        ownerNames[i] = players[game.ownerAddr].name;
-        playerXs[i] = game.playerXAddr;
-        playerOs[i] = game.playerOAddr;
+            Game memory game = games[openGameIds[i]];
+            gameIds[i] = game.gameId;
+            gameStates[i] = game.state;
+            gameNames[i] = game.name;
+            owners[i] = game.ownerAddr;
+            ownerNames[i] = players[game.ownerAddr].name;
+            playerXs[i] = game.playerXAddr;
+            playerOs[i] = game.playerOAddr;
         }
         return (gameIds, gameStates, gameNames, owners, ownerNames, playerXs, playerOs);
     }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
-        function joinGame(uint gameId, bytes32 playerName) public {
+    function joinGame(uint gameId, bytes32 playerName) public {
         Game storage game = games[gameId];
 
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
@@ -117,24 +119,24 @@ contract TicTacToe {
             game.playerOAddr = msg.sender;
             game.state = GameState.WAITING_FOR_X;
 
-    emit Joined(true, game.gameId,game.state, playerName, "O");
-    }
-    else if (game.state == GameState.WAITING_FOR_X) {
-    //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+            emit Joined(true, game.gameId,game.state, playerName, "O");
+        }
+        else if (game.state == GameState.WAITING_FOR_X) {
+            //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
 
-    game.playerXAddr = msg.sender;
-    game.state = GameState.READY;
+            game.playerXAddr = msg.sender;
+            game.state = GameState.READY;
 
-    emit Joined(true, game.gameId,game.state, playerName, "X");
-    }
-    else if (game.state == GameState.WAITING_FOR_O) {
-    //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
+            emit Joined(true, game.gameId,game.state, playerName, "X");
+        }
+        else if (game.state == GameState.WAITING_FOR_O) {
+            //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
 
-    game.playerOAddr = msg.sender;
-    game.state = GameState.READY;
+            game.playerOAddr = msg.sender;
+            game.state = GameState.READY;
 
-    emit Joined(true, game.gameId,game.state, playerName, "O");
-    }
+            emit Joined(true, game.gameId,game.state, playerName, "O");
+        }
     }
 
 
@@ -158,12 +160,12 @@ contract TicTacToe {
         else if (game.state == GameState.READY && game.playerXAddr == msg.sender ) {
             game.playerXAddr = address(0);
             game.state = GameState.WAITING_FOR_X;
-        emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
         }
         else if (game.state == GameState.READY && game.playerOAddr == msg.sender ) {
             game.playerOAddr = address(0);
             game.state = GameState.WAITING_FOR_O;
-        emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
+            emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
         }
     }
 
@@ -193,7 +195,6 @@ contract TicTacToe {
         SquareState[boardSize][boardSize] memory board = games[gameId].board;
         SquareState[boardSize*boardSize] memory boardRep;
         uint i=0;
-
         for(uint y = 0; y < boardSize; y++) {
             for(uint x = 0; x < boardSize; x++) {
                 boardRep[i++] = board[y][x];
@@ -247,27 +248,26 @@ contract TicTacToe {
         //check column
         for (uint i = 0; i < boardSize; i++) {
             if (board[i][x] != symbol)  {
-            break;
-        }
-        else if(i == (boardSize -1)) {
-            game.winnerAddr = currentPlayer;
-            game.state = getGameState(symbol);
-            payoutBet(game.gameId);
-            return;
+                break;
+            }
+            else if(i == (boardSize -1)) {
+                game.winnerAddr = currentPlayer;
+                game.state = getGameState(symbol);
+                payoutBet(game.gameId);
+                return;
             }
         }
 
         //check row
         for (i = 0; i < boardSize; i++) {
             if(board[y][i] != symbol) {
-            break;
-        }
-
-        else if(i == (boardSize -1)) {
-            game.winnerAddr = currentPlayer;
-            game.state = getGameState(symbol);
-            payoutBet(game.gameId);
-            return;
+                break;
+            }
+            else if(i == (boardSize -1)) {
+                game.winnerAddr = currentPlayer;
+                game.state = getGameState(symbol);
+                payoutBet(game.gameId);
+                return;
             }
         }
 
@@ -277,11 +277,11 @@ contract TicTacToe {
                 if(board[i][i] != symbol) {
                     break;
                 }
-            else if(i == (boardSize -1)) {
-                game.winnerAddr = currentPlayer;
-                game.state = getGameState(symbol);
-                payoutBet(game.gameId);
-                return;
+                else if(i == (boardSize -1)) {
+                    game.winnerAddr = currentPlayer;
+                    game.state = getGameState(symbol);
+                    payoutBet(game.gameId);
+                    return;
                 }
             }
         }
@@ -308,8 +308,10 @@ contract TicTacToe {
     }
 
     function getGameState(SquareState symbol) private pure returns (GameState state) {
-        if (symbol == SquareState.X) return GameState.WINNER_X;
-        else return GameState.WINNER_O;
+        if (symbol == SquareState.X)
+            return GameState.WINNER_X;
+        else
+            return GameState.WINNER_O;
     }
 
     event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
