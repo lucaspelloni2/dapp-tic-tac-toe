@@ -81,14 +81,18 @@ class Login extends Component {
     if (localStorage.getItem('username')) {
       return <Redirect to="/lobby" />;
     }
-    return <div style={{background: 'red', marginBottom: 30}}>Please insert an username</div>;
+    return (
+      <div style={{background: 'red', marginBottom: 30}}>
+        Please insert an username
+      </div>
+    );
   }
 
   render() {
     return (
       <Container>
+        <MetaMaskLogo />
         <LoginContainer>
-          <MetaMaskLogo />
           <h1>Tic Tac Toe</h1>
           <SubTitle>Please insert your username</SubTitle>
           <FieldsContainer>
@@ -133,7 +137,7 @@ class Login extends Component {
               </InputLabel>
             </LoginRow>
             <ButtonLinkContainer>
-                {this.state.clickedLogin && this.login()}
+              {this.state.clickedLogin && this.login()}
               <button
                 onClick={() => {
                   this.setState({
@@ -143,7 +147,6 @@ class Login extends Component {
               >
                 Login
               </button>
-
             </ButtonLinkContainer>
           </FieldsContainer>
         </LoginContainer>
