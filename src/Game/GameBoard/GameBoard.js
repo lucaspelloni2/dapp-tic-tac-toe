@@ -172,7 +172,8 @@ class GameBoard extends Component {
     this.playMove(0, loc % 3, Math.trunc(loc / 3));
 
     // for testing purposes.. does not work yet.
-    //this.getPlayer(this.props.account.ethAddress);
+    // this.getPlayer(this.props.account.ethAddress);     DOES NOT WORK
+    //this.getPlayer('0x8745be2c582bcfc50acf9d2c61caded65a4e3825'); DOES NOT WORK EITHER
 
     let currentGameBoard = this.state.gameBoard;
     currentGameBoard.splice(loc, 1, this.state.turn);
