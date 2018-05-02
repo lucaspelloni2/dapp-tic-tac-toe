@@ -191,9 +191,8 @@ contract TicTacToe {
         }
     }
 
-    function getBoard(uint gameId) public view returns (SquareState[boardSize*boardSize]) { // apparently no string array can be returned yet in solidity
+    function getBoard(uint gameId) public view returns (SquareState[boardSize*boardSize] boardRep) { // apparently no string array can be returned yet in solidity
         SquareState[boardSize][boardSize] memory board = games[gameId].board;
-        SquareState[boardSize*boardSize] memory boardRep;
         uint i=0;
         for(uint y = 0; y < boardSize; y++) {
             for(uint x = 0; x < boardSize; x++) {
@@ -274,7 +273,7 @@ contract TicTacToe {
             else if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
-                payoutBet(game.gameId);
+                payoutBets(game.gameId);
                 return;
             }
         }
@@ -287,7 +286,7 @@ contract TicTacToe {
             else if(i == (boardSize -1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
-                payoutBet(game.gameId);
+                payoutBets(game.gameId);
                 return;
             }
         }
@@ -301,7 +300,7 @@ contract TicTacToe {
                 else if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
-                    payoutBet(game.gameId);
+                    payoutBets(game.gameId);
                     return;
                 }
             }
@@ -316,7 +315,7 @@ contract TicTacToe {
                 else if(i == (boardSize -1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
-                    payoutBet(game.gameId);
+                    payoutBets(game.gameId);
                     return;
                 }
             }
@@ -390,21 +389,60 @@ contract TicTacToe {
         emit JoinedBet(true, betId, bet.state, "Joined Bet");
     }
 
+    function withdrawBet(uint betId) public {
+        Bet storage bet = bets[betId];
+
+        require(bet.state != BetState.NOT_EXISTING
+                && bet.state != BetState.WITHDRAWN, "The bet does not exist.");
+        require(bet.state == BetState.MISSING_X_BETTOR
+                || bet.state == BetState.MISSING_O_BETTOR, "Bet is already fixed. Someone already joined.");
+
+        require(msg.sender == bet.bettorOnXAddr
+                || msg.sender == bet.bettorOnOAddr, "Only the owner can withdraw his bet.");
+
+        if (msg.sender == bet.bettorOnXAddr) {
+            (bet.bettorOnXAddr).transfer(bet.value);
+            bet.bettorOnXAddr = address(0);
+        }
+        else {
+            (bet.bettorOnOAddr).transfer(bet.value);
+            bet.bettorOnOAddr = address(0);
+        }
+
+        bet.state = BetState.WITHDRAWN;
+    }
+
     function getBalance() public view returns (uint) {
         return address(this).balance;
     }
 
-    function payoutBet(uint gameId) internal {
+    function payoutBets(uint gameId) internal {
         for (uint i = 0; i < openBetIds.length; i++) {
+
             Bet storage iBet = bets[openBetIds[i]];
+
             if(iBet.gameId == gameId) {
-                if(games[gameId].state == GameState.WINNER_X) {
-                    (iBet.bettorOnXAddr).transfer(2*(iBet.value));
-                } else if(games[gameId].state == GameState.WINNER_O){
-                    (iBet.bettorOnOAddr).transfer(2*(iBet.value));
-                } else {
-                    (iBet.bettorOnOAddr).transfer(iBet.value);
+
+                if (iBet.state == BetState.FIXED) {
+                    if(games[gameId].state == GameState.WINNER_X) {
+                        (iBet.bettorOnXAddr).transfer(2*(iBet.value));
+                    } else if(games[gameId].state == GameState.WINNER_O){
+                        (iBet.bettorOnOAddr).transfer(2*(iBet.value));
+                    } else {
+                        (iBet.bettorOnOAddr).transfer(iBet.value);
+                        (iBet.bettorOnXAddr).transfer(iBet.value);
+                    }
+                    iBet.state = BetState.PAYEDOUT;
+                }
+
+                if (iBet.state == BetState.MISSING_O_BETTOR) {
                     (iBet.bettorOnXAddr).transfer(iBet.value);
+                    iBet.state = BetState.WITHDRAWN;
+                }
+
+                if (iBet.state == BetState.MISSING_X_BETTOR) {
+                    (iBet.bettorOnOAddr).transfer(iBet.value);
+                    iBet.state = BetState.WITHDRAWN;
                 }
             }
         }
