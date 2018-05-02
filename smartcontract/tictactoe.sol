@@ -210,27 +210,48 @@ contract TicTacToe {
         require(game.state >= GameState.X_HAS_TURN, "The game is not started yet.");
         require(game.state < GameState.WINNER_X, "The game is already finished.");
 
+        game.moveCounter += 1;
+
         if (game.state == GameState.X_HAS_TURN) {
-            require(game.playerXAddr == msg.sender, "Sender not equal player X");
+
+            require(game.playerXAddr == msg.sender
+                    || game.moveCounter == boardSize*boardSize      // last move made automatically
+                    , "Sender not equal player X");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.X;
-            game.moveCounter += 1;
             game.state = GameState.O_HAS_TURN;
             checkForWinner(x, y, gameId, game.playerXAddr);
 
             emit MoveMade(true, gameId, game.state, x, y, "X");
         }
         else {
-            require(game.playerOAddr == msg.sender, "Sender not equal player O");
+
+            require(game.playerOAddr == msg.sender
+                    || game.moveCounter == boardSize*boardSize      // last move made automatically
+                    , "Sender not equal player O");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.O;
-            game.moveCounter += 1;
             game.state = GameState.X_HAS_TURN;
             checkForWinner(x, y, gameId, game.playerOAddr);
 
             emit MoveMade(true, gameId, game.state, x, y, "O");
+        }
+
+        if (game.moveCounter == boardSize*boardSize-1) {
+            doLastMoveAutomatically(game);
+        }
+    }
+
+    function doLastMoveAutomatically(Game game) private {
+        for(uint y = 0; y < boardSize; y++) {
+            for(uint x = 0; x < boardSize; x++) {
+                if (game.board[y][x] == SquareState.EMPTY) {
+                    playMove(game.gameId, x, y);
+                    return;
+                }
+            }
         }
     }
 
@@ -374,8 +395,6 @@ contract TicTacToe {
     }
 
     function payoutBet(uint gameId) internal {
-
-
         for (uint i = 0; i < openBetIds.length; i++) {
             Bet storage iBet = bets[openBetIds[i]];
             if(iBet.gameId == gameId) {
