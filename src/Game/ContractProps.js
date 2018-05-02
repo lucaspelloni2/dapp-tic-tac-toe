@@ -5,6 +5,197 @@ const ContractProps = {
       "inputs": [
         {
           "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "betId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "JoinedBet",
+      "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "bettingOnX",
+          "type": "bool"
+        }
+      ],
+      "name": "createBet",
+      "outputs": [
+        {
+          "name": "betId",
+          "type": "uint256"
+        }
+      ],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameName",
+          "type": "bytes32"
+        },
+        {
+          "name": "playerName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "createGame",
+      "outputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "betId",
+          "type": "uint256"
+        }
+      ],
+      "name": "joinBet",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "playerName",
+          "type": "bytes32"
+        }
+      ],
+      "name": "joinGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "name": "GameStarted",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "playerName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "Left",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "betId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "name": "BetCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
           "name": "success",
           "type": "bool"
         },
@@ -36,61 +227,6 @@ const ContractProps = {
       ],
       "name": "MoveMade",
       "type": "event"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "gameName",
-          "type": "bytes32"
-        },
-        {
-          "name": "playerName",
-          "type": "bytes32"
-        }
-      ],
-      "name": "createGame",
-      "outputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "name": "playerName",
-          "type": "bytes32"
-        }
-      ],
-      "name": "joinGame",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "name": "leaveGame",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
     },
     {
       "anonymous": false,
@@ -144,17 +280,26 @@ const ContractProps = {
         },
         {
           "indexed": false,
-          "name": "playerName",
-          "type": "bytes32"
-        },
-        {
-          "indexed": false,
-          "name": "symbol",
+          "name": "message",
           "type": "string"
         }
       ],
-      "name": "Left",
+      "name": "GameCreated",
       "type": "event"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "leaveGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
       "constant": false,
@@ -179,60 +324,6 @@ const ContractProps = {
       "type": "function"
     },
     {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "wasSuccess",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "state",
-          "type": "uint8"
-        },
-        {
-          "indexed": false,
-          "name": "message",
-          "type": "string"
-        }
-      ],
-      "name": "GameStarted",
-      "type": "event"
-    },
-    {
-      "anonymous": false,
-      "inputs": [
-        {
-          "indexed": false,
-          "name": "wasSuccess",
-          "type": "bool"
-        },
-        {
-          "indexed": false,
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "indexed": false,
-          "name": "state",
-          "type": "uint8"
-        },
-        {
-          "indexed": false,
-          "name": "message",
-          "type": "string"
-        }
-      ],
-      "name": "GameCreated",
-      "type": "event"
-    },
-    {
       "constant": false,
       "inputs": [
         {
@@ -253,6 +344,20 @@ const ContractProps = {
       "type": "constructor"
     },
     {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "betId",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawBet",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
       "constant": true,
       "inputs": [
         {
@@ -268,6 +373,10 @@ const ContractProps = {
         },
         {
           "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "betId",
           "type": "uint256"
         },
         {
@@ -336,6 +445,34 @@ const ContractProps = {
     },
     {
       "constant": true,
+      "inputs": [],
+      "name": "getBalance",
+      "outputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getBetIds",
+      "outputs": [
+        {
+          "name": "betIds",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
       "inputs": [
         {
           "name": "gameId",
@@ -345,7 +482,7 @@ const ContractProps = {
       "name": "getBoard",
       "outputs": [
         {
-          "name": "",
+          "name": "boardRep",
           "type": "uint8[9]"
         }
       ],
@@ -426,7 +563,8 @@ const ContractProps = {
     }
   ],
 
-  CONTRACT_ADDRESS: '0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718'
+  CONTRACT_ADDRESS: '0x00641149e235fbbbdb8df42f9eb63e3981390e3f'
+  //CONTRACT_ADDRESS: '0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718'
 };
 
 export default ContractProps;
