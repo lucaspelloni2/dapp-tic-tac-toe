@@ -151,7 +151,7 @@ class GameScreen extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         return {
-          playerName: this.props.web3.utils.hexToAscii(res)
+          playerName: this.props.web3.utils.hexToAscii(res).replace(/\u0000/g, '')
         };
       })
       .catch(err => {
