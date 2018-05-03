@@ -2,17 +2,17 @@ pragma solidity ^0.4.23;
 //pragma experimental ABIEncoderV2;
 
 contract TicTacToe {
-    uint constant boardSize = 3;
-    address contractOwner;
+//    address contractOwner;
 
+    uint constant boardSize = 3;
     enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
     enum BetState { NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
     enum SquareState { EMPTY, X, O }
 
 
-    constructor() public {
-        contractOwner = msg.sender;
-    }
+//    constructor() public {
+//        contractOwner = msg.sender;
+//    }
 
 
     // Players
@@ -60,8 +60,8 @@ contract TicTacToe {
     }
 
     event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
-    function createGame(bytes32 gameName, bytes32 playerName) public returns (uint gameId) {
-        gameId = counter++;
+    function createGame(bytes32 gameName, bytes32 playerName) public  {
+        uint gameId = counter++;
         Game storage myGame = games[gameId];
 
         myGame.gameId = gameId;
@@ -74,7 +74,6 @@ contract TicTacToe {
         openGameIds.push(gameId);
 
         emit GameCreated(true, gameId, myGame.state, "Game created");
-        return gameId;
     }
 
 
@@ -177,16 +176,16 @@ contract TicTacToe {
         require(game.state == GameState.READY, "Not enough players to start the game.");
         require(game.ownerAddr == msg.sender, "Only the game owner can start the game.");
 
-        initialize(gameId);
+        initialize(game);
         game.state = GameState.X_HAS_TURN;
         emit GameStarted(true, gameId, game.state, "game has been started.");
     }
 
-    function initialize(uint gameId) private {
-        SquareState[boardSize][boardSize] storage board = games[gameId].board;
+    function initialize(Game game) pure private {
+        //SquareState[boardSize][boardSize] memory board = games[gameId].board;
         for (uint y = 0; y < boardSize; y++) {
             for (uint x = 0; x < boardSize; x++) {
-                board[y][x] = SquareState.EMPTY;
+                game.board[y][x] = SquareState.EMPTY;
             }
         }
     }
@@ -335,13 +334,12 @@ contract TicTacToe {
     }
 
     event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
-    function createBet(uint gameId, bool bettingOnX) public payable returns (uint betId){
+    function createBet(uint gameId, bool bettingOnX) public payable {
 
-        Game memory game = games[gameId];
-        require(game.state >= GameState.EMPTY, "The game does not exist.");
-        require(game.state < GameState.WINNER_X, "The game is already finished.");
+        require(games[gameId].state >= GameState.EMPTY, "The game does not exist.");
+        require(games[gameId].state < GameState.WINNER_X, "The game is already finished.");
 
-        betId = betCounter++;
+        uint betId = betCounter++;
         Bet storage myBet = bets[betId];
 
         myBet.betId = betId;
@@ -360,7 +358,6 @@ contract TicTacToe {
         openBetIds.push(betId);
 
         emit BetCreated(true, betId, myBet.state, "Bet created");
-        return betId;
     }
 
     function getBetIds() public view returns (uint[] betIds) {
@@ -410,10 +407,6 @@ contract TicTacToe {
         }
 
         bet.state = BetState.WITHDRAWN;
-    }
-
-    function getBalance() public view returns (uint) {
-        return address(this).balance;
     }
 
     function payoutBets(uint gameId) internal {
