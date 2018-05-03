@@ -14,7 +14,6 @@ const Container = styled.div`
     #0177a2 0,
     #02b8d4 1200px
   );
-  
 `;
 
 const Table = styled.table`
@@ -81,10 +80,14 @@ class MyTransactions extends Component {
   }
 
   componentDidMount() {
-    setInterval(() => {
+    this.interval = setInterval(() => {
       this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
       this.fetchData();
     }, 1000);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   fetchData() {

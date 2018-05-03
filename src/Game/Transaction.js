@@ -8,5 +8,4 @@ class Transaction {
     Object.assign(this, data);
   }
 }
-
 export default Transaction;

@@ -12,6 +12,7 @@ import ContractProps from './Game/ContractProps';
 import JoinGame from './Game/JoinGame';
 import CreateGame from './Game/CreateGame';
 import GameBoard from "./Game/GameBoard/GameBoard";
+import GameScreen from './Game/GameScreen';
 
 let web3 = window.web3;
 
@@ -111,6 +112,18 @@ class App extends Component {
                     />
                   )}
                 />
+                  <Route
+                      path="/games/:address/:gameId"
+                      exact
+                      render={props => (
+                          <GameScreen
+                              {...props}
+                              web3={this.state.web3}
+                              contract={this.state.contract}
+                              account={this.state}
+                          />
+                      )}
+                  />
                 <Route
                   // path="/games/:address/:gameId"
                   path="/board"
