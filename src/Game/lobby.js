@@ -118,7 +118,12 @@ class Lobby extends Component {
                   <Button>Make Bet</Button>
                 </ButtonContainer>
                 <ButtonContainer>
-                  <Button>Join Bet</Button>
+                  <ButtonLink
+                    width={250}
+                    location={'bets'}
+                  >
+                    Join Bet
+                  </ButtonLink>
                 </ButtonContainer>
                 <ButtonContainer>
                   <Button>Rules</Button>
