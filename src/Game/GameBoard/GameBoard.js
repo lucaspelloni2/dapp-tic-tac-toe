@@ -117,6 +117,72 @@ class GameBoard extends Component {
       });
   }
 
+  createBet(gameId, isBetOnX, betValueInEth) {
+    this.props.contract.methods
+      .createBet(gameId, isBetOnX)
+      .send(
+        {from: this.props.account.ethAddress,
+          value: this.props.web3.utils.toWei(betValueInEth, 'ether')})
+      .on('transactionHash', tx => {
+        //this.addNewTx(tx, game.id, Status.GAME_JOINED);
+        // this.setLoadingToTrue(game);
+      })
+      .on('receipt', res => {
+        //console.log(res);
+        if (res.status === '0x1') {
+          console.log('bet created successfully');
+        } else {
+          console.log('bet could not be created');
+        }
+      })
+      .on('confirmation', function (confirmationNr) {
+        // is returned for the first 24 block confirmations
+      });
+  }
+
+  joinBet(betId, betValueInEth) {
+    this.props.contract.methods
+      .joinBet(betId)
+      .send(
+        {from: this.props.account.ethAddress,
+          value: this.props.web3.utils.toWei(betValueInEth, 'ether')})
+      .on('transactionHash', tx => {
+        //this.addNewTx(tx, game.id, Status.GAME_JOINED);
+        // this.setLoadingToTrue(game);
+      })
+      .on('receipt', res => {
+        //console.log(res);
+        if (res.status === '0x1') {
+          console.log('bet joined successfully');
+        } else {
+          console.log('bet could not be joined');
+        }
+      })
+      .on('confirmation', function (confirmationNr) {
+        // is returned for the first 24 block confirmations
+      });
+  }
+
+  getBet(betId) {
+    this.props.contract.methods
+      .bets(betId)
+      .call({from: this.props.account.ethAddress})
+      .then(res => {
+        let bet = {
+          betId: res.betId,
+          gameId: res.gameId,
+          state: res.state,
+          value: this.props.web3.utils.fromWei(res.value, 'ether'),
+          bettorOnOAddr: res.bettorOnOAddr,
+          bettorOnXAddr: res.bettorOnXAddr
+        };
+        console.log(bet);
+      })
+      .catch(err => {
+        console.log('error getting bet ' + betId + ": " + err);
+      });
+  }
+
 
   render() {
     return (
@@ -164,13 +230,18 @@ class GameBoard extends Component {
 
     1 mod 3  = 1   x
     1 / 2	    = 0	  y
-    */
+    */  
     console.log(loc % 3);
     console.log(Math.trunc(loc / 3));
-
     //TODO make gameId dynamic
-    this.playMove(0, loc % 3, Math.trunc(loc / 3));
+    //this.playMove(0, loc % 3, Math.trunc(loc / 3));
 
+    //this.createBet(0, false, '0.04');
+    //this.getBet(1);
+    //this.joinBet(1, '0.04');
+
+
+    console.log(this.props.account.ethAddress);
     // for testing purposes.. does not work yet.
     // this.getPlayer(this.props.account.ethAddress);     DOES NOT WORK
     //this.getPlayer('0x8745be2c582bcfc50acf9d2c61caded65a4e3825'); DOES NOT WORK EITHER
