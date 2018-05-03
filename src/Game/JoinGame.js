@@ -240,7 +240,6 @@ class JoinGame extends Component {
           // this.setState({games: [], loading: true});
           // this.fetchData();
           this.setState({receivedGame: game});
-          // TODO: navigate to GameScreen component
         } else {
           console.log('not possible to start game');
         }
