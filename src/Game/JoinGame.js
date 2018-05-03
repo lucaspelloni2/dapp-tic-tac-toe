@@ -370,7 +370,7 @@ class JoinGame extends Component {
       status
     });
     let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.push(transaction);
+    transactions.unshift(transaction);
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
