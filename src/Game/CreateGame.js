@@ -111,7 +111,7 @@ class CreateGame extends Component {
       status: Status.GAME_CREATED
     });
     let transactions = JSON.parse(localStorage.getItem('txs'));
-    transactions.push(transaction);
+    transactions.unshift(transaction);
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
