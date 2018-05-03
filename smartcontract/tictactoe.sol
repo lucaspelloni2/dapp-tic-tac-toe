@@ -2,7 +2,7 @@ pragma solidity ^0.4.23;
 //pragma experimental ABIEncoderV2;
 
 contract TicTacToe {
-//    address contractOwner;
+    //    address contractOwner;
 
     uint constant boardSize = 3;
     enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
@@ -10,9 +10,9 @@ contract TicTacToe {
     enum SquareState { EMPTY, X, O }
 
 
-//    constructor() public {
-//        contractOwner = msg.sender;
-//    }
+    //    constructor() public {
+    //        contractOwner = msg.sender;
+    //    }
 
 
     // Players
@@ -82,7 +82,7 @@ contract TicTacToe {
     }
 
     function getGames() public view returns (uint[] gameIds, GameState[] gameStates, bytes32[] gameNames
-            , address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
+    , address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
 
         gameIds = new uint[](openGameIds.length);
         gameStates = new GameState[](openGameIds.length);
@@ -103,6 +103,32 @@ contract TicTacToe {
             playerOs[i] = game.playerOAddr;
         }
         return (gameIds, gameStates, gameNames, owners, ownerNames, playerXs, playerOs);
+    }
+
+    function getBets() public view returns (uint[] betIds, uint[] gameIds, BetState[] betStates,
+        uint[] values, bytes32[] bettorOnX, bytes32[] bettorOnO) {
+
+        uint arrayLenght = openBetIds.length;
+
+        betIds = new uint[](arrayLenght);
+        gameIds = new uint[](arrayLenght);
+        betStates = new BetState[](arrayLenght);
+        values = new uint[](arrayLenght);
+        bettorOnX = new bytes32[](arrayLenght);
+        bettorOnO = new bytes32[](arrayLenght);
+
+
+        for(uint i=0; i<arrayLenght; i++) {
+            Bet memory bet = bets[openBetIds[i]];
+            betIds[i] = bet.betId;
+            gameIds[i] = bet.gameId;
+            betStates[i] = bet.state;
+            values[i] = bet.value;
+            bettorOnX[i] = players[bet.bettorOnXAddr].name;
+            bettorOnO[i] = players[bet.bettorOnOAddr].name;
+
+        }
+        return (betIds, gameIds, betStates, values, bettorOnX, bettorOnO);
     }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
@@ -213,8 +239,8 @@ contract TicTacToe {
         if (game.state == GameState.X_HAS_TURN) {
 
             require(game.playerXAddr == msg.sender
-                    || game.moveCounter == boardSize*boardSize      // last move made automatically
-                    , "Sender not equal player X");
+            || game.moveCounter == boardSize*boardSize      // last move made automatically
+            , "Sender not equal player X");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.X;
@@ -226,8 +252,8 @@ contract TicTacToe {
         else {
 
             require(game.playerOAddr == msg.sender
-                    || game.moveCounter == boardSize*boardSize      // last move made automatically
-                    , "Sender not equal player O");
+            || game.moveCounter == boardSize*boardSize      // last move made automatically
+            , "Sender not equal player O");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.O;
@@ -374,7 +400,7 @@ contract TicTacToe {
 
         require(msg.value == bet.value, "Not equal amount of value.");
         require(msg.sender != bet.bettorOnXAddr
-                || msg.sender != bet.bettorOnOAddr, "Same address on both sides.");
+        || msg.sender != bet.bettorOnOAddr, "Same address on both sides.");
         require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
 
         if(bet.state == BetState.MISSING_X_BETTOR) {
@@ -390,12 +416,12 @@ contract TicTacToe {
         Bet storage bet = bets[betId];
 
         require(bet.state != BetState.NOT_EXISTING
-                && bet.state != BetState.WITHDRAWN, "The bet does not exist.");
+        && bet.state != BetState.WITHDRAWN, "The bet does not exist.");
         require(bet.state == BetState.MISSING_X_BETTOR
-                || bet.state == BetState.MISSING_O_BETTOR, "Bet is already fixed. Someone already joined.");
+        || bet.state == BetState.MISSING_O_BETTOR, "Bet is already fixed. Someone already joined.");
 
         require(msg.sender == bet.bettorOnXAddr
-                || msg.sender == bet.bettorOnOAddr, "Only the owner can withdraw his bet.");
+        || msg.sender == bet.bettorOnOAddr, "Only the owner can withdraw his bet.");
 
         if (msg.sender == bet.bettorOnXAddr) {
             (bet.bettorOnXAddr).transfer(bet.value);
@@ -440,4 +466,5 @@ contract TicTacToe {
             }
         }
     }
+
 }
