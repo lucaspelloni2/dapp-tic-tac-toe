@@ -1,41 +1,169 @@
 const ContractProps = {
   CONTRACT_ABI: [
     {
-      "anonymous": false,
+      "constant": true,
       "inputs": [
         {
-          "indexed": false,
-          "name": "success",
-          "type": "bool"
-        },
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "games",
+      "outputs": [
         {
-          "indexed": false,
           "name": "gameId",
           "type": "uint256"
         },
         {
-          "indexed": false,
+          "name": "name",
+          "type": "bytes32"
+        },
+        {
+          "name": "ownerAddr",
+          "type": "address"
+        },
+        {
           "name": "state",
           "type": "uint8"
         },
         {
-          "indexed": false,
-          "name": "x",
+          "name": "moveCounter",
           "type": "uint256"
         },
         {
-          "indexed": false,
-          "name": "y",
-          "type": "uint256"
+          "name": "playerOAddr",
+          "type": "address"
         },
         {
-          "indexed": false,
-          "name": "symbol",
-          "type": "string"
+          "name": "playerXAddr",
+          "type": "address"
+        },
+        {
+          "name": "winnerAddr",
+          "type": "address"
         }
       ],
-      "name": "MoveMade",
-      "type": "event"
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getBetIds",
+      "outputs": [
+        {
+          "name": "betIds",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "uint256"
+        }
+      ],
+      "name": "bets",
+      "outputs": [
+        {
+          "name": "value",
+          "type": "uint256"
+        },
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "betId",
+          "type": "uint256"
+        },
+        {
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "name": "bettorOnOAddr",
+          "type": "address"
+        },
+        {
+          "name": "bettorOnXAddr",
+          "type": "address"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "betId",
+          "type": "uint256"
+        }
+      ],
+      "name": "joinBet",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "leaveGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        }
+      ],
+      "name": "getBoard",
+      "outputs": [
+        {
+          "name": "boardRep",
+          "type": "uint8[9]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "name": "bettingOnX",
+          "type": "bool"
+        }
+      ],
+      "name": "createBet",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
     },
     {
       "constant": false,
@@ -50,12 +178,57 @@ const ContractProps = {
         }
       ],
       "name": "createGame",
-      "outputs": [
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
         {
           "name": "gameId",
           "type": "uint256"
+        },
+        {
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "name": "y",
+          "type": "uint256"
         }
       ],
+      "name": "playMove",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [],
+      "name": "getGameIds",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": false,
+      "inputs": [
+        {
+          "name": "betId",
+          "type": "uint256"
+        }
+      ],
+      "name": "withdrawBet",
+      "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
@@ -79,6 +252,63 @@ const ContractProps = {
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "getGames",
+      "outputs": [
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "gameStates",
+          "type": "uint8[]"
+        },
+        {
+          "name": "gameNames",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "owners",
+          "type": "address[]"
+        },
+        {
+          "name": "ownerNames",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "playerXs",
+          "type": "address[]"
+        },
+        {
+          "name": "playerOs",
+          "type": "address[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
+      "constant": true,
+      "inputs": [
+        {
+          "name": "",
+          "type": "address"
+        }
+      ],
+      "name": "players",
+      "outputs": [
+        {
+          "name": "name",
+          "type": "bytes32"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "constant": false,
       "inputs": [
         {
@@ -86,11 +316,38 @@ const ContractProps = {
           "type": "uint256"
         }
       ],
-      "name": "leaveGame",
+      "name": "startGame",
       "outputs": [],
       "payable": false,
       "stateMutability": "nonpayable",
       "type": "function"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "message",
+          "type": "string"
+        }
+      ],
+      "name": "GameCreated",
+      "type": "event"
     },
     {
       "anonymous": false,
@@ -157,28 +414,6 @@ const ContractProps = {
       "type": "event"
     },
     {
-      "constant": false,
-      "inputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "name": "x",
-          "type": "uint256"
-        },
-        {
-          "name": "y",
-          "type": "uint256"
-        }
-      ],
-      "name": "playMove",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
       "anonymous": false,
       "inputs": [
         {
@@ -210,7 +445,7 @@ const ContractProps = {
       "inputs": [
         {
           "indexed": false,
-          "name": "wasSuccess",
+          "name": "success",
           "type": "bool"
         },
         {
@@ -225,208 +460,81 @@ const ContractProps = {
         },
         {
           "indexed": false,
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "y",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "MoveMade",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "betId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
           "name": "message",
           "type": "string"
         }
       ],
-      "name": "GameCreated",
+      "name": "BetCreated",
       "type": "event"
     },
     {
-      "constant": false,
+      "anonymous": false,
       "inputs": [
         {
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "name": "startGame",
-      "outputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "function"
-    },
-    {
-      "inputs": [],
-      "payable": false,
-      "stateMutability": "nonpayable",
-      "type": "constructor"
-    },
-    {
-      "constant": true,
-      "inputs": [
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
         {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "bets",
-      "outputs": [
-        {
-          "name": "value",
+          "indexed": false,
+          "name": "betId",
           "type": "uint256"
         },
         {
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
+          "indexed": false,
           "name": "state",
           "type": "uint8"
         },
         {
-          "name": "bettorOnOAddr",
-          "type": "address"
-        },
-        {
-          "name": "bettorOnXAddr",
-          "type": "address"
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
         }
       ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "uint256"
-        }
-      ],
-      "name": "games",
-      "outputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        },
-        {
-          "name": "name",
-          "type": "bytes32"
-        },
-        {
-          "name": "ownerAddr",
-          "type": "address"
-        },
-        {
-          "name": "state",
-          "type": "uint8"
-        },
-        {
-          "name": "moveCounter",
-          "type": "uint256"
-        },
-        {
-          "name": "playerOAddr",
-          "type": "address"
-        },
-        {
-          "name": "playerXAddr",
-          "type": "address"
-        },
-        {
-          "name": "winnerAddr",
-          "type": "address"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "gameId",
-          "type": "uint256"
-        }
-      ],
-      "name": "getBoard",
-      "outputs": [
-        {
-          "name": "",
-          "type": "uint8[9]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getGameIds",
-      "outputs": [
-        {
-          "name": "gameIds",
-          "type": "uint256[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [],
-      "name": "getGames",
-      "outputs": [
-        {
-          "name": "gameIds",
-          "type": "uint256[]"
-        },
-        {
-          "name": "gameStates",
-          "type": "uint8[]"
-        },
-        {
-          "name": "gameNames",
-          "type": "bytes32[]"
-        },
-        {
-          "name": "owners",
-          "type": "address[]"
-        },
-        {
-          "name": "ownerNames",
-          "type": "bytes32[]"
-        },
-        {
-          "name": "playerXs",
-          "type": "address[]"
-        },
-        {
-          "name": "playerOs",
-          "type": "address[]"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
-    },
-    {
-      "constant": true,
-      "inputs": [
-        {
-          "name": "",
-          "type": "address"
-        }
-      ],
-      "name": "players",
-      "outputs": [
-        {
-          "name": "name",
-          "type": "bytes32"
-        }
-      ],
-      "payable": false,
-      "stateMutability": "view",
-      "type": "function"
+      "name": "JoinedBet",
+      "type": "event"
     }
   ],
 
-  CONTRACT_ADDRESS: '0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718'
+  CONTRACT_ADDRESS: '0x3f1c1b3b8007f6645ba6a146d4e1359e15d3d529'
+  // CONTRACT_ADDRESS: '0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718'
 };
 
 export default ContractProps;
