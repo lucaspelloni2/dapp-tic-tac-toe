@@ -222,29 +222,31 @@ class JoinGame extends Component {
       });
   }
 
-  startGame(game) {
-    this.props.contract.methods
-      .startGame(game.id)
-      .send({from: this.props.account.ethAddress})
-      .on('transactionHash', tx => {
-        this.addNewTx(tx, game.id, Status.GAME_STARTED);
-        this.setLoadingToTrue(game);
-      })
-      .on('receipt', res => {
-        console.log(res);
-        if (res.status === '0x1') {
-          console.log('game started successfully');
-          this.setState({games: [], loading: true});
-          this.fetchData();
-        } else {
-          console.log('not possible to start game');
-        }
-      })
-      .on('confirmation', function(confirmationNr) {
-        // is returned for the first 24 block confirmations
-        //console.log('new game joined ' + confirmationNr);
-      });
-  }
+    startGame(game) {
+        this.props.contract.methods
+            .startGame(game.id)
+            .send({from: this.props.account.ethAddress})
+            .on('transactionHash', tx => {
+                this.addNewTx(tx, game.id, Status.GAME_STARTED);
+                this.setLoadingToTrue(game);
+            })
+            .on('receipt', res => {
+                console.log(res);
+                if (res.status === '0x1') {
+                    console.log('game started successfully');
+                    this.setState({games: [], loading: true});
+                    this.fetchData();
+
+                    // TODO: navigate to GameScreen component
+                } else {
+                    console.log('not possible to start game');
+                }
+            })
+            .on('confirmation', function(confirmationNr) {
+                // is returned for the first 24 block confirmations
+                //console.log('new game joined ' + confirmationNr);
+            });
+    }
 
   setLoadingToTrue(game) {
     this.state.games.forEach(g => {
@@ -307,7 +309,7 @@ class JoinGame extends Component {
     );
   }
 
-  getButton(game) {
+   getButton(game) {
     if (game.status === GAME_STATUS.READY) {
       if (game.owner === this.props.account.ethAddress) {
         return this.renderStartButton(game, 'Start');

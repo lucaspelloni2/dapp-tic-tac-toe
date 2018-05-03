@@ -112,18 +112,7 @@ class App extends Component {
                     />
                   )}
                 />
-                  <Route
-                      path="/games/:address/:gameId"
-                      exact
-                      render={props => (
-                          <GameScreen
-                              {...props}
-                              web3={this.state.web3}
-                              contract={this.state.contract}
-                              account={this.state}
-                          />
-                      )}
-                  />
+
                 <Route
                   // path="/games/:address/:gameId"
                   path="/board"
