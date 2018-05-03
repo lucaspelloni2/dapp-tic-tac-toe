@@ -2,7 +2,6 @@ import React from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
-import Notification from './Notification';
 
 const Container = styled.div`
   display: flex;
