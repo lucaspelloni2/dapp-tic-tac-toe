@@ -60,7 +60,10 @@ const Result = styled.div``;
 const Player = styled.div`
   width: 130px;
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-  border: 1px solid #03b8d4;
+
+  //border: 1px solid #03b8d4;
+  border-bottom: ${props =>
+    props.isTurn ? '3px solid #f6841b' : 0}; // wer ish dra
   line-height: 16px;
   text-transform: uppercase;
   white-space: nowrap;
@@ -99,6 +102,7 @@ class GameScreen extends Component {
     super();
     this.state = {
       game: null,
+      board: null,
       playerX: null,
       playerO: null,
       loading: true
@@ -106,12 +110,19 @@ class GameScreen extends Component {
   }
 
   async componentDidMount() {
-    await this.getGame(this.props.match.params.gameId);
-    const [playerX, playerO] = await Promise.all([
+    let gameId = this.props.match.params.gameId;
+    await this.getGame(gameId);
+    const [playerX, playerO, board] = await Promise.all([
       this.getPlayer(this.state.game.playerXAddr),
-      this.getPlayer(this.state.game.playerOAddr)
+      this.getPlayer(this.state.game.playerOAddr),
+      this.getBoard(gameId)
     ]);
-    this.setState({playerX: playerX, playerO: playerO, loading: false});
+    this.setState({
+      playerX: playerX,
+      playerO: playerO,
+      board: board,
+      loading: false
+    });
   }
 
   getGame(gameId) {
@@ -149,6 +160,26 @@ class GameScreen extends Component {
         );
       });
   }
+  getBoard(gameId) {
+    return this.props.contract.methods
+      .getBoard(gameId)
+      .call({from: this.props.account.ethAddress})
+      .then(res => {
+        return res;
+        // for (let i = 0; i < res.length; i++) {
+        //     if (res[i] === '0')
+        //         this.state.gameBoard[i] = '';
+        //     else if (res[i] === '1')
+        //         this.state.gameBoard[i] = 'x';
+        //     else
+        //         this.state.gameBoard[i] = 'o';
+        // }
+        // console.log(this.state.gameBoard);
+      })
+      .catch(err => {
+        console.log('error getting board from game ' + gameId + ': ' + err);
+      });
+  }
 
   render() {
     return (
@@ -170,7 +201,7 @@ class GameScreen extends Component {
 
                 <PlayerContainer>
                   <XContainer>
-                    <PlayerX>
+                    <PlayerX isTurn={true}>
                       <TicTacToeSymbols symbol={'X'} width={30} height={30} />
                     </PlayerX>
                     <PlayerName>{this.state.playerX.playerName}</PlayerName>
@@ -179,7 +210,7 @@ class GameScreen extends Component {
                     <h2>VS</h2>
                   </VsContainer>
                   <OContainer>
-                    <PlayerO>
+                    <PlayerO isTurn={false}>
                       <TicTacToeSymbols symbol={'O'} width={30} height={30} />
                     </PlayerO>
                     <PlayerName>{this.state.playerO.playerName}</PlayerName>
@@ -194,7 +225,13 @@ class GameScreen extends Component {
 
               {/*}}*/}
               {/*/>*/}
-              <Board />
+              <Board
+                game={this.state.game}
+                board={this.state.board}
+                onChecked={tileChecked => {
+                  console.log({tileChecked});
+                }}
+              />
               <MyTransactions web3={this.props.web3} />
             </ParentContainer>
           </div>

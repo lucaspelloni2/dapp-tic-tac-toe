@@ -1,11 +1,18 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import TicTacToeSymbols from './TicTacToeSymbols';
 
 const BoardContainer = styled.div`
   width: 400px;
   height: 400px;
   margin-top: 4em;
-  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
+  box-shadow: rgba(43, 9, 9, 0.4) 0px 0px 15px 3px;
+
+  background-image: radial-gradient(
+    farthest-side at 212% 285px,
+    #0eef49 0,
+    #03b8d4 1200px
+  );
   //border: 1px solid #03b8d4;
 `;
 
@@ -16,17 +23,20 @@ const Table = styled.table`
   height: 100%;
   border-collapse: collapse;
   table-layout: fixed;
+
+  color: black;
 `;
 
 const Row = styled.tr`
-  border-top: 1px solid black;
+  border-top: 5px solid #0186ae;
   &:first-child {
     border-top: 0;
   }
 `;
 
 const Square = styled.td`
-  border-right: 1px solid black;
+  padding: 8px;
+  border-right: 5px solid #0186ae;
   &:last-child {
     border-right: 0;
   }
@@ -37,44 +47,43 @@ class Board extends Component {
     super();
   }
 
+  renderSymbol(symbol) {
+    switch (symbol) {
+      case '0':
+        return '';
+      case '1':
+        return <TicTacToeSymbols width={70} heigth={70} symbol={'X'} />;
+      case '2':
+        return <TicTacToeSymbols width={70} heigth={70} symbol={'O'} />;
+    }
+  }
+
   render() {
+    console.log(this.props.board);
     return (
       <div>
         <BoardContainer>
           <Table>
-            <Row>
-              <Square data-col="0" data-row="0">
-                1asfasfasf
-              </Square>
-              <Square data-col="0" data-row="1">
-                2
-              </Square>
-              <Square data-col="0" data-row="2">
-                3
-              </Square>
-            </Row>
-            <Row>
-              <Square data-col="1" data-row="0">
-                4
-              </Square>
-              <Square data-col="1" data-row="1">
-                5
-              </Square>
-              <Square data-col="1" data-row="2">
-                6
-              </Square>
-            </Row>
-            <Row>
-              <Square data-col="2" data-row="0">
-                7
-              </Square>
-              <Square data-col="2" data-row="1">
-                8
-              </Square>
-              <Square data-col="2" data-row="2">
-                9
-              </Square>
-            </Row>
+            <tbody>
+              {new Array(3).fill(true).map((a, i) => {
+                return (
+                  <Row key={i}>
+                    {new Array(3).fill(true).map((b, j) => {
+                      return (
+                        <Square
+                          key={i * 3 + j}
+                          data-col={i}
+                          data-row={j}
+                          onClick={() => this.props.onChecked(i * 3 + j)}
+                        >
+                          {this.renderSymbol(this.props.board[i * 3 + j])}
+                        </Square>
+                      );
+                    })}
+                  </Row>
+                );
+              })}
+            </tbody>
           </Table>
         </BoardContainer>
       </div>
