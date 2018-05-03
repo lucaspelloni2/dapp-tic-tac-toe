@@ -250,6 +250,10 @@ class JoinGame extends Component {
       });
   }
 
+  playGame(game) {
+    this.setState({receivedGame: game});
+  }
+
   setLoadingToTrue(game) {
     this.state.games.forEach(g => {
       if (game.id === g.id) {
@@ -304,7 +308,12 @@ class JoinGame extends Component {
   renderBetButton(game, text) {
     // TODO: implement BET CALLS
     return (
-      <Button hoverColor={'#03b8d4'}>
+      <Button
+        hoverColor={'#03b8d4'}
+        onClick={() => {
+          this.playGame(game);
+        }}
+      >
         <GameIcon icon={'bet'} />
         <JoinParagraph>{text}</JoinParagraph>
       </Button>
