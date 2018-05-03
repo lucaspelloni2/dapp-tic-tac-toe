@@ -3,6 +3,8 @@ import styled from 'styled-components';
 import MetaMaskLogo from './MetamaskLogo';
 import MyTransactions from './MyTransactions';
 import GameSpinner from './GameSpinner';
+import Board from './Board';
+import TicTacToeSymbols from './TicTacToeSymbols';
 
 const TopContainer = styled.div`
   display: flex;
@@ -27,13 +29,6 @@ const CentralSpinner = styled.div`
   justify-content: center;
   align-items: center;
   margin-top: 15em;
-`;
-const Board = styled.div`
-  width: 400px;
-  height: 400px;
-  margin-top: 4em;
-  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-  border: 1px solid #03b8d4;
 `;
 
 const GameNameContainer = styled.div`
@@ -74,25 +69,6 @@ const Player = styled.div`
 `;
 
 const PlayerX = Player.extend``;
-
-const X = styled.svg`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-  path {
-    stroke: white;
-    stroke-width: 16px;
-  }
-`;
-
-const O = styled.svg`
-  width: ${props => props.width}px;
-  height: ${props => props.height}px;
-  path {
-    fill: none;
-    stroke: white;
-    stroke-width: 16px;
-  }
-`;
 
 const MetaContainer = styled.div`
   margin-bottom: 60px;
@@ -195,10 +171,7 @@ class GameScreen extends Component {
                 <PlayerContainer>
                   <XContainer>
                     <PlayerX>
-                      <X viewBox="0 0 128 128" width={30} height={30}>
-                        <path d="M16,16L112,112" />
-                        <path d="M112,16L16,112" />
-                      </X>
+                      <TicTacToeSymbols symbol={'X'} width={30} height={30} />
                     </PlayerX>
                     <PlayerName>{this.state.playerX.playerName}</PlayerName>
                   </XContainer>
@@ -207,9 +180,7 @@ class GameScreen extends Component {
                   </VsContainer>
                   <OContainer>
                     <PlayerO>
-                      <O viewBox="0 0 128 128" width={30} height={30}>
-                        <path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16" />
-                      </O>
+                      <TicTacToeSymbols symbol={'O'} width={30} height={30} />
                     </PlayerO>
                     <PlayerName>{this.state.playerO.playerName}</PlayerName>
                   </OContainer>
@@ -217,6 +188,12 @@ class GameScreen extends Component {
               </GameInfo>
             </TopContainer>
             <ParentContainer>
+              {/*<Board*/}
+              {/*boardState={}*/}
+              {/*onClick={tileNumber => {*/}
+
+              {/*}}*/}
+              {/*/>*/}
               <Board />
               <MyTransactions web3={this.props.web3} />
             </ParentContainer>
