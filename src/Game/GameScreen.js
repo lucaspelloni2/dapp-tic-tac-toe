@@ -181,6 +181,41 @@ class GameScreen extends Component {
       });
   }
 
+  async playMove(selectedTile) {
+    // this.setState({
+    //     board: {
+    //         ...this.state.board,
+    //         [selectedTile]: '1'
+    //     }
+    // });
+
+      // TODO: change 1 and 2 below and do it dynmic according to the selected tile
+    this.props.contract.methods
+      .playMove(this.state.game.gameId, "1", "2") //this.props.web3.utils.toBN(
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        // this.addNewTx(tx, game.id, Status.GAME_JOINED);
+        // this.setLoadingToTrue(game);
+      })
+      .on('receipt', async res => {
+        //console.log(res);
+        if (res.status === '0x1') {
+          console.log('play successful');
+          this.setState({board: [], loading: true});
+          let newBoard = await this.getBoard(this.state.game.gameId);
+          this.setState({board: newBoard, loading: false});
+
+          //this.getBoard(gameId);
+        } else {
+          console.log('play not successful');
+        }
+      })
+      .on('confirmation', function(confirmationNr) {
+        // is returned for the first 24 block confirmations
+        //console.log('new game joined ' + confirmationNr);
+      });
+  }
+
   render() {
     return (
       <div style={{marginBottom: '4em'}}>
@@ -229,7 +264,7 @@ class GameScreen extends Component {
                 game={this.state.game}
                 board={this.state.board}
                 onChecked={tileChecked => {
-                  console.log({tileChecked});
+                  this.playMove(tileChecked);
                 }}
               />
               <MyTransactions web3={this.props.web3} />
