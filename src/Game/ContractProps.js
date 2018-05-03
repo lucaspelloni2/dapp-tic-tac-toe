@@ -234,6 +234,40 @@ const ContractProps = {
       "type": "function"
     },
     {
+      "constant": true,
+      "inputs": [],
+      "name": "getBets",
+      "outputs": [
+        {
+          "name": "betIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "gameIds",
+          "type": "uint256[]"
+        },
+        {
+          "name": "betStates",
+          "type": "uint8[]"
+        },
+        {
+          "name": "values",
+          "type": "uint256[]"
+        },
+        {
+          "name": "bettorOnX",
+          "type": "bytes32[]"
+        },
+        {
+          "name": "bettorOnO",
+          "type": "bytes32[]"
+        }
+      ],
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
+    },
+    {
       "constant": false,
       "inputs": [
         {
@@ -533,7 +567,7 @@ const ContractProps = {
     }
   ],
 
-  CONTRACT_ADDRESS: '0x3f1c1b3b8007f6645ba6a146d4e1359e15d3d529'
+  CONTRACT_ADDRESS: '0xe3b2b7399be6bf8651d30d5b78b1705fde91bc25'
   // CONTRACT_ADDRESS: '0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718'
 };
 
