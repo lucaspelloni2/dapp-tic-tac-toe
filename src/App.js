@@ -13,6 +13,7 @@ import JoinGame from './Game/JoinGame';
 import CreateGame from './Game/CreateGame';
 import GameBoard from './Game/GameBoard/GameBoard';
 import GameScreen from './Game/GameScreen';
+import BetsScreen from "./Game/BetsScreen";
 
 let web3 = window.web3;
 
@@ -117,6 +118,18 @@ class App extends Component {
                   exact
                   render={props => (
                     <GameScreen
+                      {...props}
+                      web3={this.state.web3}
+                      contract={this.state.contract}
+                      account={this.state}
+                    />
+                  )}
+                />
+                <Route
+                  path="/bets"
+                  exact
+                  render={props => (
+                    <BetsScreen
                       {...props}
                       web3={this.state.web3}
                       contract={this.state.contract}
