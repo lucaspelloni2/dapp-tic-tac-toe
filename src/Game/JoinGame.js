@@ -7,6 +7,7 @@ import Transaction from './Transaction';
 import Status from './Status';
 import ArrowWithPath from './ArrowWithPath';
 import GameIcon from './GameIcon';
+import {Redirect} from 'react-router';
 
 const Container = styled.div`
   display: flex;
@@ -96,6 +97,7 @@ class JoinGame extends Component {
     super();
     this.state = {
       games: [],
+      receivedGame: null,
       loading: true
     };
   }
@@ -210,6 +212,7 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
+
           this.setState({games: [], loading: true});
           this.fetchData();
         } else {
@@ -222,31 +225,31 @@ class JoinGame extends Component {
       });
   }
 
-    startGame(game) {
-        this.props.contract.methods
-            .startGame(game.id)
-            .send({from: this.props.account.ethAddress})
-            .on('transactionHash', tx => {
-                this.addNewTx(tx, game.id, Status.GAME_STARTED);
-                this.setLoadingToTrue(game);
-            })
-            .on('receipt', res => {
-                console.log(res);
-                if (res.status === '0x1') {
-                    console.log('game started successfully');
-                    this.setState({games: [], loading: true});
-                    this.fetchData();
-
-                    // TODO: navigate to GameScreen component
-                } else {
-                    console.log('not possible to start game');
-                }
-            })
-            .on('confirmation', function(confirmationNr) {
-                // is returned for the first 24 block confirmations
-                //console.log('new game joined ' + confirmationNr);
-            });
-    }
+  startGame(game) {
+    this.props.contract.methods
+      .startGame(game.id)
+      .send({from: this.props.account.ethAddress})
+      .on('transactionHash', tx => {
+        this.addNewTx(tx, game.id, Status.GAME_STARTED);
+        this.setLoadingToTrue(game);
+      })
+      .on('receipt', res => {
+        console.log(res);
+        if (res.status === '0x1') {
+          console.log('game started successfully');
+          // this.setState({games: [], loading: true});
+          // this.fetchData();
+          this.setState({receivedGame: game});
+          // TODO: navigate to GameScreen component
+        } else {
+          console.log('not possible to start game');
+        }
+      })
+      .on('confirmation', function(confirmationNr) {
+        // is returned for the first 24 block confirmations
+        //console.log('new game joined ' + confirmationNr);
+      });
+  }
 
   setLoadingToTrue(game) {
     this.state.games.forEach(g => {
@@ -309,7 +312,7 @@ class JoinGame extends Component {
     );
   }
 
-   getButton(game) {
+  getButton(game) {
     if (game.status === GAME_STATUS.READY) {
       if (game.owner === this.props.account.ethAddress) {
         return this.renderStartButton(game, 'Start');
@@ -374,71 +377,83 @@ class JoinGame extends Component {
   render() {
     return (
       <div>
-        <MetaMaskLogo />
-        <ParentContainer>
-          <Container>
-            <h1>List of available Games</h1>
-            <GamesContainer>
-              {this.state.loading ? (
-                <SpinnerContainer>
-                  <Spinner width={60} height={60} />
-                </SpinnerContainer>
-              ) : null}
-              <Table>
-                <tbody>
-                  <tr>
-                    <th>
-                      <Title>Game Id</Title>
-                    </th>
-                    <th>
-                      <Title>Game name</Title>
-                    </th>
-                    <th>
-                      <Title>Owner</Title>
-                    </th>
-                    <th>
-                      <Title>Status</Title>
-                    </th>
-                    <th />
-                  </tr>
-                </tbody>
-                <tbody>
-                  {this.state.games.map(game => (
-                    <tr key={game.id}>
-                      <td>
-                        <GameId>{game.id}</GameId>
-                      </td>
-                      <td>{game.name}</td>
-                      <td>
-                        <a
-                          style={{marginRight: 10}}
-                          href={
-                            'https://ropsten.etherscan.io/address/' + game.owner
-                          }
-                          target="_blank"
-                        >
-                          {game.ownerName}
-                        </a>
-                      </td>
-                      <td>{this.getGameStatus(game.status)}</td>
-                      <td style={{width: 120}}>
-                        {this.getJoiningStatus(game, game.joiningStatus)}
-                      </td>
+        <div>
+          {this.state.receivedGame ? (
+            <Redirect
+              to={`/games/${this.props.account.ethAddress}/${
+                this.state.receivedGame.id
+              }`}
+            />
+          ) : null}
+        </div>
+        <div>
+          <MetaMaskLogo />
+          <ParentContainer>
+            <Container>
+              <h1>List of available Games</h1>
+              <GamesContainer>
+                {this.state.loading ? (
+                  <SpinnerContainer>
+                    <Spinner width={60} height={60} />
+                  </SpinnerContainer>
+                ) : null}
+                <Table>
+                  <tbody>
+                    <tr>
+                      <th>
+                        <Title>Game Id</Title>
+                      </th>
+                      <th>
+                        <Title>Game name</Title>
+                      </th>
+                      <th>
+                        <Title>Owner</Title>
+                      </th>
+                      <th>
+                        <Title>Status</Title>
+                      </th>
+                      <th />
                     </tr>
-                  ))}
-                </tbody>
-              </Table>
-            </GamesContainer>
-          </Container>
-          <MyTransactions marginTop={5} web3={this.props.web3} />
-        </ParentContainer>
+                  </tbody>
+                  <tbody>
+                    {this.state.games.map(game => (
+                      <tr key={game.id}>
+                        <td>
+                          <GameId>{game.id}</GameId>
+                        </td>
+                        <td>{game.name}</td>
+                        <td>
+                          <a
+                            style={{marginRight: 10}}
+                            href={
+                              'https://ropsten.etherscan.io/address/' +
+                              game.owner
+                            }
+                            target="_blank"
+                          >
+                            {game.ownerName}
+                          </a>
+                        </td>
+                        <td>{this.getGameStatus(game.status)}</td>
+                        <td style={{width: 120}}>
+                          {this.getJoiningStatus(game, game.joiningStatus)}
+                        </td>
+                      </tr>
+                    ))}
+                  </tbody>
+                </Table>
+              </GamesContainer>
+            </Container>
+            <MyTransactions marginTop={5} web3={this.props.web3} />
+          </ParentContainer>
 
-        <ArrowWithPath
-          top={50}
-          location={'/games/' + this.props.account.ethAddress}
-        >
-          Create a game!
-        </ArrowWithPath>
+          <ArrowWithPath
+            top={50}
+            location={'/games/' + this.props.account.ethAddress}
+          >
+            Create a game!
+          </ArrowWithPath>
+        </div>
       </div>
     );
   }
