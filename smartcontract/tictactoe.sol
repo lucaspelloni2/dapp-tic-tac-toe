@@ -5,15 +5,13 @@ contract TicTacToe {
     //    address contractOwner;
 
     uint constant boardSize = 3;
-    enum GameState { NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW }
-    enum BetState { NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT }
-    enum SquareState { EMPTY, X, O }
-
+    enum GameState {NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW}
+    enum BetState {NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT}
+    enum SquareState {EMPTY, X, O}
 
     //    constructor() public {
     //        contractOwner = msg.sender;
     //    }
-
 
     // Players
     mapping(address => Player) public players;        // address = key, Player is value
@@ -60,7 +58,8 @@ contract TicTacToe {
     }
 
     event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
-    function createGame(bytes32 gameName, bytes32 playerName) public  {
+
+    function createGame(bytes32 gameName, bytes32 playerName) public {
         uint gameId = counter++;
         Game storage myGame = games[gameId];
 
@@ -92,7 +91,7 @@ contract TicTacToe {
         playerXs = new address[](openGameIds.length);
         playerOs = new address[](openGameIds.length);
 
-        for(uint i=0; i<openGameIds.length; i++) {
+        for (uint i = 0; i < openGameIds.length; i++) {
             Game memory game = games[openGameIds[i]];
             gameIds[i] = game.gameId;
             gameStates[i] = game.state;
@@ -118,7 +117,7 @@ contract TicTacToe {
         bettorOnO = new bytes32[](arrayLenght);
 
 
-        for(uint i=0; i<arrayLenght; i++) {
+        for (uint i = 0; i < arrayLenght; i++) {
             Bet memory bet = bets[openBetIds[i]];
             betIds[i] = bet.betId;
             gameIds[i] = bet.gameId;
@@ -132,19 +131,20 @@ contract TicTacToe {
     }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
+
     function joinGame(uint gameId, bytes32 playerName) public {
         Game storage game = games[gameId];
 
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
-        require(game.state < GameState.READY, "The game is full." );
+        require(game.state < GameState.READY, "The game is full.");
 
         players[msg.sender].name = playerName;
 
-        if(game.state == GameState.EMPTY) {
+        if (game.state == GameState.EMPTY) {
             game.playerOAddr = msg.sender;
             game.state = GameState.WAITING_FOR_X;
 
-            emit Joined(true, game.gameId,game.state, playerName, "O");
+            emit Joined(true, game.gameId, game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
             //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
@@ -152,7 +152,7 @@ contract TicTacToe {
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
 
-            emit Joined(true, game.gameId,game.state, playerName, "X");
+            emit Joined(true, game.gameId, game.state, playerName, "X");
         }
         else if (game.state == GameState.WAITING_FOR_O) {
             //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
@@ -160,34 +160,35 @@ contract TicTacToe {
             game.playerOAddr = msg.sender;
             game.state = GameState.READY;
 
-            emit Joined(true, game.gameId,game.state, playerName, "O");
+            emit Joined(true, game.gameId, game.state, playerName, "O");
         }
     }
 
 
     event Left(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
+
     function leaveGame(uint gameId) public {
         Game storage game = games[gameId];
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
-        require(game.state <= GameState.READY, "The game is already started." );
+        require(game.state <= GameState.READY, "The game is already started.");
         require(game.playerOAddr == msg.sender || game.playerXAddr == msg.sender, "Player is not part of this game.");
 
-        if (game.state == GameState.WAITING_FOR_X && game.playerOAddr == msg.sender ) {
+        if (game.state == GameState.WAITING_FOR_X && game.playerOAddr == msg.sender) {
             game.playerOAddr = address(0);
             game.state = GameState.EMPTY;
             emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
         }
-        else if (game.state == GameState.WAITING_FOR_O && game.playerXAddr == msg.sender ) {
+        else if (game.state == GameState.WAITING_FOR_O && game.playerXAddr == msg.sender) {
             game.playerXAddr = address(0);
             game.state = GameState.EMPTY;
             emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
         }
-        else if (game.state == GameState.READY && game.playerXAddr == msg.sender ) {
+        else if (game.state == GameState.READY && game.playerXAddr == msg.sender) {
             game.playerXAddr = address(0);
             game.state = GameState.WAITING_FOR_X;
             emit Left(true, game.gameId, game.state, players[msg.sender].name, "X");
         }
-        else if (game.state == GameState.READY && game.playerOAddr == msg.sender ) {
+        else if (game.state == GameState.READY && game.playerOAddr == msg.sender) {
             game.playerOAddr = address(0);
             game.state = GameState.WAITING_FOR_O;
             emit Left(true, game.gameId, game.state, players[msg.sender].name, "O");
@@ -195,6 +196,7 @@ contract TicTacToe {
     }
 
     event GameStarted(bool wasSuccess, uint gameId, GameState state, string message);
+
     function startGame(uint gameId) public {
         Game storage game = games[gameId];
 
@@ -216,11 +218,11 @@ contract TicTacToe {
         }
     }
 
-    function getBoard(uint gameId) public view returns (SquareState[boardSize*boardSize] boardRep) { // apparently no string array can be returned yet in solidity
+    function getBoard(uint gameId) public view returns (SquareState[boardSize * boardSize] boardRep) {// apparently no string array can be returned yet in solidity
         SquareState[boardSize][boardSize] memory board = games[gameId].board;
-        uint i=0;
-        for(uint y = 0; y < boardSize; y++) {
-            for(uint x = 0; x < boardSize; x++) {
+        uint i = 0;
+        for (uint y = 0; y < boardSize; y++) {
+            for (uint x = 0; x < boardSize; x++) {
                 boardRep[i++] = board[y][x];
             }
         }
@@ -228,6 +230,7 @@ contract TicTacToe {
     }
 
     event MoveMade(bool success, uint gameId, GameState state, uint x, uint y, string symbol);
+
     function playMove(uint gameId, uint x, uint y) public {
         Game storage game = games[gameId];
 
@@ -239,7 +242,7 @@ contract TicTacToe {
         if (game.state == GameState.X_HAS_TURN) {
 
             require(game.playerXAddr == msg.sender
-            || game.moveCounter == boardSize*boardSize      // last move made automatically
+            || game.moveCounter == boardSize * boardSize      // last move made automatically
             , "Sender not equal player X");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
@@ -252,7 +255,7 @@ contract TicTacToe {
         else {
 
             require(game.playerOAddr == msg.sender
-            || game.moveCounter == boardSize*boardSize      // last move made automatically
+            || game.moveCounter == boardSize * boardSize      // last move made automatically
             , "Sender not equal player O");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
@@ -263,14 +266,14 @@ contract TicTacToe {
             emit MoveMade(true, gameId, game.state, x, y, "O");
         }
 
-        if (game.moveCounter == boardSize*boardSize-1) {
+        if (game.moveCounter == boardSize * boardSize - 1) {
             doLastMoveAutomatically(game);
         }
     }
 
     function doLastMoveAutomatically(Game game) private {
-        for(uint y = 0; y < boardSize; y++) {
-            for(uint x = 0; x < boardSize; x++) {
+        for (uint y = 0; y < boardSize; y++) {
+            for (uint x = 0; x < boardSize; x++) {
                 if (game.board[y][x] == SquareState.EMPTY) {
                     playMove(game.gameId, x, y);
                     return;
@@ -283,7 +286,7 @@ contract TicTacToe {
         Game storage game = games[gameId];
 
         //is winning already possible?
-        if(game.moveCounter < 2*boardSize -1) {
+        if (game.moveCounter < 2 * boardSize - 1) {
             return;
         }
 
@@ -292,10 +295,10 @@ contract TicTacToe {
 
         //check column
         for (uint i = 0; i < boardSize; i++) {
-            if (board[i][x] != symbol)  {
+            if (board[i][x] != symbol) {
                 break;
             }
-            else if(i == (boardSize -1)) {
+            else if (i == (boardSize - 1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
                 payoutBets(game.gameId);
@@ -305,10 +308,10 @@ contract TicTacToe {
 
         //check row
         for (i = 0; i < boardSize; i++) {
-            if(board[y][i] != symbol) {
+            if (board[y][i] != symbol) {
                 break;
             }
-            else if(i == (boardSize -1)) {
+            else if (i == (boardSize - 1)) {
                 game.winnerAddr = currentPlayer;
                 game.state = getGameState(symbol);
                 payoutBets(game.gameId);
@@ -317,12 +320,12 @@ contract TicTacToe {
         }
 
         //check diagonal
-        if(x == y) {
+        if (x == y) {
             for (i = 0; i < boardSize; i++) {
-                if(board[i][i] != symbol) {
+                if (board[i][i] != symbol) {
                     break;
                 }
-                else if(i == (boardSize -1)) {
+                else if (i == (boardSize - 1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
                     payoutBets(game.gameId);
@@ -332,12 +335,12 @@ contract TicTacToe {
         }
 
         // check anti diagonal
-        if(x + y == (boardSize -1)) {
+        if (x + y == (boardSize - 1)) {
             for (i = 0; i < boardSize; i++) {
-                if(board[x][boardSize-1-i] != symbol) {            //!equalStrings(board[x][(boardSize-1) - 1], symbol)) {
+                if (board[x][boardSize - 1 - i] != symbol) {//!equalStrings(board[x][(boardSize-1) - 1], symbol)) {
                     break;
                 }
-                else if(i == (boardSize -1)) {
+                else if (i == (boardSize - 1)) {
                     game.winnerAddr = currentPlayer;
                     game.state = getGameState(symbol);
                     payoutBets(game.gameId);
@@ -347,7 +350,7 @@ contract TicTacToe {
         }
 
         //check for draw
-        if (game.moveCounter == boardSize*boardSize) {
+        if (game.moveCounter == boardSize * boardSize) {
             game.state = GameState.DRAW;
         }
     }
@@ -360,6 +363,7 @@ contract TicTacToe {
     }
 
     event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
+
     function createBet(uint gameId, bool bettingOnX) public payable {
 
         require(games[gameId].state >= GameState.EMPTY, "The game does not exist.");
@@ -373,7 +377,7 @@ contract TicTacToe {
         myBet.value = msg.value;
 
         // x-betting
-        if(bettingOnX) {
+        if (bettingOnX) {
             myBet.bettorOnXAddr = msg.sender;
             myBet.state = BetState.MISSING_O_BETTOR;
         } else {
@@ -391,6 +395,7 @@ contract TicTacToe {
     }
 
     event JoinedBet(bool wasSuccess, uint betId, BetState state, string symbol);
+
     function joinBet(uint betId) payable public {
 
         Bet storage bet = bets[betId];
@@ -403,7 +408,7 @@ contract TicTacToe {
         || msg.sender != bet.bettorOnOAddr, "Same address on both sides.");
         require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
 
-        if(bet.state == BetState.MISSING_X_BETTOR) {
+        if (bet.state == BetState.MISSING_X_BETTOR) {
             bet.bettorOnXAddr = msg.sender;
         } else {
             bet.bettorOnOAddr = msg.sender;
@@ -440,13 +445,13 @@ contract TicTacToe {
 
             Bet storage iBet = bets[openBetIds[i]];
 
-            if(iBet.gameId == gameId) {
+            if (iBet.gameId == gameId) {
 
                 if (iBet.state == BetState.FIXED) {
-                    if(games[gameId].state == GameState.WINNER_X) {
-                        (iBet.bettorOnXAddr).transfer(2*(iBet.value));
-                    } else if(games[gameId].state == GameState.WINNER_O){
-                        (iBet.bettorOnOAddr).transfer(2*(iBet.value));
+                    if (games[gameId].state == GameState.WINNER_X) {
+                        (iBet.bettorOnXAddr).transfer(2 * (iBet.value));
+                    } else if (games[gameId].state == GameState.WINNER_O) {
+                        (iBet.bettorOnOAddr).transfer(2 * (iBet.value));
                     } else {
                         (iBet.bettorOnOAddr).transfer(iBet.value);
                         (iBet.bettorOnXAddr).transfer(iBet.value);
