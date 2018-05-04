@@ -4,11 +4,10 @@ import MetaMaskLogo from './MetamaskLogo';
 import MyTransactions from './MyTransactions';
 import GameSpinner from './GameSpinner';
 import Board from './Board';
-import TicTacToeSymbols from './TicTacToeSymbols';
 import Transaction from './Transaction';
 import Status from './Status';
 import StatusRender from './StatusRender';
-import GAME_STATUS from './GameStatus';
+import GameTopInfo from './GameTopInfo';
 
 const TopContainer = styled.div`
   display: flex;
@@ -16,10 +15,6 @@ const TopContainer = styled.div`
   align-items: center;
   flex-direction: column;
   margin-top: 2em;
-`;
-const Title = styled.p`
-  margin: 0;
-  font-size: 38px;
 `;
 
 const ParentContainer = styled.div`
@@ -35,76 +30,11 @@ const CentralSpinner = styled.div`
   margin-top: 15em;
 `;
 
-const GameNameContainer = styled.div`
-  border-radius: 4px;
-  padding: 8px;
-  background-image: radial-gradient(
-    farthest-side at 212% 285px,
-    #05e03e 0,
-    #00a7cb 1200px
-  );
-  display: flex;
-  justify-content: center;
-  align-items: center;
-`;
-
-const GameInfo = styled.div`
-  width: 400px;
-`;
-
-const PlayerContainer = styled.div`
-  height: 145px;
-  background: #005686;
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-`;
-
 const Result = styled.div``;
-const Player = styled.div`
-  width: 130px;
-  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-
-  //border: 1px solid #03b8d4;
-  border-bottom: ${props =>
-    props.isTurn ? '3px solid #f6841b' : 0}; // wer ish dra
-  line-height: 16px;
-  text-transform: uppercase;
-  white-space: nowrap;
-  border-radius: 2px;
-  padding: 4px;
-`;
-
-const PlayerX = Player.extend``;
 
 const MetaContainer = styled.div`
   margin-bottom: 60px;
   margin-top: -35px;
-`;
-
-const XContainer = styled.div`
-  display: flex;
-  flex-direction: column;
-`;
-
-const PlayerName = styled.p`
-  margin-bottom: 0;
-  margin-top: 5px;
-`;
-
-const VsContainer = styled.div`
-  margin-top: 0px;
-  margin-bottom: 25px;
-`;
-
-const OContainer = XContainer.extend``;
-
-const PlayerO = Player.extend``;
-
-const CurrentTurn = styled.div`
-  color: #f6841b;
-  text-align: center;
-  margin-top: -45px;
 `;
 
 class GameScreen extends Component {
@@ -204,7 +134,7 @@ class GameScreen extends Component {
     this.props.contract.methods
       .playMove(
         this.state.game.gameId,
-        (selectedTile % 3),
+        selectedTile % 3,
         Math.trunc(selectedTile / 3)
       ) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
@@ -245,10 +175,6 @@ class GameScreen extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
-  getCurrentPlayer() {
-    return <p>{this.state.game.status.toString().replace(/_/g , " ")} </p>;
-  }
-
   render() {
     return (
       <div style={{marginBottom: '4em'}}>
@@ -262,34 +188,11 @@ class GameScreen extends Component {
               <MetaContainer>
                 <MetaMaskLogo />
               </MetaContainer>
-              <GameInfo>
-                <GameNameContainer>
-                  <Title>Game {this.state.game.gameId}</Title>
-                </GameNameContainer>
-
-                <PlayerContainer>
-                  <XContainer>
-                    <PlayerX
-                      isTurn={this.state.game.status === GAME_STATUS.X_HAS_TURN}
-                    >
-                      <TicTacToeSymbols symbol={'X'} width={30} height={30} />
-                    </PlayerX>
-                    <PlayerName>{this.state.playerX.playerName}</PlayerName>
-                  </XContainer>
-                  <VsContainer>
-                    <h2>VS</h2>
-                  </VsContainer>
-                  <OContainer>
-                    <PlayerO
-                      isTurn={this.state.game.status === GAME_STATUS.O_HAS_TURN}
-                    >
-                      <TicTacToeSymbols symbol={'O'} width={30} height={30} />
-                    </PlayerO>
-                    <PlayerName>{this.state.playerO.playerName}</PlayerName>
-                  </OContainer>
-                </PlayerContainer>
-                <CurrentTurn>{this.getCurrentPlayer()}</CurrentTurn>
-              </GameInfo>
+              <GameTopInfo
+                game={this.state.game}
+                playerX={this.state.playerX}
+                playerO={this.state.playerO}
+              />
             </TopContainer>
             <ParentContainer>
               {/*<Board*/}
