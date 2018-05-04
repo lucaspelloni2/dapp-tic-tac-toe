@@ -5,9 +5,10 @@ import MyTransactions from './MyTransactions';
 import GameSpinner from './GameSpinner';
 import Board from './Board';
 import TicTacToeSymbols from './TicTacToeSymbols';
-import Transaction from "./Transaction";
-import Status from "./Status";
-import StatusRender from "./StatusRender";
+import Transaction from './Transaction';
+import Status from './Status';
+import StatusRender from './StatusRender';
+import GAME_STATUS from './GameStatus';
 
 const TopContainer = styled.div`
   display: flex;
@@ -143,12 +144,10 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
-          console.log(this.state.game);
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
       });
-
   }
   getPlayer(address) {
     return this.props.contract.methods
@@ -210,8 +209,11 @@ class GameScreen extends Component {
         //console.log(res);
         if (res.status === '0x1') {
           console.log('play successful');
-          this.setState({board: [], loading: true});
-          let newBoard = await this.getBoard(this.state.game.gameId);
+          let gameId = this.state.game.gameId;
+          this.setState({board: [], game: null, loading: true});
+          await this.getGame(gameId);
+          let newBoard = await this.getBoard(gameId);
+
           this.setState({board: newBoard, loading: false});
 
           //this.getBoard(gameId);
@@ -258,7 +260,9 @@ class GameScreen extends Component {
 
                 <PlayerContainer>
                   <XContainer>
-                    <PlayerX isTurn={true}>
+                    <PlayerX
+                      isTurn={this.state.game.status === GAME_STATUS.X_HAS_TURN}
+                    >
                       <TicTacToeSymbols symbol={'X'} width={30} height={30} />
                     </PlayerX>
                     <PlayerName>{this.state.playerX.playerName}</PlayerName>
@@ -267,7 +271,9 @@ class GameScreen extends Component {
                     <h2>VS</h2>
                   </VsContainer>
                   <OContainer>
-                    <PlayerO isTurn={false}>
+                    <PlayerO
+                      isTurn={this.state.game.status === GAME_STATUS.O_HAS_TURN}
+                    >
                       <TicTacToeSymbols symbol={'O'} width={30} height={30} />
                     </PlayerO>
                     <PlayerName>{this.state.playerO.playerName}</PlayerName>
