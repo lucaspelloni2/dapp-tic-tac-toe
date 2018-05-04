@@ -59,6 +59,31 @@ const Value = styled.span`
   margin-left: 5px;
 `;
 
+const Paragraph = styled.p`
+  margin-bottom: 0;
+  margin-top: 0;
+  font-size: 13px;
+  font-weight: bold;
+
+  letter-spacing: 3px;
+`;
+
+const Button = styled.div`
+  &:hover {
+    border: 1px solid ${props => props.hoverColor};
+  }
+  padding: 2px;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
+  border-radius: 4px;
+  flex-direction: row;
+  cursor: pointer;
+  transition: all 0.2s ease-out;
+  width: 65px;
+`;
+
 class Bets extends Component {
   constructor() {
     super();
@@ -145,6 +170,27 @@ class Bets extends Component {
     }
   }
 
+  getButton(bet) {
+    if (
+      bet.status === BET_STATUS.MISSING_X_BETTOR ||
+      bet.status === BET_STATUS.MISSING_O_BETTOR
+    ) {
+      return (
+        <Button
+          hoverColor={'#03b8d4'}
+          onClick={() => {
+            // this.bet();
+          }}
+        >
+          <GameIcon icon={'bet'} height={'14'}  />
+          <Paragraph>BET</Paragraph>
+        </Button>
+      );
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -195,6 +241,7 @@ class Bets extends Component {
                       </td>
                       <td>{bet.bettorOnX}</td>
                       <td>{bet.bettorOnO}</td>
+                      <td>{this.getButton(bet)}</td>
                     </tr>
                   ))}
                 </tbody>
