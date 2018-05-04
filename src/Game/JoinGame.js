@@ -8,6 +8,8 @@ import Status from './Status';
 import ArrowWithPath from './ArrowWithPath';
 import GameIcon from './GameIcon';
 import {Redirect} from 'react-router';
+import StatusRender from './StatusRender';
+import GAME_STATUS from './GameStatus';
 
 const Container = styled.div`
   display: flex;
@@ -129,6 +131,7 @@ class JoinGame extends Component {
     let playerX = res.playerXs[i];
     let playerO = res.playerOs[i];
     let status = res.gameStates[i];
+    console.log(StatusRender.renderStatus(status));
     if (
       status === '1' ||
       status === '2' ||
@@ -139,7 +142,7 @@ class JoinGame extends Component {
     ) {
       game = {
         id: res.gameIds[i],
-        status: JoinGame.renderStatus(status),
+        status: StatusRender.renderStatus(status), //JoinGame.renderStatus(status),
         name: this.hexToAscii(res.gameNames[i]),
         owner,
         ownerName: this.hexToAscii(res.ownerNames[i]),
@@ -150,43 +153,6 @@ class JoinGame extends Component {
     }
 
     return game;
-  }
-
-  static renderStatus(id) {
-    let status = '';
-    switch (id) {
-      case '0':
-        status = GAME_STATUS.NOT_EXISTING;
-        break;
-      case '1':
-        status = GAME_STATUS.EMPTY;
-        break;
-      case '2':
-        status = GAME_STATUS.WAITING_FOR_O;
-        break;
-      case '3':
-        status = GAME_STATUS.WAITING_FOR_X;
-        break;
-      case '4':
-        status = GAME_STATUS.READY;
-        break;
-      case '5':
-        status = GAME_STATUS.X_HAS_TURN;
-        break;
-      case '6':
-        status = GAME_STATUS.O_HAS_TURN;
-        break;
-      case '7':
-        status = GAME_STATUS.WINNER_X;
-        break;
-      case '8':
-        status = GAME_STATUS.WINNER_O;
-        break;
-      case '9':
-        status = GAME_STATUS.DRAW;
-        break;
-    }
-    return status;
   }
 
   hexToAscii(byte32) {
@@ -466,17 +432,5 @@ class JoinGame extends Component {
     );
   }
 }
-const GAME_STATUS = {
-  NOT_EXISTING: 'NOT_EXISTING',
-  EMPTY: 'EMPTY',
-  WAITING_FOR_O: 'WAITING_FOR_O',
-  WAITING_FOR_X: 'WAITING_FOR_X',
-  READY: 'READY',
-  X_HAS_TURN: 'X_HAS_TURN',
-  O_HAS_TURN: 'O_HAS_TURN',
-  WINNER_X: 'WINNER_X',
-  WINNER_O: 'WINNER_O',
-  DRAW: 'DRAW'
-};
 
 export default JoinGame;

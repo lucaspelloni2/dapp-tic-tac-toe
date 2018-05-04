@@ -1,0 +1,14 @@
+const GAME_STATUS = {
+    NOT_EXISTING: 'NOT_EXISTING',
+    EMPTY: 'EMPTY',
+    WAITING_FOR_O: 'WAITING_FOR_O',
+    WAITING_FOR_X: 'WAITING_FOR_X',
+    READY: 'READY',
+    X_HAS_TURN: 'X_HAS_TURN',
+    O_HAS_TURN: 'O_HAS_TURN',
+    WINNER_X: 'WINNER_X',
+    WINNER_O: 'WINNER_O',
+    DRAW: 'DRAW'
+};
+
+export default GAME_STATUS;
