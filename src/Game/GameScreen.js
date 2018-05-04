@@ -151,7 +151,9 @@ class GameScreen extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         return {
-          playerName: this.props.web3.utils.hexToAscii(res).replace(/\u0000/g, '')
+          playerName: this.props.web3.utils
+            .hexToAscii(res)
+            .replace(/\u0000/g, '')
         };
       })
       .catch(err => {
@@ -188,10 +190,12 @@ class GameScreen extends Component {
     //         [selectedTile]: '1'
     //     }
     // });
-
-      // TODO: change 1 and 2 below and do it dynmic according to the selected tile
     this.props.contract.methods
-      .playMove(this.state.game.gameId, (selectedTile % 3).toString(), (Math.trunc(selectedTile / 3)).toString()) //this.props.web3.utils.toBN(
+      .playMove(
+        this.state.game.gameId,
+        (selectedTile % 3).toString(),
+        Math.trunc(selectedTile / 3).toString()
+      ) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         // this.addNewTx(tx, game.id, Status.GAME_JOINED);
