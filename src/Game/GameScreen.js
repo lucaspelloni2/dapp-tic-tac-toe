@@ -196,7 +196,7 @@ class GameScreen extends Component {
       .playMove(this.state.game.gameId, (selectedTile % 3).toString(), (Math.trunc(selectedTile / 3)).toString()) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        this.addNewTx(tx, this.state.game.gameId, Status.GAME_JOINED);
+        this.addNewTx(tx, this.state.game.gameId, Status.MOVE_MADE);
         // this.setLoadingToTrue(this.state.game);
       })
       .on('receipt', async res => {
