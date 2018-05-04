@@ -29,6 +29,7 @@ const Table = styled.table`
 
 const Row = styled.tr`
   border-top: 5px solid #0186ae;
+  height: 133px;
   &:first-child {
     border-top: 0;
   }

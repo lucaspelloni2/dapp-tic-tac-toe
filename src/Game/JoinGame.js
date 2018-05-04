@@ -131,7 +131,6 @@ class JoinGame extends Component {
     let playerX = res.playerXs[i];
     let playerO = res.playerOs[i];
     let status = res.gameStates[i];
-    console.log(StatusRender.renderStatus(status));
     if (
       status === '1' ||
       status === '2' ||
@@ -168,7 +167,6 @@ class JoinGame extends Component {
         this.setLoadingToTrue(game);
       })
       .on('receipt', res => {
-        console.log(res);
         const returnValues = res.events.Joined.returnValues;
         if (res.status === '0x1') {
           console.log(

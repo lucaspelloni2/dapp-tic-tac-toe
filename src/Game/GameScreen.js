@@ -7,6 +7,7 @@ import Board from './Board';
 import TicTacToeSymbols from './TicTacToeSymbols';
 import Transaction from "./Transaction";
 import Status from "./Status";
+import StatusRender from "./StatusRender";
 
 const TopContainer = styled.div`
   display: flex;
@@ -135,17 +136,19 @@ class GameScreen extends Component {
         let game = {
           gameId: res.gameId,
           name: this.props.web3.utils.hexToAscii(res.name),
-          state: res.state,
+          status: StatusRender.renderStatus(res.state),
           ownerAddr: res.ownerAddr,
           moveCounter: res.moveCounter,
           playerXAddr: res.playerXAddr,
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
+          console.log(this.state.game);
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
       });
+
   }
   getPlayer(address) {
     return this.props.contract.methods
