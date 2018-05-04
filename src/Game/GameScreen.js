@@ -73,6 +73,10 @@ class GameScreen extends Component {
     }, 200);
   }
 
+  componentWillUnmount() {
+    clearInterval(this.interval);
+  }
+
   getGame(gameId) {
     return this.props.contract.methods
       .games(gameId)
@@ -201,6 +205,9 @@ class GameScreen extends Component {
                   game={this.state.game}
                   playerX={this.state.playerX}
                   playerO={this.state.playerO}
+                  web3={this.props.web3}
+                  contract={this.props.contract}
+                  account={this.props.account}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>

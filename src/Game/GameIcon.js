@@ -15,9 +15,11 @@ const PlayIcon = styled.svg`
 
 const BetIcon = styled.svg`
   width: 15px;
-  height: 35px;
+  height: ${props => props.height ? props.height : '35'}px;
   fill: #03b8d4;
   margin-bottom: 2px;
+  margin-left: ${props => props.marginLeft ? props.marginLeft : null};
+  margin-right: ${props => props.marginRight ? props.marginRight : null};
 `;
 
 const ConfirmedIcon = styled.svg`
@@ -44,7 +46,11 @@ const GameIcon = props => {
 
     case 'bet':
       return (
-        <BetIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
+        <BetIcon
+          xmlns="http://www.w3.org/2000/svg"
+          viewBox="0 0 320 512"
+          {...props}
+        >
           <path d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z" />
         </BetIcon>
       );
