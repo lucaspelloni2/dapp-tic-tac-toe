@@ -33,9 +33,12 @@ const TicTacToeSymbols = props => {
     case 'O':
       return (
         <O viewBox="0 0 128 128" {...props}>
-            <path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16" />
+          <path d="M64,16A48,48 0 1,0 64,112A48,48 0 1,0 64,16" />
         </O>
       );
+
+    default:
+      return <div>default</div>;
   }
 };
 

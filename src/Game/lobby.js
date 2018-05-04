@@ -63,8 +63,6 @@ const UserName = styled.p`
   margin-bottom: 0;
 `;
 
-const YourGames = styled.div``;
-
 class Lobby extends Component {
   constructor() {
     super();

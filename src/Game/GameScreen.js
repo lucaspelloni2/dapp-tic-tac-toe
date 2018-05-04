@@ -29,9 +29,6 @@ const CentralSpinner = styled.div`
   align-items: center;
   margin-top: 15em;
 `;
-
-const Result = styled.div``;
-
 const MetaContainer = styled.div`
   margin-bottom: 60px;
   margin-top: -35px;
@@ -195,12 +192,6 @@ class GameScreen extends Component {
               />
             </TopContainer>
             <ParentContainer>
-              {/*<Board*/}
-              {/*boardState={}*/}
-              {/*onClick={tileNumber => {*/}
-
-              {/*}}*/}
-              {/*/>*/}
               <Board
                 game={this.state.game}
                 board={this.state.board}

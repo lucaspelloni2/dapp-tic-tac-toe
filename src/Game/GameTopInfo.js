@@ -88,7 +88,6 @@ class GameTopInfo extends Component {
         <GameNameContainer>
           <Title>Game {this.props.game.gameId}</Title>
         </GameNameContainer>
-
         <PlayerContainer>
           <XContainer>
             <PlayerX isTurn={this.props.game.status === GAME_STATUS.X_HAS_TURN}>

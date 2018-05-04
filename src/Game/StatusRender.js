@@ -1,11 +1,6 @@
-import React, {Component} from 'react';
 import GAME_STATUS from './GameStatus';
 
-class StatusRender extends Component {
-  constructor() {
-    super();
-  }
-
+class StatusRender {
   static renderStatus(id) {
     switch (id) {
       case '0':
@@ -28,11 +23,9 @@ class StatusRender extends Component {
         return GAME_STATUS.WINNER_O;
       case '9':
         return GAME_STATUS.DRAW;
+      default:
+        return null;
     }
-  }
-
-  render() {
-    return null;
   }
 }
 

@@ -48,7 +48,7 @@ class Board extends Component {
     super();
   }
 
-  renderSymbol(symbol) {
+  static renderSymbol(symbol) {
     switch (symbol) {
       case '0':
         return '';
@@ -56,6 +56,8 @@ class Board extends Component {
         return <TicTacToeSymbols width={70} heigth={70} symbol={'X'} />;
       case '2':
         return <TicTacToeSymbols width={70} heigth={70} symbol={'O'} />;
+      default:
+        return <div>default</div>;
     }
   }
 
@@ -77,7 +79,7 @@ class Board extends Component {
                           data-row={j}
                           onClick={() => this.props.onChecked(i * 3 + j)}
                         >
-                          {this.renderSymbol(this.props.board[i * 3 + j])}
+                          {Board.renderSymbol(this.props.board[i * 3 + j])}
                         </Square>
                       );
                     })}

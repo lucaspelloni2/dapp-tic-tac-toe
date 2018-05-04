@@ -228,16 +228,14 @@ class JoinGame extends Component {
   }
 
   getJoiningStatus(game) {
-    switch (game.isLoading) {
-      case false:
-        return this.getButton(game);
-
-      case true:
-        return (
-          <SpinnerContainer>
-            <Spinner width={30} height={30} />
-          </SpinnerContainer>
-        );
+    if (!game.isLoading) {
+      return this.getButton(game);
+    } else {
+      return (
+        <SpinnerContainer>
+          <Spinner width={30} height={30} />
+        </SpinnerContainer>
+      );
     }
   }
 
