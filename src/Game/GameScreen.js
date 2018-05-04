@@ -246,7 +246,7 @@ class GameScreen extends Component {
   }
 
   getCurrentPlayer() {
-    return <p>{this.state.game.status.toString().replace('_/', ' ')} </p>;
+    return <p>{this.state.game.status.toString().replace(/_/g , " ")} </p>;
   }
 
   render() {
