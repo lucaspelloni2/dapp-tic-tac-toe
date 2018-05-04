@@ -204,8 +204,8 @@ class GameScreen extends Component {
     this.props.contract.methods
       .playMove(
         this.state.game.gameId,
-        (selectedTile % 3).toString(),
-        Math.trunc(selectedTile / 3).toString()
+        (selectedTile % 3),
+        Math.trunc(selectedTile / 3)
       ) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
