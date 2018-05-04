@@ -8,6 +8,7 @@ import Transaction from './Transaction';
 import Status from './Status';
 import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
+import Bets from './Bets';
 
 const TopContainer = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const MetaContainer = styled.div`
   margin-top: -35px;
 `;
 
-const GameContainer = styled.div`
+const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -181,7 +182,7 @@ class GameScreen extends Component {
               </MetaContainer>
             </TopContainer>
             <ParentContainer>
-              <GameContainer>
+              <ColumnContainer>
                 <GameTopInfo
                   game={this.state.game}
                   playerX={this.state.playerX}
@@ -194,8 +195,15 @@ class GameScreen extends Component {
                     this.playMove(tileChecked);
                   }}
                 />
-              </GameContainer>
-              <MyTransactions web3={this.props.web3} />
+              </ColumnContainer>
+              <ColumnContainer>
+                <Bets
+                  game={this.state.game}
+                  playerX={this.state.playerX}
+                  playerO={this.state.playerO}
+                />
+                <MyTransactions web3={this.props.web3} />
+              </ColumnContainer>
             </ParentContainer>
           </div>
         )}
