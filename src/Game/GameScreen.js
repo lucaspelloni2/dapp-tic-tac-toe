@@ -191,7 +191,7 @@ class GameScreen extends Component {
 
       // TODO: change 1 and 2 below and do it dynmic according to the selected tile
     this.props.contract.methods
-      .playMove(this.state.game.gameId, "1", "2") //this.props.web3.utils.toBN(
+      .playMove(this.state.game.gameId, (selectedTile % 3).toString(), (Math.trunc(selectedTile / 3)).toString()) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         // this.addNewTx(tx, game.id, Status.GAME_JOINED);
