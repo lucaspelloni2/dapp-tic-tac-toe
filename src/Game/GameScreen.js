@@ -5,6 +5,8 @@ import MyTransactions from './MyTransactions';
 import GameSpinner from './GameSpinner';
 import Board from './Board';
 import TicTacToeSymbols from './TicTacToeSymbols';
+import Transaction from "./Transaction";
+import Status from "./Status";
 
 const TopContainer = styled.div`
   display: flex;
@@ -194,8 +196,8 @@ class GameScreen extends Component {
       .playMove(this.state.game.gameId, (selectedTile % 3).toString(), (Math.trunc(selectedTile / 3)).toString()) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
-        // this.addNewTx(tx, game.id, Status.GAME_JOINED);
-        // this.setLoadingToTrue(game);
+        this.addNewTx(tx, this.state.game.gameId, Status.GAME_JOINED);
+        // this.setLoadingToTrue(this.state.game);
       })
       .on('receipt', async res => {
         //console.log(res);
@@ -214,6 +216,19 @@ class GameScreen extends Component {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
+  }
+
+  addNewTx(tx, gameId, status) {
+    let transaction = new Transaction({
+      tx: tx,
+      confirmed: false,
+      gameName: gameId,
+      blockNumber: null,
+      status
+    });
+    let transactions = JSON.parse(localStorage.getItem('txs'));
+    transactions.unshift(transaction);
+    localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
   render() {
