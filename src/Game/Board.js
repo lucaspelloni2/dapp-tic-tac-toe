@@ -5,7 +5,7 @@ import TicTacToeSymbols from './TicTacToeSymbols';
 const BoardContainer = styled.div`
   width: 400px;
   height: 400px;
-  margin-top: 1.5em;
+  margin-top: 4em;
   box-shadow: rgba(43, 9, 9, 0.4) 0px 0px 15px 3px;
 
   background-image: radial-gradient(
@@ -36,6 +36,14 @@ const Row = styled.tr`
 `;
 
 const Square = styled.td`
+  &:hover {
+    background-image: radial-gradient(
+      farthest-side at 212% 285px,
+      #0acfd0 0,
+      #03b8d4 1200px
+    );
+    cursor: pointer;
+  }
   padding: 8px;
   border-right: 5px solid #0186ae;
   &:last-child {
@@ -62,7 +70,6 @@ class Board extends Component {
   }
 
   render() {
-    console.log(this.props.board);
     return (
       <div>
         <BoardContainer>

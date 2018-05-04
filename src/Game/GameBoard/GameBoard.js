@@ -2,8 +2,6 @@
 import styled from 'styled-components';
 import BoardTile from "./BoardTile";
 import Announcement from "./Annoucement";
-import JoinGame from "../JoinGame";
-import Status from "../Status";
 
 const Container = styled.div`
   text-align: center;

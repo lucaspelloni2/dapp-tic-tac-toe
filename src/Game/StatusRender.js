@@ -1,4 +1,5 @@
 import GAME_STATUS from './GameStatus';
+import BET_STATUS from './BetStatus';
 
 class StatusRender {
   static renderStatus(id) {
@@ -27,6 +28,24 @@ class StatusRender {
         return null;
     }
   }
-}
 
+  static renderBetStatus(id) {
+    switch (id) {
+      case '0':
+        return BET_STATUS.NOT_EXISTING;
+      case '1':
+        return BET_STATUS.MISSING_X_BETTOR;
+      case '2':
+        return BET_STATUS.MISSING_O_BETTOR;
+      case '3':
+        return BET_STATUS.WITHDRAWN;
+      case '4':
+        return BET_STATUS.FIXED;
+      case '5':
+        return BET_STATUS.PAYEDOUT;
+      default:
+        return null;
+    }
+  }
+}
 export default StatusRender;

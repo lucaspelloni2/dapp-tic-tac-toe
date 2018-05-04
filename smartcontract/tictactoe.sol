@@ -266,7 +266,7 @@ contract TicTacToe {
             emit MoveMade(true, gameId, game.state, x, y, "O");
         }
 
-        if (game.moveCounter == boardSize * boardSize - 1) {
+        if (game.moveCounter == boardSize * boardSize - 1 && game.state < GameState.WINNER_X) {
             doLastMoveAutomatically(game);
         }
     }
@@ -471,5 +471,4 @@ contract TicTacToe {
             }
         }
     }
-
 }

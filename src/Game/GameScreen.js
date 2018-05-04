@@ -8,6 +8,7 @@ import Transaction from './Transaction';
 import Status from './Status';
 import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
+import Bets from './Bets';
 
 const TopContainer = styled.div`
   display: flex;
@@ -34,7 +35,7 @@ const MetaContainer = styled.div`
   margin-top: -35px;
 `;
 
-const GameContainer = styled.div`
+const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
@@ -65,19 +66,15 @@ class GameScreen extends Component {
       loading: false
     });
 
-    this.props.contract.events.MoveMade( //{
-      // filter: {gameId: '6'}//, //{myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}, // Using an array means OR: e.g. 20 or 23
-      // fromBlock: 0
-    // },
-      function(error, event){ console.log(event);
-        console.log(error);})
-      // .on('data', function(event){
-      //   console.log(event); // same results as the optional callback above
-      // })
-      // .on('changed', function(event){
-      //   // remove event from local database
-      // })
-      // .on('error', console.error);
+    this.interval = setInterval(async () => {
+      await this.getGame(gameId);
+      let board = await this.getBoard(gameId);
+      this.setState({board: board});
+    }, 200);
+  }
+
+  componentWillUnmount() {
+    clearInterval(this.interval);
   }
 
   getGame(gameId) {
@@ -95,7 +92,6 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
-        console.log(this.state.game);
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
@@ -124,15 +120,6 @@ class GameScreen extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         return res;
-        // for (let i = 0; i < res.length; i++) {
-        //     if (res[i] === '0')
-        //         this.state.gameBoard[i] = '';
-        //     else if (res[i] === '1')
-        //         this.state.gameBoard[i] = 'x';
-        //     else
-        //         this.state.gameBoard[i] = 'o';
-        // }
-        // console.log(this.state.gameBoard);
       })
       .catch(err => {
         console.log('error getting board from game ' + gameId + ': ' + err);
@@ -161,12 +148,6 @@ class GameScreen extends Component {
         //console.log(res);
         if (res.status === '0x1') {
           console.log('play successful');
-          let gameId = this.state.game.gameId;
-          this.setState({board: [], game: null, loading: true});
-          await this.getGame(gameId);
-          let newBoard = await this.getBoard(gameId);
-          this.setState({board: newBoard, loading: false});
-          //this.getBoard(gameId);
         } else {
           console.log('play not successful');
         }
@@ -205,7 +186,7 @@ class GameScreen extends Component {
               </MetaContainer>
             </TopContainer>
             <ParentContainer>
-              <GameContainer>
+              <ColumnContainer>
                 <GameTopInfo
                   game={this.state.game}
                   playerX={this.state.playerX}
@@ -218,8 +199,18 @@ class GameScreen extends Component {
                     this.playMove(tileChecked);
                   }}
                 />
-              </GameContainer>
-              <MyTransactions web3={this.props.web3} />
+              </ColumnContainer>
+              <ColumnContainer>
+                <Bets
+                  game={this.state.game}
+                  playerX={this.state.playerX}
+                  playerO={this.state.playerO}
+                  web3={this.props.web3}
+                  contract={this.props.contract}
+                  account={this.props.account}
+                />
+                <MyTransactions web3={this.props.web3} />
+              </ColumnContainer>
             </ParentContainer>
           </div>
         )}
