@@ -34,6 +34,10 @@ const MetaContainer = styled.div`
   margin-top: -35px;
 `;
 
+const GameContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+`;
 class GameScreen extends Component {
   constructor() {
     super();
@@ -185,20 +189,22 @@ class GameScreen extends Component {
               <MetaContainer>
                 <MetaMaskLogo />
               </MetaContainer>
-              <GameTopInfo
-                game={this.state.game}
-                playerX={this.state.playerX}
-                playerO={this.state.playerO}
-              />
             </TopContainer>
             <ParentContainer>
-              <Board
-                game={this.state.game}
-                board={this.state.board}
-                onChecked={tileChecked => {
-                  this.playMove(tileChecked);
-                }}
-              />
+              <GameContainer>
+                <GameTopInfo
+                  game={this.state.game}
+                  playerX={this.state.playerX}
+                  playerO={this.state.playerO}
+                />
+                <Board
+                  game={this.state.game}
+                  board={this.state.board}
+                  onChecked={tileChecked => {
+                    this.playMove(tileChecked);
+                  }}
+                />
+              </GameContainer>
               <MyTransactions web3={this.props.web3} />
             </ParentContainer>
           </div>
