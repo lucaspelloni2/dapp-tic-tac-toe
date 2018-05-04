@@ -50,6 +50,17 @@ class GameScreen extends Component {
     };
   }
 
+  // componentDidMount() {
+  //     this.interval = setInterval(() => {
+  //         this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
+  //         this.fetchData();
+  //     }, 1000);
+  // }
+  //
+  // componentWillUnmount() {
+  //     clearInterval(this.interval);
+  // }
+
   async componentDidMount() {
     let gameId = this.props.match.params.gameId;
     await this.getGame(gameId);
@@ -64,6 +75,12 @@ class GameScreen extends Component {
       board: board,
       loading: false
     });
+
+    this.interval = setInterval(async () => {
+      await this.getGame(gameId);
+      let board = await this.getBoard(gameId);
+      this.setState({board: board});
+    }, 200);
   }
 
   getGame(gameId) {
@@ -81,7 +98,6 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
-        console.log(this.state.game);
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
@@ -147,12 +163,11 @@ class GameScreen extends Component {
         //console.log(res);
         if (res.status === '0x1') {
           console.log('play successful');
-          let gameId = this.state.game.gameId;
-          this.setState({board: [], game: null, loading: true});
-          await this.getGame(gameId);
-          let newBoard = await this.getBoard(gameId);
-          this.setState({board: newBoard, loading: false});
-          //this.getBoard(gameId);
+          // let gameId = this.state.game.gameId;
+          // this.setState({board: [], game: null, loading: true});
+          // await this.getGame(gameId);
+          // let newBoard = await this.getBoard(gameId);
+          // this.setState({board: newBoard, loading: false});
         } else {
           console.log('play not successful');
         }
