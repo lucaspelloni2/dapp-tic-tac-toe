@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import GameIcon from './GameIcon';
+import StatusRender from './StatusRender';
+import BET_STATUS from './BetStatus';
 
 const BetsContainer = styled.div`
   display: flex;
@@ -34,7 +36,7 @@ const Title = styled.p`
 `;
 
 const Element = styled.div`
-  border: 1px solid ${props => props.border};
+  border: 1px solid ${props => (props.border ? props.border : 0)};
   border-radius: 4px;
   padding: 4px;
   background-image: radial-gradient(
@@ -101,7 +103,7 @@ class Bets extends Component {
     return {
       id: res.betIds[i],
       gameId: res.gameIds[i],
-      state: res.betStates[i],
+      status: StatusRender.renderBetStatus(res.betStates[i]),
       bettorOnO: this.hexToAscii(res.bettorOnO[i]),
       bettorOnX: this.hexToAscii(res.bettorOnX[i]),
       value: res.values[i] //this.props.web3.fromWei(res.values[i].toString(), 'ether')
@@ -110,6 +112,37 @@ class Bets extends Component {
 
   hexToAscii(byte32) {
     return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
+  }
+
+  getElement(bet) {
+    switch (bet.status) {
+      case BET_STATUS.MISSING_O_BETTOR:
+        return (
+          <Element color={'#3d41bb'} border={'#3d41bb'}>
+            {bet.status}
+          </Element>
+        );
+      case BET_STATUS.MISSING_X_BETTOR:
+        return (
+          <Element color={'#3d41bb'} border={'#3d41bb'}>
+            {bet.status}
+          </Element>
+        );
+      case BET_STATUS.FIXED:
+        return <Element color={'#00ff32'}>{bet.status}</Element>;
+      case BET_STATUS.PAYEDOUT:
+        return (
+          <Element color={'#024169'} border={'#02b8d4'}>
+            {bet.status}
+          </Element>
+        );
+      case BET_STATUS.WITHDRAWN:
+        return (
+          <Element color={'#024169'} border={'#02b8d4'}>
+            {bet.status}
+          </Element>
+        );
+    }
   }
 
   render() {
@@ -125,9 +158,6 @@ class Bets extends Component {
                 <tbody>
                   <tr>
                     <th>
-                      <Title>Bet Id</Title>
-                    </th>
-                    <th>
                       <Title>Game Id</Title>
                     </th>
                     <th>
@@ -137,10 +167,10 @@ class Bets extends Component {
                       <Title>Value</Title>
                     </th>
                     <th>
-                      <Title>Who Bets on X</Title>
+                      <Title>Who on X</Title>
                     </th>
                     <th>
-                      <Title>Who Bets on O</Title>
+                      <Title>Who on O</Title>
                     </th>
                     <th />
                   </tr>
@@ -148,9 +178,8 @@ class Bets extends Component {
                 <tbody>
                   {this.state.bets.map(bet => (
                     <tr key={bet.id}>
-                      <td>{bet.id}</td>
                       <td>{bet.gameId}</td>
-                      <td>{bet.state}</td>
+                      <td>{this.getElement(bet)}</td>
                       <td>
                         <Element color={'#024169'} border={'#02b8d4'}>
                           <ValueContainer>
