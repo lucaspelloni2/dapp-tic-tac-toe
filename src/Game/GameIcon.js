@@ -20,6 +20,12 @@ const BetIcon = styled.svg`
   margin-bottom: 2px;
 `;
 
+const ConfirmedIcon = styled.svg`
+  fill: #00ff31;
+  width: 30px;
+  height: 30px;
+`;
+
 const GameIcon = props => {
   switch (props.icon) {
     case 'join':
@@ -41,6 +47,13 @@ const GameIcon = props => {
         <BetIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 512">
           <path d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z" />
         </BetIcon>
+      );
+
+    case 'confirmation':
+      return (
+        <ConfirmedIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+          <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
+        </ConfirmedIcon>
       );
 
     default:

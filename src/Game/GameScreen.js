@@ -50,17 +50,6 @@ class GameScreen extends Component {
     };
   }
 
-  // componentDidMount() {
-  //     this.interval = setInterval(() => {
-  //         this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
-  //         this.fetchData();
-  //     }, 1000);
-  // }
-  //
-  // componentWillUnmount() {
-  //     clearInterval(this.interval);
-  // }
-
   async componentDidMount() {
     let gameId = this.props.match.params.gameId;
     await this.getGame(gameId);
@@ -126,15 +115,6 @@ class GameScreen extends Component {
       .call({from: this.props.account.ethAddress})
       .then(res => {
         return res;
-        // for (let i = 0; i < res.length; i++) {
-        //     if (res[i] === '0')
-        //         this.state.gameBoard[i] = '';
-        //     else if (res[i] === '1')
-        //         this.state.gameBoard[i] = 'x';
-        //     else
-        //         this.state.gameBoard[i] = 'o';
-        // }
-        // console.log(this.state.gameBoard);
       })
       .catch(err => {
         console.log('error getting board from game ' + gameId + ': ' + err);
@@ -163,11 +143,6 @@ class GameScreen extends Component {
         //console.log(res);
         if (res.status === '0x1') {
           console.log('play successful');
-          // let gameId = this.state.game.gameId;
-          // this.setState({board: [], game: null, loading: true});
-          // await this.getGame(gameId);
-          // let newBoard = await this.getBoard(gameId);
-          // this.setState({board: newBoard, loading: false});
         } else {
           console.log('play not successful');
         }
