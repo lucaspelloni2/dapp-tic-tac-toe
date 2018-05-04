@@ -53,7 +53,7 @@ const GameInfo = styled.div`
 `;
 
 const PlayerContainer = styled.div`
-  height: 125px;
+  height: 145px;
   background: #005686;
   display: flex;
   justify-content: space-around;
@@ -101,6 +101,12 @@ const OContainer = XContainer.extend``;
 
 const PlayerO = Player.extend``;
 
+const CurrentTurn = styled.div`
+  color: #f6841b;
+  text-align: center;
+  margin-top: -45px;
+`;
+
 class GameScreen extends Component {
   constructor() {
     super();
@@ -144,6 +150,7 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
+        console.log(this.state.game);
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
@@ -213,9 +220,7 @@ class GameScreen extends Component {
           this.setState({board: [], game: null, loading: true});
           await this.getGame(gameId);
           let newBoard = await this.getBoard(gameId);
-
           this.setState({board: newBoard, loading: false});
-
           //this.getBoard(gameId);
         } else {
           console.log('play not successful');
@@ -238,6 +243,10 @@ class GameScreen extends Component {
     let transactions = JSON.parse(localStorage.getItem('txs'));
     transactions.unshift(transaction);
     localStorage.setItem('txs', JSON.stringify(transactions));
+  }
+
+  getCurrentPlayer() {
+    return <p>{this.state.game.status.toString().replace('_/', ' ')} </p>;
   }
 
   render() {
@@ -279,6 +288,7 @@ class GameScreen extends Component {
                     <PlayerName>{this.state.playerO.playerName}</PlayerName>
                   </OContainer>
                 </PlayerContainer>
+                <CurrentTurn>{this.getCurrentPlayer()}</CurrentTurn>
               </GameInfo>
             </TopContainer>
             <ParentContainer>
