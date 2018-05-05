@@ -229,7 +229,7 @@ class Bets extends Component {
                       <td>
                         <Element color={'#024169'} border={'#02b8d4'}>
                           <ValueContainer>
-                            <Value>{bet.value}</Value>
+                            <Value>{Math.round(this.props.web3.utils.fromWei(bet.value, 'ether') * 1000) / 1000}</Value>
                             <GameIcon
                               icon={'bet'}
                               marginLeft={'auto'}
