@@ -120,6 +120,7 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
+          this.props.unloadGame(game);
         } else {
           console.log('not possible to join');
         }
@@ -144,6 +145,7 @@ class JoinGame extends Component {
           console.log('game started successfully');
           // this.setState({games: [], loading: true});
           // this.fetchData();
+          this.props.unloadGame(game);
           this.setState({receivedGame: game});
         } else {
           console.log('not possible to start game');
@@ -160,10 +162,7 @@ class JoinGame extends Component {
   }
 
   setLoadingToTrue(game) {
-    //const gameToLoad = this.props.games.find(g => game.id === g.id);
     this.props.loadGame(game);
-    // TODO update games state of parent
-    // this.setState({games: this.state.games});
   }
 
   getJoiningStatus(game) {

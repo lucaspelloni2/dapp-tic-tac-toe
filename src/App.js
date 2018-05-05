@@ -170,6 +170,19 @@ class App extends Component {
                           })
                         });
                       }}
+                      unloadGame={async gameToUnload => {
+                        this.setState({
+                          games: this.state.games.map(game => {
+                            if (game.id === gameToUnload.id) {
+                              return Object.assign({}, gameToUnload, {
+                                isLoading: false
+                              });
+                            }
+                            return game;
+                          })
+                        });
+                        await this.fetchGames();
+                      }}
                     />
                   )}
                 />
