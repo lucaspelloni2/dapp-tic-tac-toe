@@ -98,10 +98,10 @@ class JoinGame extends Component {
   constructor() {
     super();
     this.state = {
-      receivedGame: null,
+      receivedGame: null
     };
   }
-  
+
   joinGame(game, playerName) {
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
@@ -120,9 +120,6 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
-
-          this.setState({games: [], loading: true});
-          this.fetchData();
         } else {
           console.log('not possible to join');
         }
@@ -163,11 +160,8 @@ class JoinGame extends Component {
   }
 
   setLoadingToTrue(game) {
-    this.props.games.forEach(g => {
-      if (game.id === g.id) {
-        g.isLoading = true;
-      }
-    });
+    //const gameToLoad = this.props.games.find(g => game.id === g.id);
+    this.props.loadGame(game);
     // TODO update games state of parent
     // this.setState({games: this.state.games});
   }

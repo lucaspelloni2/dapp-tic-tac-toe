@@ -158,6 +158,18 @@ class App extends Component {
                       account={this.state}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
+                      loadGame={gameToLoad => {
+                        this.setState({
+                          games: this.state.games.map(game => {
+                            if (game.id === gameToLoad.id) {
+                              return Object.assign({}, gameToLoad, {
+                                isLoading: true
+                              });
+                            }
+                            return game;
+                          })
+                        });
+                      }}
                     />
                   )}
                 />
