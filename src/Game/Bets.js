@@ -3,8 +3,8 @@ import styled from 'styled-components';
 import GameIcon from './GameIcon';
 import StatusRender from './StatusRender';
 import BET_STATUS from './BetStatus';
-import Status from "./Status";
-import Transaction from "./Transaction";
+import Status from './Status';
+import Transaction from './Transaction';
 
 const BetsContainer = styled.div`
   display: flex;
@@ -33,7 +33,7 @@ const Table = styled.table`
 `;
 
 const Title = styled.p`
-  font-size: 18px;
+  font-size: 16px;
   font-weight: bold;
 `;
 
@@ -144,9 +144,10 @@ class Bets extends Component {
   createBet(gameId, isBetOnX, betValueInEth) {
     this.props.contract.methods
       .createBet(gameId, isBetOnX)
-      .send(
-        {from: this.props.account.ethAddress,
-          value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')})
+      .send({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')
+      })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);
         //this.setLoadingToTrue(game);
@@ -159,7 +160,7 @@ class Bets extends Component {
           console.log('bet could not be created');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -167,8 +168,10 @@ class Bets extends Component {
   joinBet(bet) {
     this.props.contract.methods
       .joinBet(bet.id)
-      .send({from: this.props.account.ethAddress,
-          value: bet.value})
+      .send({
+        from: this.props.account.ethAddress,
+        value: bet.value
+      })
       .on('transactionHash', tx => {
         this.addNewTx(tx, bet.id, Status.JOINED_BET);
         //this.setLoadingToTrue(game);
@@ -181,7 +184,7 @@ class Bets extends Component {
           console.log('bet could not be joined');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -189,31 +192,15 @@ class Bets extends Component {
   getElement(bet) {
     switch (bet.status) {
       case BET_STATUS.MISSING_O_BETTOR:
-        return (
-          <Element color={'#3d41bb'} border={'#3d41bb'}>
-            {bet.status}
-          </Element>
-        );
+        return <Element color={'#3d41bb'}>{bet.status}</Element>;
       case BET_STATUS.MISSING_X_BETTOR:
-        return (
-          <Element color={'#3d41bb'} border={'#3d41bb'}>
-            {bet.status}
-          </Element>
-        );
+        return <Element color={'#3d41bb'}>{bet.status}</Element>;
       case BET_STATUS.FIXED:
         return <Element color={'#00ff32'}>{bet.status}</Element>;
       case BET_STATUS.PAYEDOUT:
-        return (
-          <Element color={'#024169'} border={'#02b8d4'}>
-            {bet.status}
-          </Element>
-        );
+        return <Element color={'#024169'}>{bet.status}</Element>;
       case BET_STATUS.WITHDRAWN:
-        return (
-          <Element color={'#024169'} border={'#02b8d4'}>
-            {bet.status}
-          </Element>
-        );
+        return <Element color={'#008ad6'}>{bet.status}</Element>;
     }
   }
 
@@ -226,10 +213,10 @@ class Bets extends Component {
         <Button
           hoverColor={'#03b8d4'}
           onClick={() => {
-             this.joinBet(bet);
+            this.joinBet(bet);
           }}
         >
-          <GameIcon icon={'bet'} height={'14'}  />
+          <GameIcon icon={'bet'} height={'14'} />
           <Paragraph>BET</Paragraph>
         </Button>
       );
@@ -280,13 +267,13 @@ class Bets extends Component {
                     </th>
                     <th>
                       {/*<Button*/}
-                        {/*hoverColor={'#03b8d4'}*/}
-                        {/*onClick={() => {*/}
-                          {/*this.createBet(this.props.game.gameId, true, '0.04');*/}
-                        {/*}}*/}
+                      {/*hoverColor={'#03b8d4'}*/}
+                      {/*onClick={() => {*/}
+                      {/*this.createBet(this.props.game.gameId, true, '0.04');*/}
+                      {/*}}*/}
                       {/*>*/}
-                        {/*<GameIcon icon={'bet'} height={'14'}  />*/}
-                        {/*<Paragraph>ADD</Paragraph>*/}
+                      {/*<GameIcon icon={'bet'} height={'14'}  />*/}
+                      {/*<Paragraph>ADD</Paragraph>*/}
                       {/*</Button>*/}
                     </th>
                   </tr>
@@ -299,7 +286,14 @@ class Bets extends Component {
                       <td>
                         <Element color={'#024169'} border={'#02b8d4'}>
                           <ValueContainer>
-                            <Value>{Math.round(this.props.web3.utils.fromWei(bet.value, 'ether') * 1000) / 1000}</Value>
+                            <Value>
+                              {Math.round(
+                                this.props.web3.utils.fromWei(
+                                  bet.value,
+                                  'ether'
+                                ) * 1000
+                              ) / 1000}
+                            </Value>
                             <GameIcon
                               icon={'bet'}
                               marginLeft={'auto'}

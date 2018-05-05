@@ -9,6 +9,7 @@ import Status from './Status';
 import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
 import Bets from './Bets';
+import BetForm from './BetForm';
 
 const TopContainer = styled.div`
   display: flex;
@@ -172,7 +173,7 @@ class GameScreen extends Component {
           console.log('play not successful');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
@@ -196,13 +197,13 @@ class GameScreen extends Component {
       <div style={{marginBottom: '4em'}}>
         {this.state.loading ? (
           <CentralSpinner>
-            <GameSpinner/>
+            <GameSpinner />
           </CentralSpinner>
         ) : (
           <div>
             <TopContainer>
               <MetaContainer>
-                <MetaMaskLogo/>
+                <MetaMaskLogo />
               </MetaContainer>
             </TopContainer>
             <ParentContainer>
@@ -229,7 +230,13 @@ class GameScreen extends Component {
                   contract={this.props.contract}
                   account={this.props.account}
                 />
-                <MyTransactions web3={this.props.web3}/>
+                <BetForm
+                  game={this.state.game}
+                  web3={this.props.web3}
+                  contract={this.props.contract}
+                  account={this.props.account}
+                />
+                <MyTransactions web3={this.props.web3} />
               </ColumnContainer>
             </ParentContainer>
           </div>

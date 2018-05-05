@@ -15,17 +15,23 @@ const PlayIcon = styled.svg`
 
 const BetIcon = styled.svg`
   width: 15px;
-  height: ${props => props.height ? props.height : '35'}px;
+  height: ${props => (props.height ? props.height : '35')}px;
   fill: #03b8d4;
   margin-bottom: 2px;
-  margin-left: ${props => props.marginLeft ? props.marginLeft : null};
-  margin-right: ${props => props.marginRight ? props.marginRight : null};
+  margin-left: ${props => (props.marginLeft ? props.marginLeft : null)};
+  margin-right: ${props => (props.marginRight ? props.marginRight : null)};
 `;
 
 const ConfirmedIcon = styled.svg`
   fill: #00ff31;
   width: 30px;
   height: 30px;
+`;
+
+const PlusIcon = styled.svg`
+  width: 30px;
+  height: 30px;
+  fill: white;
 `;
 
 const GameIcon = props => {
@@ -60,6 +66,13 @@ const GameIcon = props => {
         <ConfirmedIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path d="M504 256c0 136.967-111.033 248-248 248S8 392.967 8 256 119.033 8 256 8s248 111.033 248 248zM227.314 387.314l184-184c6.248-6.248 6.248-16.379 0-22.627l-22.627-22.627c-6.248-6.249-16.379-6.249-22.628 0L216 308.118l-70.059-70.059c-6.248-6.248-16.379-6.248-22.628 0l-22.627 22.627c-6.248 6.248-6.248 16.379 0 22.627l104 104c6.249 6.249 16.379 6.249 22.628.001z" />
         </ConfirmedIcon>
+      );
+
+    case 'add':
+      return (
+        <PlusIcon xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
+          <path d="M448 294.2v-76.4c0-13.3-10.7-24-24-24H286.2V56c0-13.3-10.7-24-24-24h-76.4c-13.3 0-24 10.7-24 24v137.8H24c-13.3 0-24 10.7-24 24v76.4c0 13.3 10.7 24 24 24h137.8V456c0 13.3 10.7 24 24 24h76.4c13.3 0 24-10.7 24-24V318.2H424c13.3 0 24-10.7 24-24z" />
+        </PlusIcon>
       );
 
     default:
