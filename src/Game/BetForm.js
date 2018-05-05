@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import GameIcon from './GameIcon';
+import GameModal from './Modal';
 
 const Container = styled.div`
   &:hover {
@@ -28,7 +29,10 @@ class BetForm extends Component {
     return (
       <Container>
         <h3 style={{marginRight: 10}}>Add Your Bet</h3>
-        <GameIcon icon={'add'} />
+
+          <GameModal button={ <GameIcon icon={'add'} />}>
+              modal content
+          </GameModal>
       </Container>
     );
   }
