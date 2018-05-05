@@ -139,6 +139,28 @@ class Bets extends Component {
     return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
   }
 
+  joinBet(bet) {
+    this.props.contract.methods
+      .joinBet(bet.id)
+      .send({from: this.props.account.ethAddress,
+          value: bet.value})
+      .on('transactionHash', tx => {
+        this.addNewTx(tx, bet.id, Status.JOINED_BET);
+        //this.setLoadingToTrue(game);
+      })
+      .on('receipt', res => {
+        //console.log(res);
+        if (res.status === '0x1') {
+          console.log('bet joined successfully');
+        } else {
+          console.log('bet could not be joined');
+        }
+      })
+      .on('confirmation', function (confirmationNr) {
+        // is returned for the first 24 block confirmations
+      });
+  }
+
   getElement(bet) {
     switch (bet.status) {
       case BET_STATUS.MISSING_O_BETTOR:
@@ -179,7 +201,7 @@ class Bets extends Component {
         <Button
           hoverColor={'#03b8d4'}
           onClick={() => {
-            // this.bet();
+             this.joinBet(bet);
           }}
         >
           <GameIcon icon={'bet'} height={'14'}  />
@@ -189,6 +211,19 @@ class Bets extends Component {
     } else {
       return null;
     }
+  }
+
+  addNewTx(tx, gameId, status) {
+    let transaction = new Transaction({
+      tx: tx,
+      confirmed: false,
+      gameName: gameId,
+      blockNumber: null,
+      status
+    });
+    let transactions = JSON.parse(localStorage.getItem('txs'));
+    transactions.unshift(transaction);
+    localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
   render() {
