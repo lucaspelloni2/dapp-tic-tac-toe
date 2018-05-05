@@ -52,7 +52,7 @@ const ValueContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  width: 50px;
+  width: 80px;
 `;
 
 const Value = styled.span`
@@ -76,7 +76,7 @@ const Button = styled.div`
   }
   padding: 2px;
   display: flex;
-  justify-content: space-evenly;
+  justify-content: space-around;
   align-items: center;
   box-shadow: 0 0 3px 3px rgba(168, 221, 224, 0.5);
   border-radius: 4px;
@@ -279,15 +279,15 @@ class Bets extends Component {
                       <Title>Who on O</Title>
                     </th>
                     <th>
-                      <Button
-                        hoverColor={'#03b8d4'}
-                        onClick={() => {
-                          this.createBet(this.props.game.gameId, true, '0.04');
-                        }}
-                      >
-                        <GameIcon icon={'bet'} height={'14'}  />
-                        <Paragraph>ADD</Paragraph>
-                      </Button>
+                      {/*<Button*/}
+                        {/*hoverColor={'#03b8d4'}*/}
+                        {/*onClick={() => {*/}
+                          {/*this.createBet(this.props.game.gameId, true, '0.04');*/}
+                        {/*}}*/}
+                      {/*>*/}
+                        {/*<GameIcon icon={'bet'} height={'14'}  />*/}
+                        {/*<Paragraph>ADD</Paragraph>*/}
+                      {/*</Button>*/}
                     </th>
                   </tr>
                 </tbody>
