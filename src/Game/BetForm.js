@@ -20,7 +20,6 @@ const Container = styled.div`
   align-items: center;
   flex-direction: column;
 `;
-const Form = styled.div``;
 
 const Balance = styled.div`
   border-radius: 4px;
@@ -40,20 +39,32 @@ const Row = styled.div`
 
 const Title = styled.h3`
   margin-top: 8px;
-  margin-bottom:8px;
+  margin-bottom: 8px;
   margin-right: 10px;
 `;
+
+const ModalContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const Form = styled.div``;
 
 class BetForm extends Component {
   constructor() {
     super();
   }
+
+  handleBet() {}
   renderModalContent() {
     return (
-      <div>
+      <ModalContainer>
         <h2>Add Your Bet</h2>
-        <Form />
-      </div>
+        <form onSubmit={this.handleBet}>
+        </form>
+      </ModalContainer>
     );
   }
 

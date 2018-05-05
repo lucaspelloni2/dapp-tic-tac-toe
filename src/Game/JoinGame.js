@@ -98,66 +98,10 @@ class JoinGame extends Component {
   constructor() {
     super();
     this.state = {
-      games: [],
       receivedGame: null,
-      loading: true
     };
   }
-  componentDidMount() {
-    this.fetchData();
-  }
-  fetchData() {
-    let games = this.state.games;
-    this.props.contract.methods
-      .getGames()
-      .call({from: this.props.account.ethAddress})
-      .then(res => {
-        for (let i = 0; i < res.gameIds.length; i++) {
-          let game = this.createGame(res, i);
-          if (game !== null) {
-            games.push(game);
-          }
-        }
-        this.setState({games: games, loading: false});
-      })
-      .catch(err => {
-        console.log('error getting games ' + err);
-      });
-  }
-
-  createGame(res, i) {
-    let game = null;
-    let owner = res.owners[i];
-    let playerX = res.playerXs[i];
-    let playerO = res.playerOs[i];
-    let status = res.gameStates[i];
-    if (
-      status === '1' ||
-      status === '2' ||
-      status === '3' ||
-      status === '4' ||
-      status === '5' ||
-      status === '6'
-    ) {
-      game = {
-        id: res.gameIds[i],
-        status: StatusRender.renderStatus(status), //JoinGame.renderStatus(status),
-        name: this.hexToAscii(res.gameNames[i]),
-        owner,
-        ownerName: this.hexToAscii(res.ownerNames[i]),
-        isLoading: false,
-        playerX,
-        playerO
-      };
-    }
-
-    return game;
-  }
-
-  hexToAscii(byte32) {
-    return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
-  }
-
+  
   joinGame(game, playerName) {
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
@@ -219,12 +163,13 @@ class JoinGame extends Component {
   }
 
   setLoadingToTrue(game) {
-    this.state.games.forEach(g => {
+    this.props.games.forEach(g => {
       if (game.id === g.id) {
         g.isLoading = true;
       }
     });
-    this.setState({games: this.state.games});
+    // TODO update games state of parent
+    // this.setState({games: this.state.games});
   }
 
   getJoiningStatus(game) {
@@ -362,7 +307,7 @@ class JoinGame extends Component {
             <Container>
               <h1>List of available Games</h1>
               <GamesContainer>
-                {this.state.loading ? (
+                {this.props.gamesLoading ? (
                   <SpinnerContainer>
                     <Spinner width={60} height={60} />
                   </SpinnerContainer>
@@ -386,7 +331,7 @@ class JoinGame extends Component {
                     </tr>
                   </tbody>
                   <tbody>
-                    {this.state.games.map(game => (
+                    {this.props.games.map(game => (
                       <tr key={game.id}>
                         <td>
                           <GameId>{game.id}</GameId>

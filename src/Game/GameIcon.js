@@ -32,6 +32,7 @@ const PlusIcon = styled.svg`
   width: 30px;
   height: 30px;
   fill: white;
+  margin-top: 3px;
 `;
 
 const GameIcon = props => {

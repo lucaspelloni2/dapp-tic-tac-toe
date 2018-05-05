@@ -13,6 +13,7 @@ import JoinGame from './Game/JoinGame';
 import CreateGame from './Game/CreateGame';
 import GameBoard from './Game/GameBoard/GameBoard';
 import GameScreen from './Game/GameScreen';
+import StatusRender from './Game/StatusRender';
 
 let web3 = window.web3;
 
@@ -44,13 +45,71 @@ class App extends Component {
       ethAddress: '',
       ethBalance: 0,
       web3: web3Instance,
-      contract: tictactoeContract
+      contract: tictactoeContract,
+      games: [],
+      gamesLoading: true
     };
-    this.getUserAccount();
+  }
+
+  async componentDidMount() {
+    await this.getUserAccount();
+    await this.fetchGames();
+  }
+
+  fetchGames() {
+    let games = [];
+    return this.state.contract.methods
+      .getGames()
+      .call({from: this.state.ethAddress})
+      .then(res => {
+        for (let i = 0; i < res.gameIds.length; i++) {
+          let game = this.createGame(res, i);
+          if (game !== null) {
+            games.push(game);
+          }
+        }
+        this.setState({games: games, gamesLoading: false});
+      })
+      .catch(err => {
+        console.log('error getting games ' + err);
+      });
+  }
+
+  createGame(res, i) {
+    let game = null;
+    let owner = res.owners[i];
+    let playerX = res.playerXs[i];
+    let playerO = res.playerOs[i];
+    let status = res.gameStates[i];
+    if (
+      status === '1' ||
+      status === '2' ||
+      status === '3' ||
+      status === '4' ||
+      status === '5' ||
+      status === '6'
+    ) {
+      game = {
+        id: res.gameIds[i],
+        status: StatusRender.renderStatus(status), //JoinGame.renderStatus(status),
+        name: this.hexToAscii(res.gameNames[i]),
+        owner,
+        ownerName: this.hexToAscii(res.ownerNames[i]),
+        isLoading: false,
+        playerX,
+        playerO
+      };
+    }
+
+    return game;
+  }
+
+  hexToAscii(byte32) {
+    return this.state.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
   }
 
   getUserAccount() {
-    this.state.web3.eth
+    return this.state.web3.eth
       .getAccounts()
       .then(addr => {
         this.setState({ethAddress: addr.toString()});
@@ -97,6 +156,8 @@ class App extends Component {
                       web3={this.state.web3}
                       contract={this.state.contract}
                       account={this.state}
+                      games={this.state.games}
+                      gamesLoading={this.state.gamesLoading}
                     />
                   )}
                 />
