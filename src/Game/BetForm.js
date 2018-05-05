@@ -7,7 +7,7 @@ const Container = styled.div`
   &:hover {
     background: #007bbd;
   }
-  cursor: pointer; 
+  cursor: pointer;
   border-radius: 4px;
   padding: 8px;
   background-image: radial-gradient(
@@ -18,21 +18,62 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
+`;
+const Form = styled.div``;
+
+const Balance = styled.div`
+  border-radius: 4px;
+  padding: 4px;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #1b0185 1200px
+  );
+`;
+
+const Row = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Title = styled.h3`
+  margin-top: 8px;
+  margin-bottom:8px;
+  margin-right: 10px;
 `;
 
 class BetForm extends Component {
   constructor() {
     super();
   }
+  renderModalContent() {
+    return (
+      <div>
+        <h2>Add Your Bet</h2>
+        <Form />
+      </div>
+    );
+  }
 
   render() {
     return (
       <Container>
-        <h3 style={{marginRight: 10}}>Add Your Bet</h3>
-
-          <GameModal button={ <GameIcon icon={'add'} />}>
-              modal content
+        <Row>
+          <Title>Add Your Bet</Title>
+          <GameModal
+            contentLabel={'Add Your Bet'}
+            button={<GameIcon icon={'add'} />}
+          >
+            {this.renderModalContent()}
           </GameModal>
+        </Row>
+        <Row>
+          <Balance>
+            Your Balance: {this.props.account.ethBalance.substr(0, 5)} ETH
+          </Balance>
+        </Row>
       </Container>
     );
   }

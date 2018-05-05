@@ -25,7 +25,7 @@ const customStyles = {
         right: 0,
         bottom: '10%',
         padding: '2em',
-        background: '#fff'
+        background: '#024169'
     }
 };
 
@@ -55,7 +55,7 @@ class GameModal extends Component {
     render() {
         const button = React.cloneElement(this.props.button, {
             onClick: this.openModal.bind(this)
-        })
+        });
         return (
                 <div>
                     {/*<Element style={{width: '160px'}} onClick={this.openModal}>*/}
@@ -68,9 +68,10 @@ class GameModal extends Component {
                         onAfterOpen={this.afterOpenModal}
                         onRequestClose={this.closeModal}
                         style={customStyles}
-                        //contentLabel={this.props.label}
+                        contentLabel={this.props.label}
+                        c
                     >
-                        <div>content of modal</div>
+                        {this.props.children}
                     </Modal>
                 </div>
         );
