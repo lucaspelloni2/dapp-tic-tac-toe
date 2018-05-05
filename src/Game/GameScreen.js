@@ -39,6 +39,7 @@ const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
 `;
+
 class GameScreen extends Component {
   constructor() {
     super();
@@ -71,6 +72,23 @@ class GameScreen extends Component {
       let board = await this.getBoard(gameId);
       this.setState({board: board});
     }, 200);
+
+    // META MASK CANT HANDLE EVENTS AT THE MOMENT, FOLLOW ISSUE:  https://github.com/MetaMask/metamask-extension/issues/3642
+    // this.props.contract.events.MoveMade({
+    //     filter: {gameId: '6'} //{myIndexedParam: [20,23], myOtherIndexedParam: '0x123456789...'}, // Using an array means OR: e.g. 20 or 23
+    //     // ,fromBlock: 0
+    //   },
+    //   function (error, event) {
+    //     console.log(event);
+    //     console.log(error);
+    //   })
+    //   .on('data', function (event) {
+    //     console.log(event); // same results as the optional callback above
+    //   })
+    //   .on('changed', function (event) {
+    //     // remove event from local database
+    //   })
+    //   .on('error', console.error);
   }
 
   componentWillUnmount() {
@@ -97,6 +115,7 @@ class GameScreen extends Component {
         console.log('error getting game ' + gameId + ': ' + err);
       });
   }
+
   getPlayer(address) {
     return this.props.contract.methods
       .players(address)
@@ -114,6 +133,7 @@ class GameScreen extends Component {
         );
       });
   }
+
   getBoard(gameId) {
     return this.props.contract.methods
       .getBoard(gameId)
@@ -152,7 +172,7 @@ class GameScreen extends Component {
           console.log('play not successful');
         }
       })
-      .on('confirmation', function(confirmationNr) {
+      .on('confirmation', function (confirmationNr) {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
@@ -176,13 +196,13 @@ class GameScreen extends Component {
       <div style={{marginBottom: '4em'}}>
         {this.state.loading ? (
           <CentralSpinner>
-            <GameSpinner />
+            <GameSpinner/>
           </CentralSpinner>
         ) : (
           <div>
             <TopContainer>
               <MetaContainer>
-                <MetaMaskLogo />
+                <MetaMaskLogo/>
               </MetaContainer>
             </TopContainer>
             <ParentContainer>
@@ -209,7 +229,7 @@ class GameScreen extends Component {
                   contract={this.props.contract}
                   account={this.props.account}
                 />
-                <MyTransactions web3={this.props.web3} />
+                <MyTransactions web3={this.props.web3}/>
               </ColumnContainer>
             </ParentContainer>
           </div>
@@ -218,4 +238,5 @@ class GameScreen extends Component {
     );
   }
 }
+
 export default GameScreen;
