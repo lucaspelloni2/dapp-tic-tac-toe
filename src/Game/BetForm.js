@@ -8,8 +8,6 @@ import {RadioGroup, RadioButton} from 'react-radio-buttons';
 import TicTacToeSymbols from './TicTacToeSymbols';
 import 'react-select/dist/react-select.css';
 import '../tooltip.css';
-import Prompt from './Prompt';
-import Popup from 'react-popup';
 import Status from './Status';
 import Transaction from './Transaction';
 
@@ -405,35 +403,37 @@ class BetForm extends Component {
 
   render() {
     return (
-      <Container>
-        <Row>
-          <Title>Add Your Bet</Title>
-          <GameModal
-            openModal={() => {
-              this.setState({
-                secondModalIsOpen: true
-              });
-            }}
-            closeModal={() => {
-              this.setState({
-                modalIsOpen: false,
-                secondModalIsOpen: false
-              });
-            }}
-            modalIsOpen={this.state.secondModalIsOpen}
-            customStyles={bigModal}
-            contentLabel={'Add Your Bet'}
-            button={<GameIcon icon={'add'} />}
-          >
-            {this.renderModalContent()}
-          </GameModal>
-        </Row>
-        <Row>
-          <Balance>
-            Your Balance: {this.props.account.ethBalance.substr(0, 5)} ETH
-          </Balance>
-        </Row>
-      </Container>
+      <GameModal
+        openModal={() => {
+          this.setState({
+            secondModalIsOpen: true
+          });
+        }}
+        closeModal={() => {
+          this.setState({
+            modalIsOpen: false,
+            secondModalIsOpen: false
+          });
+        }}
+        modalIsOpen={this.state.secondModalIsOpen}
+        customStyles={bigModal}
+        contentLabel={'Add Your Bet'}
+        button={
+          <Container>
+            <Row>
+              <Title>Add Your Bet</Title>
+              <GameIcon icon={'add'} />
+            </Row>
+            <Row>
+              <Balance>
+                Your Balance: {this.props.account.ethBalance.substr(0, 5)} ETH
+              </Balance>
+            </Row>
+          </Container>
+        }
+      >
+        {this.renderModalContent()}
+      </GameModal>
     );
   }
 }
