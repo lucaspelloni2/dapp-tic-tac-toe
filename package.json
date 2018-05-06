@@ -15,6 +15,7 @@
     "react-fontawesome": "^1.6.1",
     "react-modal": "^3.4.4",
     "react-notification-system": "0.2.x",
+    "react-radio-group": "^3.0.3",
     "react-router-dom": "^4.2.2",
     "react-scripts": "1.1.1",
     "react-select": "^1.2.1",

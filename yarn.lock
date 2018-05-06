@@ -7097,6 +7097,12 @@ react-notification-system@0.2.x:
     object-assign "^4.0.1"
     prop-types "^15.5.6"
 
+react-radio-group@^3.0.3:
+  version "3.0.3"
+  resolved "https://registry.yarnpkg.com/react-radio-group/-/react-radio-group-3.0.3.tgz#60bb29c7ad05d8b6f67cf443af0767ee2007cf98"
+  dependencies:
+    prop-types "^15.5.8"
+
 react-router-dom@^4.2.2:
   version "4.2.2"
   resolved "https://registry.yarnpkg.com/react-router-dom/-/react-router-dom-4.2.2.tgz#c8a81df3adc58bba8a76782e946cbd4eae649b8d"
