@@ -141,30 +141,6 @@ class Bets extends Component {
     return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
   }
 
-  createBet(gameId, isBetOnX, betValueInEth) {
-    this.props.contract.methods
-      .createBet(gameId, isBetOnX)
-      .send({
-        from: this.props.account.ethAddress,
-        value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')
-      })
-      .on('transactionHash', tx => {
-        this.addNewTx(tx, gameId, Status.PLACED_BET);
-        //this.setLoadingToTrue(game);
-      })
-      .on('receipt', res => {
-        //console.log(res);
-        if (res.status === '0x1') {
-          console.log('bet created successfully');
-        } else {
-          console.log('bet could not be created');
-        }
-      })
-      .on('confirmation', function(confirmationNr) {
-        // is returned for the first 24 block confirmations
-      });
-  }
-
   joinBet(bet) {
     this.props.contract.methods
       .joinBet(bet.id)
@@ -266,15 +242,6 @@ class Bets extends Component {
                       <Title>Who on O</Title>
                     </th>
                     <th>
-                      {/*<Button*/}
-                      {/*hoverColor={'#03b8d4'}*/}
-                      {/*onClick={() => {*/}
-                      {/*this.createBet(this.props.game.gameId, true, '0.04');*/}
-                      {/*}}*/}
-                      {/*>*/}
-                      {/*<GameIcon icon={'bet'} height={'14'}  />*/}
-                      {/*<Paragraph>ADD</Paragraph>*/}
-                      {/*</Button>*/}
                     </th>
                   </tr>
                 </tbody>
