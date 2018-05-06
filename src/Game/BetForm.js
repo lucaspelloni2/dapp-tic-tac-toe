@@ -10,6 +10,8 @@ import 'react-select/dist/react-select.css';
 import '../tooltip.css';
 import Prompt from './Prompt';
 import Popup from 'react-popup';
+import Status from './Status';
+import Transaction from './Transaction';
 
 const Container = styled.div`
   &:hover {
@@ -73,7 +75,10 @@ const FormRow = styled.div`
 `;
 
 const LastRow = FormRow.extend`
-  justify-content: space-evenly;
+  justify-content: space-around;
+  width: 100%;
+  margin-top: 20px;
+  margin-bottom: 10px;
 `;
 
 const Label = styled.label`
@@ -111,18 +116,27 @@ const ChildModalElement = styled.div`
     #01497c 1200px
   );
   display: flex;
-    align-items: center;
+  align-items: center;
 `;
 
 const Confirm = styled.div`
+  &:hover {
+    background: #0030a7;
+  }
   border: 1px solid #01497c;
   border-radius: 4px;
   padding: 4px;
   width: 120px;
   background: #01497c;
+  cursor: pointer;
+  transition: all 0.1s ease-out;
+  text-align: center;
 `;
 
 const NotConfirm = Confirm.extend`
+  &:hover {
+    background: #d63d4b;
+  }
   background: #c5545c;
   border: 1px solid #c5545c;
 `;
@@ -207,6 +221,43 @@ class BetForm extends Component {
     this.setState({betAmount: amount});
   }
 
+  createBet(gameId, isBetOnX, betValueInEth) {
+    this.props.contract.methods
+      .createBet(gameId, isBetOnX)
+      .send({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')
+      })
+      .on('transactionHash', tx => {
+        this.addNewTx(tx, gameId, Status.PLACED_BET);
+        //this.setLoadingToTrue(game);
+      })
+      .on('receipt', res => {
+        //console.log(res);
+        if (res.status === '0x1') {
+          console.log('bet created successfully');
+        } else {
+          console.log('bet could not be created');
+        }
+      })
+      .on('confirmation', function(confirmationNr) {
+        // is returned for the first 24 block confirmations
+      });
+  }
+
+  addNewTx(tx, gameId, status) {
+    let transaction = new Transaction({
+      tx: tx,
+      confirmed: false,
+      gameName: gameId,
+      blockNumber: null,
+      status
+    });
+    let transactions = JSON.parse(localStorage.getItem('txs'));
+    transactions.unshift(transaction);
+    localStorage.setItem('txs', JSON.stringify(transactions));
+  }
+
   renderChildModal() {
     return (
       <div>
@@ -218,7 +269,7 @@ class BetForm extends Component {
                 <Label>The game you selected: </Label>
                 <ChildModalElement>
                   {this.state.selectedGame.name} (ID:{' '}
-                  {this.state.selectedGame.gameId})
+                  {this.state.selectedGame.id})
                 </ChildModalElement>
               </FormRow>
               <FormRow>
@@ -234,7 +285,17 @@ class BetForm extends Component {
               </FormRow>
               <LastRow>
                 <NotConfirm>Back</NotConfirm>
-                <Confirm>Confirm</Confirm>
+                <Confirm
+                  onClick={() => {
+                    this.createBet(
+                      this.state.selectedGame.id,
+                      this.state.isBetOnX,
+                      this.state.betAmount
+                    );
+                  }}
+                >
+                  Confirm
+                </Confirm>
               </LastRow>
             </FormContainer>
           </ModalContainer>
