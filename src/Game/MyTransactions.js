@@ -76,11 +76,11 @@ class MyTransactions extends Component {
     };
   }
 
-  componentDidMount() {
-    this.interval = setInterval(() => {
+  async componentDidMount() {
+    this.interval = setInterval(async () => {
       this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
-      this.fetchData();
-    }, 2000);
+      await this.fetchData();
+    }, 1500);
   }
 
   componentWillUnmount() {
@@ -88,7 +88,7 @@ class MyTransactions extends Component {
   }
 
   fetchData() {
-    this.state.transactions.forEach(transaction => {
+    return this.state.transactions.forEach(transaction => {
       this.props.web3.eth
         .getTransaction(transaction.tx)
         .then(receipt => {
