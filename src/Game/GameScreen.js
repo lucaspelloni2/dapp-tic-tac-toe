@@ -10,6 +10,8 @@ import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
 import Bets from './Bets';
 import BetForm from './BetForm';
+import Prompt from './Prompt';
+import Popup from 'react-popup';
 
 const TopContainer = styled.div`
   display: flex;
@@ -202,9 +204,9 @@ class GameScreen extends Component {
         ) : (
           <div>
             {/*<TopContainer>*/}
-              {/*<MetaContainer>*/}
-                {/*<MetaMaskLogo />*/}
-              {/*</MetaContainer>*/}
+            {/*<MetaContainer>*/}
+            {/*<MetaMaskLogo />*/}
+            {/*</MetaContainer>*/}
             {/*</TopContainer>*/}
             <ParentContainer>
               <ColumnContainer>

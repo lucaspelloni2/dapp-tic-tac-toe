@@ -4939,6 +4939,10 @@ keccakjs@^0.2.1:
     browserify-sha3 "^0.0.1"
     sha3 "^1.1.0"
 
+keymaster@^1.6.2:
+  version "1.6.2"
+  resolved "https://registry.yarnpkg.com/keymaster/-/keymaster-1.6.2.tgz#e1ae54d0ea9488f9f60b66b668f02e9a1946c6eb"
+
 killable@^1.0.0:
   version "1.0.0"
   resolved "https://registry.yarnpkg.com/killable/-/killable-1.0.0.tgz#da8b84bd47de5395878f95d64d02f2449fe05e6b"
@@ -7105,6 +7109,12 @@ react-notification-system@0.2.x:
     create-react-class "^15.5.1"
     object-assign "^4.0.1"
     prop-types "^15.5.6"
+
+react-popup@^0.9.2:
+  version "0.9.2"
+  resolved "https://registry.yarnpkg.com/react-popup/-/react-popup-0.9.2.tgz#5e8a983ff6c9572721528745250036de31702112"
+  dependencies:
+    keymaster "^1.6.2"
 
 react-radio-buttons@^1.2.2:
   version "1.2.2"

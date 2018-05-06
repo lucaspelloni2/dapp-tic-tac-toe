@@ -3,37 +3,38 @@ import styled from 'styled-components';
 import Modal from 'react-modal';
 import GameIcon from './GameIcon';
 
-const customStyles = {
-  overlay: {
-    position: 'fixed',
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0
-  },
-  content: {
-    position: 'absolute',
-    width: '50%',
-    height: '45%',
-    border: '1px solid #ccc',
-    overflow: 'auto',
-    WebkitOverflowScrolling: 'touch',
-    borderRadius: '4px',
-    outline: 'none',
-    top: '10%',
-    left: '25%',
-    right: 0,
-    bottom: '10%',
-    padding: '2em',
-    background: '#024169'
-  }
-};
 
 const CloseIconContainer = styled.div`
   float: right;
   margin-left: -20px;
   cursor: pointer;
 `;
+
+const style = {
+    overlay: {
+        position: 'fixed',
+        top: 0,
+        left: 0,
+        right: 0,
+        bottom: 0
+    },
+    content: {
+        position: 'absolute',
+        width: '50%',
+        height: '55%',
+        border: '1px solid #ccc',
+        overflow: 'auto',
+        WebkitOverflowScrolling: 'touch',
+        borderRadius: '4px',
+        outline: 'none',
+        top: '10%',
+        left: '25%',
+        right: 0,
+        bottom: '10%',
+        padding: '2em',
+        background: '#024169'
+    }
+};
 
 class GameModal extends Component {
   constructor() {
@@ -70,9 +71,9 @@ class GameModal extends Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={customStyles}
+          style={style}
           contentLabel={this.props.label}
-          c
+
         >
           <CloseIconContainer onClick={() => this.closeModal()}>
             <GameIcon icon={'close'} />

@@ -8,6 +8,8 @@ import {RadioGroup, RadioButton} from 'react-radio-buttons';
 import TicTacToeSymbols from './TicTacToeSymbols';
 import 'react-select/dist/react-select.css';
 import '../tooltip.css';
+import Prompt from './Prompt';
+import Popup from 'react-popup';
 
 const Container = styled.div`
   &:hover {
@@ -94,6 +96,9 @@ const Button = styled.button`
   margin-left: 9em;
 `;
 
+
+
+
 class BetForm extends Component {
   constructor() {
     super();
@@ -122,11 +127,16 @@ class BetForm extends Component {
     this.setState({betAmount: amount});
   }
 
+  showPopup() {
+    Prompt.prompt('', 'Type your name', function(value) {
+      Popup.alert('You typed: ' + value);
+    });
+  }
+
   renderModalContent() {
     return (
       <ModalContainer>
         <h2>Add Your Bet</h2>
-        <form onSubmit={this.handleBet}>
           <FormContainer>
             <FormRow>
               <Label>Select the game you want</Label>
@@ -180,10 +190,14 @@ class BetForm extends Component {
               </RadioInputsContainer>
             </FormRow>
             <FormRow>
-              <Button>Add bet</Button>
+              <GameModal
+                label={'Confirm'}
+                button={<Button>Add bet</Button>}
+              >
+                asfafasfihasfih
+              </GameModal>
             </FormRow>
           </FormContainer>
-        </form>
       </ModalContainer>
     );
   }
