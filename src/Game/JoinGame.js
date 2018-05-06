@@ -108,7 +108,7 @@ class JoinGame extends Component {
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_JOINED);
-        this.setLoadingToTrue(game);
+        this.props.setLoading(game, true);
       })
       .on('receipt', res => {
         const returnValues = res.events.Joined.returnValues;
@@ -137,15 +137,13 @@ class JoinGame extends Component {
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_STARTED);
-        this.setLoadingToTrue(game);
+        this.props.setLoading(game, true);
       })
       .on('receipt', res => {
         console.log(res);
         if (res.status === '0x1') {
           console.log('game started successfully');
-          // this.setState({games: [], loading: true});
-          // this.fetchData();
-          this.props.unloadGame(game);
+          this.props.setLoading(game, false);
           this.setState({receivedGame: game});
         } else {
           console.log('not possible to start game');
@@ -159,10 +157,6 @@ class JoinGame extends Component {
 
   playGame(game) {
     this.setState({receivedGame: game});
-  }
-
-  setLoadingToTrue(game) {
-    this.props.loadGame(game);
   }
 
   getJoiningStatus(game) {

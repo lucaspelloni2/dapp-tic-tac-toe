@@ -158,30 +158,20 @@ class App extends Component {
                       account={this.state}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
-                      loadGame={gameToLoad => {
+                      setLoading={async (game, isLoading) => {
                         this.setState({
-                          games: this.state.games.map(game => {
-                            if (game.id === gameToLoad.id) {
-                              return Object.assign({}, gameToLoad, {
-                                isLoading: true
+                          games: this.state.games.map(g => {
+                            if (game.id === g.id) {
+                              return Object.assign({}, game, {
+                                isLoading: isLoading
                               });
                             }
-                            return game;
+                            return g;
                           })
                         });
-                      }}
-                      unloadGame={async gameToUnload => {
-                        this.setState({
-                          games: this.state.games.map(game => {
-                            if (game.id === gameToUnload.id) {
-                              return Object.assign({}, gameToUnload, {
-                                isLoading: false
-                              });
-                            }
-                            return game;
-                          })
-                        });
-                        await this.fetchGames();
+                        if (!isLoading) {
+                          await this.fetchGames();
+                        }
                       }}
                     />
                   )}
