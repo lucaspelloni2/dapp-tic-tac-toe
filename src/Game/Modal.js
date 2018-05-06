@@ -10,31 +10,7 @@ const CloseIconContainer = styled.div`
   cursor: pointer;
 `;
 
-const style = {
-    overlay: {
-        position: 'fixed',
-        top: 0,
-        left: 0,
-        right: 0,
-        bottom: 0
-    },
-    content: {
-        position: 'absolute',
-        width: '50%',
-        height: '55%',
-        border: '1px solid #ccc',
-        overflow: 'auto',
-        WebkitOverflowScrolling: 'touch',
-        borderRadius: '4px',
-        outline: 'none',
-        top: '10%',
-        left: '25%',
-        right: 0,
-        bottom: '10%',
-        padding: '2em',
-        background: '#024169'
-    }
-};
+
 
 class GameModal extends Component {
   constructor() {
@@ -71,7 +47,7 @@ class GameModal extends Component {
           isOpen={this.state.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
-          style={style}
+          style={this.props.customStyles}
           contentLabel={this.props.label}
 
         >

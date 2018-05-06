@@ -96,8 +96,55 @@ const Button = styled.button`
   margin-left: 9em;
 `;
 
-
-
+const bigModal = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  content: {
+    position: 'absolute',
+    width: '50%',
+    height: '55%',
+    border: '1px solid #ccc',
+    overflow: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    borderRadius: '4px',
+    outline: 'none',
+    top: '10%',
+    left: '25%',
+    right: 0,
+    bottom: '10%',
+    padding: '2em',
+    background: '#024169'
+  }
+};
+const smallModal = {
+  overlay: {
+    position: 'fixed',
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0
+  },
+  content: {
+    position: 'absolute',
+    top: '9%',
+    left: '38%',
+    right: 0,
+    bottom: '10%',
+    border: '1px solid rgb(204, 204, 204)',
+    background: '#008eda ',
+    overflow: 'auto',
+    borderRadius: '4px',
+    outline: 'none',
+    padding: '2em',
+    width: '25%',
+    height: '40%'
+  }
+};
 
 class BetForm extends Component {
   constructor() {
@@ -137,67 +184,70 @@ class BetForm extends Component {
     return (
       <ModalContainer>
         <h2>Add Your Bet</h2>
-          <FormContainer>
-            <FormRow>
-              <Label>Select the game you want</Label>
-              <Select
-                simpleValue
-                style={{width: 220}}
-                value={
-                  this.state.selectedGame
-                    ? {
-                        label: this.state.selectedGame.name,
-                        value: this.state.selectedGame
-                      }
-                    : null
+        <FormContainer>
+          <FormRow>
+            <Label>Select the game you want</Label>
+            <Select
+              simpleValue
+              style={{width: 220}}
+              value={
+                this.state.selectedGame
+                  ? {
+                      label: this.state.selectedGame.name,
+                      value: this.state.selectedGame
+                    }
+                  : null
+              }
+              onChange={this.handleChange}
+              options={this.props.games.map(game => ({
+                label: game.name,
+                value: game
+              }))}
+            />
+          </FormRow>
+          <FormRow>
+            <Label>How many ETH you want to bet</Label>
+            <InputBalance
+              value={0}
+              type="number"
+              onChange={this.handleAmount.bind(this)}
+            />
+            <div style={{marginLeft: 5}}>
+              <GameToolTip
+                overlay={
+                  'ETH Balance: ' + this.props.account.ethBalance.substr(0, 8)
                 }
-                onChange={this.handleChange}
-                options={this.props.games.map(game => ({
-                  label: game.name,
-                  value: game
-                }))}
-              />
-            </FormRow>
-            <FormRow>
-              <Label>How many ETH you want to bet</Label>
-              <InputBalance
-                value={0}
-                type="number"
-                onChange={this.handleAmount.bind(this)}
-              />
-              <div style={{marginLeft: 5}}>
-                <GameToolTip
-                  overlay={
-                    'ETH Balance: ' + this.props.account.ethBalance.substr(0, 8)
-                  }
-                  placement={'right'}
-                >
-                  <GameIcon icon={'bet'} height={'35'} />
-                </GameToolTip>
-              </div>
-            </FormRow>
-            <FormRow>
-              <Label>Choose your Bettor</Label>
-              <RadioInputsContainer>
-                <RadioGroup onChange={this.handleBetOn.bind(this)} horizontal>
-                  <RadioButton value={'X'}>
-                    On <b>X</b>
-                  </RadioButton>
-                  <RadioButton value={'O'}>
-                    On <b>O</b>
-                  </RadioButton>
-                </RadioGroup>
-              </RadioInputsContainer>
-            </FormRow>
-            <FormRow>
-              <GameModal
-                label={'Confirm'}
-                button={<Button>Add bet</Button>}
+                placement={'right'}
               >
-                asfafasfihasfih
-              </GameModal>
-            </FormRow>
-          </FormContainer>
+                <GameIcon icon={'bet'} height={'35'} />
+              </GameToolTip>
+            </div>
+          </FormRow>
+          <FormRow>
+            <Label>Choose your Bettor</Label>
+            <RadioInputsContainer>
+              <RadioGroup onChange={this.handleBetOn.bind(this)} horizontal>
+                <RadioButton value={'X'}>
+                  On <b>X</b>
+                </RadioButton>
+                <RadioButton value={'O'}>
+                  On <b>O</b>
+                </RadioButton>
+              </RadioGroup>
+            </RadioInputsContainer>
+          </FormRow>
+          <FormRow>
+            <GameModal
+              customStyles={smallModal}
+              contentLabel={'Confirm'}
+              button={<Button>Add bet</Button>}
+            >
+              <ModalContainer>
+                <h2 style={{marginTop: '1.5em'}}>Please Confirm your Bet</h2>
+              </ModalContainer>
+            </GameModal>
+          </FormRow>
+        </FormContainer>
       </ModalContainer>
     );
   }
@@ -208,6 +258,7 @@ class BetForm extends Component {
         <Row>
           <Title>Add Your Bet</Title>
           <GameModal
+            customStyles={bigModal}
             contentLabel={'Add Your Bet'}
             button={<GameIcon icon={'add'} />}
           >
