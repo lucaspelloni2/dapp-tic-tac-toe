@@ -1,5 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
+import {Route} from 'react-router-dom';
 import GameIcon from './GameIcon';
 import GameModal from './Modal';
 import GameToolTip from './ToolTip';
@@ -104,6 +105,7 @@ const Button = styled.button`
 `;
 
 const ChildModalElement = styled.div`
+  margin-left: ${props => (props.marginLeft ? props.marginLeft : null)};
   border: 1px solid #02b8d4;
   border-radius: 4px;
   padding: 4px;
@@ -115,6 +117,8 @@ const ChildModalElement = styled.div`
   );
   display: flex;
   align-items: center;
+  justify-content: ${props => (props.justifyContentCenter ? 'center' : null)};
+  cursor: ${props => (props.justifyContentCenter ? 'pointer' : null)};
 `;
 
 const Confirm = styled.div`
@@ -138,6 +142,8 @@ const NotConfirm = Confirm.extend`
   background: #c5545c;
   border: 1px solid #c5545c;
 `;
+
+const GamePreview = styled.div``;
 
 const bigModal = {
   overlay: {
@@ -338,6 +344,21 @@ class BetForm extends Component {
                 value: game
               }))}
             />
+            {this.state.selectedGame ? (
+              <a
+                href={
+                  "http://localhost:3000/games/see/" +
+                  this.state.selectedGame.id
+                }
+                target={'_blank'}
+              >
+                <GamePreview>
+                  <ChildModalElement justifyContentCenter marginLeft={'20px'}>
+                    Show the game <GameIcon icon={'search'} />
+                  </ChildModalElement>
+                </GamePreview>
+              </a>
+            ) : null}
           </FormRow>
           <FormRow>
             <Label>How many ETH you want to bet</Label>
