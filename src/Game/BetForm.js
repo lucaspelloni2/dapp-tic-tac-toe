@@ -72,6 +72,10 @@ const FormRow = styled.div`
   margin: 10px 0;
 `;
 
+const LastRow = FormRow.extend`
+  justify-content: space-evenly;
+`;
+
 const Label = styled.label`
   margin-right: 20px;
   width: 120px;
@@ -94,6 +98,33 @@ const Button = styled.button`
   align-self: center;
   margin-top: 1em;
   margin-left: 9em;
+`;
+
+const ChildModalElement = styled.div`
+  border: 1px solid #02b8d4;
+  border-radius: 4px;
+  padding: 4px;
+  width: 175px;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #01497c 1200px
+  );
+  display: flex;
+    align-items: center;
+`;
+
+const Confirm = styled.div`
+  border: 1px solid #01497c;
+  border-radius: 4px;
+  padding: 4px;
+  width: 120px;
+  background: #01497c;
+`;
+
+const NotConfirm = Confirm.extend`
+  background: #c5545c;
+  border: 1px solid #c5545c;
 `;
 
 const bigModal = {
@@ -131,18 +162,18 @@ const smallModal = {
   },
   content: {
     position: 'absolute',
-    top: '9%',
+    top: '10%',
     left: '38%',
     right: 0,
     bottom: '10%',
     border: '1px solid rgb(204, 204, 204)',
-    background: '#008eda ',
+    background: '#02b8d4 ',
     overflow: 'auto',
     borderRadius: '4px',
     outline: 'none',
     padding: '2em',
     width: '25%',
-    height: '40%'
+    height: '55%'
   }
 };
 
@@ -152,7 +183,9 @@ class BetForm extends Component {
     this.state = {
       selectedGame: null,
       betAmount: 0,
-      isBetOnX: true
+      isBetOnX: true,
+      submitted: false,
+      isToolTipVisible: true
     };
   }
 
@@ -174,10 +207,48 @@ class BetForm extends Component {
     this.setState({betAmount: amount});
   }
 
-  showPopup() {
-    Prompt.prompt('', 'Type your name', function(value) {
-      Popup.alert('You typed: ' + value);
-    });
+  renderChildModal() {
+    return (
+      <div>
+        {this.state.selectedGame ? (
+          <ModalContainer>
+            <h2 style={{marginTop: '1.5em'}}>Please Confirm your Bet</h2>
+            <FormContainer>
+              <FormRow>
+                <Label>The game you selected: </Label>
+                <ChildModalElement>
+                  {this.state.selectedGame.name} (ID:{' '}
+                  {this.state.selectedGame.gameId})
+                </ChildModalElement>
+              </FormRow>
+              <FormRow>
+                <Label>The amount you want to bet: </Label>
+                <ChildModalElement>
+                  {this.state.betAmount}{' '}
+                  <GameIcon icon={'bet'} height={20} width={20} />
+                </ChildModalElement>
+              </FormRow>
+              <FormRow>
+                <Label>Your Bettor: </Label>
+                <ChildModalElement>{this.renderBettor()}</ChildModalElement>
+              </FormRow>
+              <LastRow>
+                <NotConfirm>Back</NotConfirm>
+                <Confirm>Confirm</Confirm>
+              </LastRow>
+            </FormContainer>
+          </ModalContainer>
+        ) : null}
+      </div>
+    );
+  }
+
+  renderBettor() {
+    if (this.state.isBetOnX) {
+      return <TicTacToeSymbols symbol={'X'} width={20} heigth={20} />;
+    } else {
+      return <TicTacToeSymbols symbol={'O'} width={20} heigth={20} />;
+    }
   }
 
   renderModalContent() {
@@ -208,15 +279,19 @@ class BetForm extends Component {
           <FormRow>
             <Label>How many ETH you want to bet</Label>
             <InputBalance
-              value={0}
+              value={this.state.betAmount}
               type="number"
               onChange={this.handleAmount.bind(this)}
+              min={0}
+              max={this.props.account.ethBalance}
+              step="any"
             />
             <div style={{marginLeft: 5}}>
               <GameToolTip
                 overlay={
                   'ETH Balance: ' + this.props.account.ethBalance.substr(0, 8)
                 }
+                visible={this.state.isToolTipVisible}
                 placement={'right'}
               >
                 <GameIcon icon={'bet'} height={'35'} />
@@ -240,11 +315,13 @@ class BetForm extends Component {
             <GameModal
               customStyles={smallModal}
               contentLabel={'Confirm'}
-              button={<Button>Add bet</Button>}
+              button={
+                <div onClick={() => this.setState({isToolTipVisible: false})}>
+                  <Button>Add bet</Button>
+                </div>
+              }
             >
-              <ModalContainer>
-                <h2 style={{marginTop: '1.5em'}}>Please Confirm your Bet</h2>
-              </ModalContainer>
+              {this.renderChildModal()}
             </GameModal>
           </FormRow>
         </FormContainer>

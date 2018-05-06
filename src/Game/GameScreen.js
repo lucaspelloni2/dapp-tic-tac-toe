@@ -74,7 +74,7 @@ class GameScreen extends Component {
       await this.getGame(gameId);
       let board = await this.getBoard(gameId);
       this.setState({board: board});
-    }, 200);
+    }, 2000);
 
     // META MASK CANT HANDLE EVENTS AT THE MOMENT, FOLLOW ISSUE:  https://github.com/MetaMask/metamask-extension/issues/3642
     // this.props.contract.events.MoveMade({

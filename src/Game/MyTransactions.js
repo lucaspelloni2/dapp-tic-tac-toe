@@ -80,7 +80,7 @@ class MyTransactions extends Component {
     this.interval = setInterval(() => {
       this.setState({transactions: JSON.parse(localStorage.getItem('txs'))});
       this.fetchData();
-    }, 1000);
+    }, 2000);
   }
 
   componentWillUnmount() {
