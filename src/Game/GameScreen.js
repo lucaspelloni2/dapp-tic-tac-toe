@@ -235,6 +235,8 @@ class GameScreen extends Component {
                   web3={this.props.web3}
                   contract={this.props.contract}
                   account={this.props.account}
+                  games={this.props.games}
+                  gamesLoading={this.props.gamesLoading}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>

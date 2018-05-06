@@ -98,7 +98,7 @@ class App extends Component {
     let playerO = res.playerOs[i];
     let status = res.gameStates[i];
     if (
-      status === '1' ||
+      //status === '1' ||
       status === '2' ||
       status === '3' ||
       status === '4' ||
@@ -214,6 +214,8 @@ class App extends Component {
                       web3={this.state.web3}
                       contract={this.state.contract}
                       account={this.state}
+                      games={this.state.games}
+                      gamesLoading={this.state.gamesLoading}
                     />
                   )}
                 />
