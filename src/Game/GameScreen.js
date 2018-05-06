@@ -201,11 +201,11 @@ class GameScreen extends Component {
           </CentralSpinner>
         ) : (
           <div>
-            <TopContainer>
-              <MetaContainer>
-                <MetaMaskLogo />
-              </MetaContainer>
-            </TopContainer>
+            {/*<TopContainer>*/}
+              {/*<MetaContainer>*/}
+                {/*<MetaMaskLogo />*/}
+              {/*</MetaContainer>*/}
+            {/*</TopContainer>*/}
             <ParentContainer>
               <ColumnContainer>
                 <GameTopInfo

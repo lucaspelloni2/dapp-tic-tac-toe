@@ -50,6 +50,8 @@ const ModalContainer = styled.div`
   align-items: center;
 `;
 
+
+
 const Form = styled.div``;
 
 class BetForm extends Component {
@@ -62,8 +64,8 @@ class BetForm extends Component {
     return (
       <ModalContainer>
         <h2>Add Your Bet</h2>
-        <form onSubmit={this.handleBet}>
-        </form>
+
+        <form onSubmit={this.handleBet} />
       </ModalContainer>
     );
   }
