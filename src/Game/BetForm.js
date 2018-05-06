@@ -2,8 +2,10 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import GameIcon from './GameIcon';
 import GameModal from './Modal';
+import GameToolTip from './ToolTip';
 import Select from 'react-select';
 import 'react-select/dist/react-select.css';
+import '../tooltip.css'; 
 
 const Container = styled.div`
   &:hover {
@@ -146,7 +148,14 @@ class BetForm extends Component {
               <Select
                 simpleValue
                 style={{width: 220}}
-                value={this.state.selectedGame ? {label: this.state.selectedGame.name, value: this.state.selectedGame} : null}
+                value={
+                  this.state.selectedGame
+                    ? {
+                        label: this.state.selectedGame.name,
+                        value: this.state.selectedGame
+                      }
+                    : null
+                }
                 onChange={this.handleChange}
                 options={this.props.games.map(game => ({
                   label: game.name,
@@ -158,7 +167,11 @@ class BetForm extends Component {
               <Label>How many ETH you want to bet</Label>
               <InputBalance type="number" />
               <div style={{marginLeft: 5}}>
-                <GameIcon icon={'bet'} height={'35'} />
+                <GameToolTip
+                  overlay={'ETH Balance: ' + this.props.account.ethBalance}
+                >
+                  <GameIcon icon={'bet'} height={'35'} />
+                </GameToolTip>
               </div>
             </FormRow>
           </FormContainer>
