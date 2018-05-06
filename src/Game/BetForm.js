@@ -4,7 +4,8 @@ import GameIcon from './GameIcon';
 import GameModal from './Modal';
 import GameToolTip from './ToolTip';
 import Select from 'react-select';
-import {RadioGroup, Radio} from 'react-radio-group'
+import {RadioGroup, RadioButton} from 'react-radio-buttons';
+import TicTacToeSymbols from './TicTacToeSymbols';
 import 'react-select/dist/react-select.css';
 import '../tooltip.css';
 
@@ -74,43 +75,32 @@ const Label = styled.label`
   width: 120px;
 `;
 
-const OptionContainer = styled.div`
-  display: flex;
-  flex-direction: row;
-  align-items: center;
-`;
-
-const OptionId = styled.div`
-  font-weight: bold;
-  margin-right: 5px;
-`;
-
-const OptionIconContainer = styled.div`
-  margin-left: auto;
-`;
-
-const OptionGameName = styled.div`
-  border: 1px solid #0177a2;
-  color: white;
-  border-radius: 4px;
-  padding: 4px;
-  background-image: radial-gradient(
-    farthest-side at 212% 174px,
-    #0177a2 0,
-    #02e3ff 1200px
-  );
-`;
-
 const InputBalance = styled.input`
   width: 220px;
   height: 34px;
+`;
+
+const RadioInputsContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 220px;
+`;
+
+const Button = styled.button`
+  font-size: 14px;
+  align-self: center;
+  margin-top: 1em;
+  margin-left: 9em;
 `;
 
 class BetForm extends Component {
   constructor() {
     super();
     this.state = {
-      selectedGame: null
+      selectedGame: null,
+      betAmount: 0,
+      isBetOnX: true
     };
   }
 
@@ -119,23 +109,17 @@ class BetForm extends Component {
     console.log('selected ', selectedGame);
   };
 
-  updateValue(selectedGame) {
-    // this.setState({
-    //     selectedGame: selectedGame
-    // });
-    console.log(selectedGame);
+  handleBetOn(value) {
+    if (value === 'X') {
+      this.setState({isBetOnX: true});
+    } else {
+      this.setState({isBetOnX: false});
+    }
   }
 
-  renderLabel(game) {
-    return (
-      <OptionContainer>
-        <OptionId>{game.id}: </OptionId>
-        <OptionGameName>{game.name}</OptionGameName>
-        <OptionIconContainer>
-          <GameIcon icon={'bet'} height={'15'} />
-        </OptionIconContainer>
-      </OptionContainer>
-    );
+  handleAmount(e) {
+    const amount = e.target.value;
+    this.setState({betAmount: amount});
   }
 
   renderModalContent() {
@@ -166,19 +150,38 @@ class BetForm extends Component {
             </FormRow>
             <FormRow>
               <Label>How many ETH you want to bet</Label>
-              <InputBalance type="number" />
+              <InputBalance
+                value={0}
+                type="number"
+                onChange={this.handleAmount.bind(this)}
+              />
               <div style={{marginLeft: 5}}>
                 <GameToolTip
-                  overlay={'ETH Balance: ' + this.props.account.ethBalance.substr(0,8)}
-                  placement={"right"}
+                  overlay={
+                    'ETH Balance: ' + this.props.account.ethBalance.substr(0, 8)
+                  }
+                  placement={'right'}
                 >
                   <GameIcon icon={'bet'} height={'35'} />
                 </GameToolTip>
               </div>
             </FormRow>
-              <FormRow>
-
-              </FormRow>
+            <FormRow>
+              <Label>Choose your Bettor</Label>
+              <RadioInputsContainer>
+                <RadioGroup onChange={this.handleBetOn.bind(this)} horizontal>
+                  <RadioButton value={'X'}>
+                    On <b>X</b>
+                  </RadioButton>
+                  <RadioButton value={'O'}>
+                    On <b>O</b>
+                  </RadioButton>
+                </RadioGroup>
+              </RadioInputsContainer>
+            </FormRow>
+            <FormRow>
+              <Button>Add bet</Button>
+            </FormRow>
           </FormContainer>
         </form>
       </ModalContainer>

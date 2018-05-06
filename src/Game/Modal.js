@@ -14,7 +14,7 @@ const customStyles = {
   content: {
     position: 'absolute',
     width: '50%',
-    height: '60%',
+    height: '45%',
     border: '1px solid #ccc',
     overflow: 'auto',
     WebkitOverflowScrolling: 'touch',
