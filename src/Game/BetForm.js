@@ -230,7 +230,11 @@ class BetForm extends Component {
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);
-        //this.setLoadingToTrue(game);
+        //todo vlose modal
+        this.setState({
+          modalIsOpen: false,
+          secondModalIsOpen: false
+        });
       })
       .on('receipt', res => {
         //console.log(res);
@@ -376,11 +380,20 @@ class BetForm extends Component {
             <GameModal
               customStyles={smallModal}
               contentLabel={'Confirm'}
-              button={
-                <div onClick={() => this.setState({isToolTipVisible: false})}>
-                  <Button>Add bet</Button>
-                </div>
-              }
+              openModal={() => {
+                this.setState({
+                  modalIsOpen: true,
+                  isToolTipVisible: false
+                });
+              }}
+              closeModal={() => {
+                this.setState({
+                  modalIsOpen: false,
+                  secondModalIsOpen: false
+                });
+              }}
+              modalIsOpen={this.state.modalIsOpen}
+              button={<Button>Add bet</Button>}
             >
               {this.renderChildModal()}
             </GameModal>
@@ -396,6 +409,18 @@ class BetForm extends Component {
         <Row>
           <Title>Add Your Bet</Title>
           <GameModal
+            openModal={() => {
+              this.setState({
+                secondModalIsOpen: true
+              });
+            }}
+            closeModal={() => {
+              this.setState({
+                modalIsOpen: false,
+                secondModalIsOpen: false
+              });
+            }}
+            modalIsOpen={this.state.secondModalIsOpen}
             customStyles={bigModal}
             contentLabel={'Add Your Bet'}
             button={<GameIcon icon={'add'} />}

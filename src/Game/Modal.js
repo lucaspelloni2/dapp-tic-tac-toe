@@ -13,45 +13,23 @@ const CloseIconContainer = styled.div`
 
 
 class GameModal extends Component {
-  constructor() {
-    super();
-    this.state = {
-      modalIsOpen: false
-    };
-    this.openModal = this.openModal.bind(this);
-    this.afterOpenModal = this.afterOpenModal.bind(this);
-    this.closeModal = this.closeModal.bind(this);
-  }
-  openModal() {
-    this.setState({modalIsOpen: true});
-  }
-
-  afterOpenModal() {
-    // references are now sync'd and can be accessed.
-    // this.subtitle.style.color = '#f00';
-  }
-
-  closeModal() {
-    this.setState({modalIsOpen: false});
-  }
-
   render() {
     const button = React.cloneElement(this.props.button, {
-      onClick: this.openModal.bind(this)
+      onClick: this.props.openModal.bind(this)
     });
     return (
       <div>
         {button}
         <Modal
           ariaHideApp={false}
-          isOpen={this.state.modalIsOpen}
+          isOpen={this.props.modalIsOpen}
           onAfterOpen={this.afterOpenModal}
           onRequestClose={this.closeModal}
           style={this.props.customStyles}
           contentLabel={this.props.label}
 
         >
-          <CloseIconContainer onClick={() => this.closeModal()}>
+          <CloseIconContainer onClick={() => this.props.closeModal()}>
             <GameIcon icon={'close'} />
           </CloseIconContainer>
           {this.props.children}
