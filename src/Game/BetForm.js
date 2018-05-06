@@ -4,8 +4,9 @@ import GameIcon from './GameIcon';
 import GameModal from './Modal';
 import GameToolTip from './ToolTip';
 import Select from 'react-select';
+import {RadioGroup, Radio} from 'react-radio-group'
 import 'react-select/dist/react-select.css';
-import '../tooltip.css'; 
+import '../tooltip.css';
 
 const Container = styled.div`
   &:hover {
@@ -168,12 +169,16 @@ class BetForm extends Component {
               <InputBalance type="number" />
               <div style={{marginLeft: 5}}>
                 <GameToolTip
-                  overlay={'ETH Balance: ' + this.props.account.ethBalance}
+                  overlay={'ETH Balance: ' + this.props.account.ethBalance.substr(0,8)}
+                  placement={"right"}
                 >
                   <GameIcon icon={'bet'} height={'35'} />
                 </GameToolTip>
               </div>
             </FormRow>
+              <FormRow>
+
+              </FormRow>
           </FormContainer>
         </form>
       </ModalContainer>
