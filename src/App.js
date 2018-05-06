@@ -54,6 +54,12 @@ class App extends Component {
   async componentDidMount() {
     await this.getUserAccount();
     await this.fetchGames();
+    // this.interval = setInterval(async () => {
+    //   if (!this.isSomeGameLoading()) {
+    //     await this.fetchGames();
+    //     console.log('fetching games..');
+    //   }
+    // }, 500);
   }
 
   fetchGames() {
@@ -73,6 +79,16 @@ class App extends Component {
       .catch(err => {
         console.log('error getting games ' + err);
       });
+  }
+
+  isSomeGameLoading() {
+    let isSomeLoading = false;
+    this.state.games.forEach(game => {
+      if (game.isLoading) {
+        isSomeLoading = true;
+      }
+    });
+    return isSomeLoading;
   }
 
   createGame(res, i) {
@@ -171,6 +187,7 @@ class App extends Component {
                         });
                         if (!isLoading) {
                           await this.fetchGames();
+                          console.log('fetching games..');
                         }
                       }}
                     />

@@ -120,7 +120,7 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
-          this.props.unloadGame(game);
+          this.props.setLoading(game, false);
         } else {
           console.log('not possible to join');
         }
