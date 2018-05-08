@@ -37,7 +37,7 @@ const WelcomePage = () => {
       </p>
       <p style={{marginTop: 5, marginBottom: 0}}>Lucas Pelloni </p>
       <p style={{marginTop: 5, marginBottom: 0}}>Severin Wullschleger</p>
-      <p style={{marginTop: 5, marginBottom: 0}}>Andreas Schafehlbuhl</p>
+      <p style={{marginTop: 5, marginBottom: 0}}>Andreas Schaufelbühl</p>
     </Container>
   );
 };
