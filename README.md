@@ -10,9 +10,8 @@ Furthermore, the current version of our game has been released and tested for th
 ## Website 
    > The game can be played at the following link: [https://www.tictactoe.bet](http://www.tictactoe.bet)
 
-![a](public/screen1.png=250x)
-![](public/screen2.png)
-![a](public/screen3.png)
+![](public/screen1.png)
+![](public/screen4.png)
 
 ## How to build
 ```
