@@ -1,32 +1,35 @@
-Welcome to the tic-tac-toe readme!
 
-### current Smart Contract:
+# Decentralized Tic-Tac-Toe
+Welcome to our Tic-Tac-Toe game! In the following, you can find some features and data related to our Game. Feel free to contribute and enjoy! 
 
-Address:
-`0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD`
+## Prerequisites
+In order to be able to play, our ÐApp requires a [MetaMask extension](https://chrome.google.com/webstore/detail/metamask/nkbihfbeogaeaoehlefnkodbefgpgknn) installed as Chrome plugin. 
+Furthermore, the current version of our game has been released and tested for the **Ropsten Testnet**.  In order to get some `Ropsten-ETH` to play, consider to use this [website](http://faucet.ropsten.be:3001/) for receiving `1 Test ETH`. 
+>It is not possible to use the *Ethereum Main Network* yet, but we are working for releasing a compatible version soon. 
 
-Archive:
-`0xe3b2b7399be6bf8651d30d5b78b1705fde91bc25`
+## Website 
+   > The game can be played at the following link: [https://www.tictactoe.bet](http://www.tictactoe.bet)
 
-`0x3f1c1b3b8007f6645ba6a146d4e1359e15d3d529`
+![a]('public/screen1.png')
+![a]('public/screen2.png')
+![a]('public/screen3.png')
 
-`0x5ad4a8ae67476ff3fc40bc351faabfd6a1e88718`
-
-`0x3Ef591C2a47F7d3E2f4D16A9F791df7B29E5a3C4`
-
-`0xC745cF52Dc3C0F983C3785949f7A658C674F1811`
-
-`0x5220a7ae2143f780F72486EDd4C072a455ff3Ba9`
-
-`0xc6ce45fd3272e9b8285cc43299746a9cadcc1cc8`
-
-`0x41c195bd70e3376133bfa1bb0691d2e1428d4d16`
-
+## How to build
+```
+$ git clone git@github.com:lucaspelloni2/tic-tac-toe.git
+$ cd tic-tac-toe
+$ yarn
+$ npm start
+```
+  ## Current Smart Contract: 
 
 
-### Useful link
-Interact with Smart contract through web3.js: https://medium.com/zeonlab-blockchain-semantic-blog/interaction-with-solidity-using-web3-5a4f1a7166f3
-
-Return struct and struct array: https://medium.com/@bryn.bellomy/solidity-tutorial-returning-structs-from-public-functions-e78e48efb378
-
-Differnece between require() and assert(): https://ethereum.stackexchange.com/questions/15166/difference-between-require-and-assert-and-the-difference-between-revert-and-thro
+### Current Smart Contract:  
+Address:  `0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD`  
+ 
+  ### Authors
+```
+Lucas Pelloni
+Severin Wullschleger
+Andreas Schaufelbühl
+```
