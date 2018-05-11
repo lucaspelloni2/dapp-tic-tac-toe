@@ -11,6 +11,7 @@ class BetsComponent extends Component {
     return (
       <div>
         <Bets
+          game={this.props.game}
           games={this.props.games}
           gamesLoading={this.props.gamesLoading}
           web3={this.props.web3}
@@ -19,6 +20,7 @@ class BetsComponent extends Component {
           maxHeight={this.props.maxHeight}
         />
         <BetForm
+          game={this.props.game}
           web3={this.props.web3}
           contract={this.props.contract}
           account={this.props.account}

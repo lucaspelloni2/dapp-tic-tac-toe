@@ -223,6 +223,7 @@ class GameScreen extends Component {
                   account={this.props.account}
                   games={this.props.games}
                   gamesLoading={this.props.gamesLoading}
+                  game={this.state.game}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>

@@ -116,6 +116,7 @@ class Bets extends Component {
   }
 
   async getBets() {
+    console.log(this.props.game);
     let bets = [];
     return this.props.contract.methods
       .getBets()
@@ -124,7 +125,14 @@ class Bets extends Component {
         for (let i = 0; i < res.betIds.length; i++) {
           let bet = this.getBet(res, i);
           if (bet !== null) {
-            bets.push(bet);
+            if (this.props.game) {
+              // if a game is passed as prop in the bet component
+              if (bet.gameId === this.props.game.gameId) {
+                bets.push(bet);
+              }
+            } else {
+              bets.push(bet);
+            }
           }
         }
         this.setState({bets: bets});
