@@ -206,6 +206,12 @@ class BetForm extends Component {
     };
   }
 
+  componentDidMount() {
+    if (this.props.game) {
+      this.setState({selectedGame: this.props.game});
+    }
+  }
+
   handleChange = selectedGame => {
     this.setState({selectedGame: selectedGame});
     console.log('selected ', selectedGame);
