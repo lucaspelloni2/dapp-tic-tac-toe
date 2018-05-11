@@ -49,16 +49,17 @@ const PreviewIcon = styled.svg`
 `;
 
 const SortUp = styled.svg`
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   fill: white;
-  margin-top: 5px; 
+  margin-top: 8px; 
 `;
 
 const SortDown = styled.svg`
-  width: 15px;
-  height: 15px;
+  width: 20px;
+  height: 20px;
   fill: white;
+  margin-bottom: 5px; 
 `;
 
 const GameIcon = props => {
