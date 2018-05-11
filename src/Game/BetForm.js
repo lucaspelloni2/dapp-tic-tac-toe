@@ -234,7 +234,6 @@ class BetForm extends Component {
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);
-        //todo vlose modal
         this.setState({
           modalIsOpen: false,
           secondModalIsOpen: false

@@ -253,7 +253,6 @@ class GameBoard extends Component {
     }
 
 
-    //TODO: send new state to blockchain --> get state to check for winner, remove this
     this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'});
     this.setState({player: (this.state.player === 'x') ? 'o' : 'x'});
     this.setState({moves: this.state.moves + 1})

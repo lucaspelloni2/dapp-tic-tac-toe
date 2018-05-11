@@ -86,12 +86,21 @@ const Button = styled.div`
   width: 65px;
 `;
 
+const ValueColumn = styled.th`
+  display: flex;
+  align-items: center;
+  cursor: pointer;
+  justify-content: space-evenly;
+`;
+
 class Bets extends Component {
   constructor() {
     super();
     this.state = {
       bets: [],
-      loading: false
+      loading: false,
+      sortedAsc: true,
+      sortedDesc: false
     };
   }
 
@@ -99,7 +108,7 @@ class Bets extends Component {
     await this.getBets();
     this.interval = setInterval(async () => {
       await this.getBets();
-    }, 1000);
+    }, 1500);
   }
 
   componentWillUnmount() {
@@ -119,6 +128,13 @@ class Bets extends Component {
           }
         }
         this.setState({bets: bets});
+        if (this.state.sortedAsc) {
+          this.sortAsc();
+        }
+
+        if (this.state.sortedDesc) {
+          this.sortDesc();
+        }
       })
       .catch(err => {
         console.log('error getting bets ' + err);
@@ -126,7 +142,6 @@ class Bets extends Component {
   }
 
   getBet(res, i) {
-    // TODO: convert the returned values in ETH (now are in WEI)
     return {
       id: res.betIds[i],
       gameId: res.gameIds[i],
@@ -214,6 +229,52 @@ class Bets extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
+  sort() {
+    if (!(this.state.sortedAsc && this.state.sortedDesc)) {
+      this.sortAsc();
+    }
+
+    if (this.state.sortedDesc) {
+      this.sortAsc();
+    }
+
+    if (this.state.sortedAsc) {
+      this.sortDesc();
+    }
+  }
+
+  sortAsc() {
+    this.setState({isSortingLoading: true});
+    const customSort = function(a, b) {
+      return Number(a.value) - Number(b.value);
+    };
+
+    const data = this.state.bets;
+    data.sort(customSort);
+    this.setState({
+      bets: data,
+      sortedAsc: true,
+      sortedDesc: false,
+      isSortingLoading: false
+    });
+  }
+
+  sortDesc() {
+    this.setState({isSortingLoading: true});
+    const customSort = function(a, b) {
+      return Number(b.value) - Number(a.value);
+    };
+
+    const data = this.state.bets;
+    data.sort(customSort);
+    this.setState({
+      bets: data,
+      sortedAsc: false,
+      sortedDesc: true,
+      isSortingLoading: false
+    });
+  }
+
   render() {
     return (
       <div>
@@ -232,17 +293,21 @@ class Bets extends Component {
                     <th>
                       <Title>Status</Title>
                     </th>
-                    <th>
+                    <ValueColumn onClick={e => this.sort()}>
                       <Title>Value</Title>
-                    </th>
+                      {this.state.sortedAsc ? (
+                        <GameIcon icon={'sortup'} />
+                      ) : (
+                        <GameIcon icon={'sortdown'} />
+                      )}
+                    </ValueColumn>
                     <th>
                       <Title>Who on X</Title>
                     </th>
                     <th>
                       <Title>Who on O</Title>
                     </th>
-                    <th>
-                    </th>
+                    <th />
                   </tr>
                 </tbody>
                 <tbody>
