@@ -7,7 +7,7 @@ class BetsComponent extends Component {
     super();
   }
 
-  render() {
+  render(props) {
     return (
       <div>
         <Bets

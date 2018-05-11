@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
+import BetsComponent from './BetsComponent';
 
 const ParentContainer = styled.div``;
 
@@ -27,7 +28,7 @@ const ButtonsContainer = styled.div`
 `;
 
 const ButtonContainer = styled.div`
-margin: 15px 0; 
+  margin: 15px 0;
 `;
 
 const UserProfileContainer = styled.div`
@@ -73,8 +74,7 @@ class Lobby extends Component {
       username: localStorage.getItem('username')
     };
   }
-  componentDidMount() {
-  }
+  componentDidMount() {}
 
   render(props) {
     return (
@@ -120,6 +120,13 @@ class Lobby extends Component {
               </ButtonsContainer>
             </LobbyContainer>
           </Container>
+          <BetsComponent
+            games={this.props.games}
+            gamesLoading={this.props.gamesLoading}
+            web3={this.props.web3}
+            contract={this.props.contract}
+            account={this.props.account}
+          />
         </ParentContainer>
       </div>
     );

@@ -42,8 +42,10 @@ class App extends Component {
     );
 
     this.state = {
-      ethAddress: '',
-      ethBalance: 0,
+      account: {
+        ethAddress: '',
+        ethBalance: 0
+      },
       web3: web3Instance,
       contract: tictactoeContract,
       games: [],
@@ -128,12 +130,16 @@ class App extends Component {
     return this.state.web3.eth
       .getAccounts()
       .then(addr => {
-        this.setState({ethAddress: addr.toString()});
-        this.state.web3.eth
+        let account = Object.assign({}, this.state.account);
+        account.ethAddress = addr.toString();
+        this.setState({account: account});
+        return this.state.web3.eth
           .getBalance(addr.toString())
           .then(bal => {
             let inEth = this.state.web3.utils.fromWei(bal, 'ether');
-            this.setState({ethBalance: inEth});
+            let account = Object.assign({}, this.state.account);
+            account.ethBalance = inEth;
+            this.setState({account: account});
           })
           .catch(err => {
             console.log('error getting balance' + err);
@@ -146,7 +152,7 @@ class App extends Component {
 
   render() {
     return (
-      <Context.Provider value={this.state}>
+      <Context.Provider value={this.state.account}>
         <Container>
           <BrowserRouter>
             <div>
@@ -158,7 +164,10 @@ class App extends Component {
                     <Lobby
                       {...props}
                       contract={this.state.contract}
-                      account={this.state}
+                      account={this.state.account}
+                      games={this.state.games}
+                      gamesLoading={this.state.gamesLoading}
+                      web3={this.state.web3}
                     />
                   )}
                 />
@@ -171,7 +180,7 @@ class App extends Component {
                       {...props}
                       web3={this.state.web3}
                       contract={this.state.contract}
-                      account={this.state}
+                      account={this.state.account}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
                       setLoading={async (game, isLoading) => {
@@ -201,7 +210,7 @@ class App extends Component {
                       {...props}
                       web3={this.state.web3}
                       contract={this.state.contract}
-                      account={this.state}
+                      account={this.state.account}
                     />
                   )}
                 />
@@ -213,7 +222,7 @@ class App extends Component {
                       {...props}
                       web3={this.state.web3}
                       contract={this.state.contract}
-                      account={this.state}
+                      account={this.state.account}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
                     />
@@ -228,7 +237,7 @@ class App extends Component {
                       {...props}
                       web3={this.state.web3}
                       contract={this.state.contract}
-                      account={this.state}
+                      account={this.state.account}
                     />
                   )}
                 />
