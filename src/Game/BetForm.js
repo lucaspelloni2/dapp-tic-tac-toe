@@ -269,7 +269,7 @@ class BetForm extends Component {
     if (window.location.host.toString().includes('localhost')) {
       domain = 'http://localhost:3000/games/see/';
     } else {
-      domain = '/games/see/';
+      domain = 'games/see/';
     }
     return domain;
   }
