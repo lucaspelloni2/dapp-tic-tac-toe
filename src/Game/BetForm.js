@@ -265,12 +265,11 @@ class BetForm extends Component {
   }
 
   getDomain() {
-    let domain ="";
-    if (window.location.host.toString().includes("localhost")) {
-        domain = "http://localhost:3000/games/see/"
-    }
-    else {
-      domain = "www.tictactoe.bet/games/see/"
+    let domain = '';
+    if (window.location.host.toString().includes('localhost')) {
+      domain = 'http://localhost:3000/games/see/';
+    } else {
+      domain = 'www.tictactoe.bet/games/see/';
     }
     return domain;
   }
@@ -345,7 +344,12 @@ class BetForm extends Component {
                       label: this.state.selectedGame.name,
                       value: this.state.selectedGame
                     }
-                  : null
+                  : this.props.game
+                    ? {
+                        label: this.props.game.name,
+                        value: this.props.game
+                      }
+                    : null
               }
               onChange={this.handleChange}
               options={this.props.games.map(game => ({
@@ -355,10 +359,7 @@ class BetForm extends Component {
             />
             {this.state.selectedGame ? (
               <a
-                href={
-                  this.getDomain() +
-                  this.state.selectedGame.id
-                }
+                href={this.getDomain() + this.state.selectedGame.id}
                 target={'_blank'}
               >
                 <GamePreview>

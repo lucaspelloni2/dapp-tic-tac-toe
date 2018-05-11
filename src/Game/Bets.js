@@ -116,7 +116,6 @@ class Bets extends Component {
   }
 
   async getBets() {
-    console.log(this.props.game);
     let bets = [];
     return this.props.contract.methods
       .getBets()
