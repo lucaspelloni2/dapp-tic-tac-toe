@@ -12,6 +12,7 @@ import Bets from './Bets';
 import BetForm from './BetForm';
 import Prompt from './Prompt';
 import Popup from 'react-popup';
+import BetsComponent from './BetsComponent';
 
 const TopContainer = styled.div`
   display: flex;
@@ -224,18 +225,7 @@ class GameScreen extends Component {
                 />
               </ColumnContainer>
               <ColumnContainer>
-                <Bets
-                  games={this.props.games}
-                  gamesLoading={this.props.gamesLoading}
-                  game={this.state.game}
-                  playerX={this.state.playerX}
-                  playerO={this.state.playerO}
-                  web3={this.props.web3}
-                  contract={this.props.contract}
-                  account={this.props.account}
-                />
-                <BetForm
-                  game={this.state.game}
+                <BetsComponent
                   web3={this.props.web3}
                   contract={this.props.contract}
                   account={this.props.account}
