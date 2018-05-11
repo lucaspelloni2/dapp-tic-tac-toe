@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import {Route} from 'react-router-dom';
 import GameIcon from './GameIcon';
 import GameModal from './Modal';
 import GameToolTip from './ToolTip';
@@ -265,6 +264,17 @@ class BetForm extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
+  getDomain() {
+    let domain ="";
+    if (window.location.host.toString().includes("localhost")) {
+        domain = "http://localhost:3000/games/see/"
+    }
+    else {
+      domain = "www.tictactoe.bet/games/see/"
+    }
+    return domain;
+  }
+
   renderChildModal() {
     return (
       <div>
@@ -346,7 +356,7 @@ class BetForm extends Component {
             {this.state.selectedGame ? (
               <a
                 href={
-                  "http://localhost:3000/games/see/" +
+                  this.getDomain() +
                   this.state.selectedGame.id
                 }
                 target={'_blank'}
