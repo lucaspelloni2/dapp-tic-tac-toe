@@ -28,12 +28,6 @@ const ParentContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-const CentralSpinner = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  margin-top: 15em;
-`;
 const MetaContainer = styled.div`
   margin-bottom: 60px;
   margin-top: -35px;
@@ -199,9 +193,7 @@ class GameScreen extends Component {
     return (
       <div style={{marginBottom: '4em'}}>
         {this.state.loading ? (
-          <CentralSpinner>
-            <GameSpinner />
-          </CentralSpinner>
+          <GameSpinner />
         ) : (
           <div>
             {/*<TopContainer>*/}

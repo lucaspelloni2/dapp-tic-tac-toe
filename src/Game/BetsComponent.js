@@ -16,6 +16,7 @@ class BetsComponent extends Component {
           web3={this.props.web3}
           contract={this.props.contract}
           account={this.props.account}
+          maxHeight={this.props.maxHeight}
         />
         <BetForm
           web3={this.props.web3}

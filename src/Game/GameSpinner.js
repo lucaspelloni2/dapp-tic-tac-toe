@@ -1,5 +1,13 @@
 import React, {Component} from 'react';
 import {BounceLoader} from 'react-spinners';
+import styled from 'styled-components';
+
+const CentralSpinner = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin-top: 15em;
+`;
 
 class GameSpinner extends Component {
   constructor(props) {
@@ -10,7 +18,13 @@ class GameSpinner extends Component {
   }
   render() {
     return (
-        <BounceLoader size={200} color={'#e4751b'} loading={this.state.loading} />
+      <CentralSpinner>
+        <BounceLoader
+          size={200}
+          color={'#e4751b'}
+          loading={this.state.loading}
+        />
+      </CentralSpinner>
     );
   }
 }

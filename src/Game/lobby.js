@@ -3,6 +3,9 @@ import styled from 'styled-components';
 import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
 import BetsComponent from './BetsComponent';
+import GameSpinner from './GameSpinner';
+import UserProfile from './UserProfile';
+import GameIcon from './GameIcon';
 
 const ParentContainer = styled.div``;
 
@@ -15,55 +18,42 @@ const Container = styled.div`
 `;
 const LobbyContainer = styled.div`
   display: flex;
-  justify-content: space-evenly;
+  justify-content: center;
+  align-items: center;
   width: 100%;
-
-  border-radius: 5px;
 `;
 
 const ButtonsContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: space-evenly;
+  padding: 15px;
+  text-align: center;
+  width: 500px;
+  height: 250px;
+  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
+  overflow: scroll;
+  background-image: radial-gradient(
+    farthest-side at 212% 174px,
+    #0177a2 0,
+    #01497c 1200px
+  );
 `;
 
 const ButtonContainer = styled.div`
-  margin: 15px 0;
-`;
-
-const UserProfileContainer = styled.div`
-  display: flex;
-  justify-content: flex-end;
-  margin-left: 4em;
-  margin-top: 2em;
+  margin: 10px 0;
 `;
 
 const Button = styled.button`
   width: 250px;
 `;
 
-const Profile = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-right: 3em;
-`;
-
-const UserIcon = styled.svg`
-  fill: #e4751b;
-  width: 60px;
-  height: 60px;
-  border: 3px solid #e4751b;
-  padding: 5px;
-  border-radius: 50%;
-`;
-
-const UserName = styled.p`
-  font-size: 18px;
-  font-weight: bold;
-  margin-top: 5px;
-  margin-bottom: 0;
+const Separator = styled.div`
+  width: 2px;
+  opacity: 0.5;
+  background-color: #f9fdff;
+  margin: 0 6em;
+  min-height: 400px;
 `;
 
 class Lobby extends Component {
@@ -79,55 +69,60 @@ class Lobby extends Component {
   render(props) {
     return (
       <div>
-        <ParentContainer>
-          <UserProfileContainer>
-            <Profile>
-              <UserIcon
-                xmlns="http://www.w3.org/2000/svg"
-                viewBox="0 0 512 512"
-              >
-                <path d="M256 0c88.366 0 160 71.634 160 160s-71.634 160-160 160S96 248.366 96 160 167.634 0 256 0zm183.283 333.821l-71.313-17.828c-74.923 53.89-165.738 41.864-223.94 0l-71.313 17.828C29.981 344.505 0 382.903 0 426.955V464c0 26.51 21.49 48 48 48h416c26.51 0 48-21.49 48-48v-37.045c0-44.052-29.981-82.45-72.717-93.134z" />
-              </UserIcon>
-              <UserName>{this.state.username}</UserName>
-            </Profile>
-          </UserProfileContainer>
-          <div style={{marginTop: -110, marginBottom: 122}}>
-            <MetaMaskLogo />
+        {this.props.gamesLoading ? (
+          <GameSpinner />
+        ) : (
+          <div>
+            <ParentContainer>
+              <UserProfile username={this.state.username} />
+              <div style={{marginTop: -110, marginBottom: 122}}>
+                <MetaMaskLogo />
+              </div>
+              <Container>
+                {/*<h1>Lobby</h1>*/}
+                {/*<p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>*/}
+                {/*Please select an option*/}
+                {/*</p>*/}
+                <LobbyContainer>
+                  <ButtonsContainer>
+                    <ButtonContainer>
+                      <ButtonLink
+                        width={250}
+                        location={'games/' + this.props.account.ethAddress}
+                      >
+                        Create Game
+                        <GameIcon icon={'create'} />
+                      </ButtonLink>
+                    </ButtonContainer>
+                    <ButtonContainer>
+                      <ButtonLink width={250} location={'games'}>
+                        Join Game
+                        <GameIcon icon={'join2'} />
+                      </ButtonLink>
+                    </ButtonContainer>
+                    <ButtonContainer>
+                      <ButtonLink width={250} location={''}>
+                        Logout
+                        <GameIcon icon={'logout'} />
+                      </ButtonLink>
+                    </ButtonContainer>
+                  </ButtonsContainer>
+                  <Separator />
+                  <div>
+                    <BetsComponent
+                      games={this.props.games}
+                      gamesLoading={this.props.gamesLoading}
+                      web3={this.props.web3}
+                      contract={this.props.contract}
+                      account={this.props.account}
+                      maxHeight={350}
+                    />
+                  </div>
+                </LobbyContainer>
+              </Container>
+            </ParentContainer>
           </div>
-          <Container>
-            <h1>Lobby</h1>
-            <p style={{fontSize: 22, marginTop: 0, marginBottom: 10}}>
-              Please select an option
-            </p>
-            <LobbyContainer>
-              <ButtonsContainer>
-                <ButtonContainer>
-                  <ButtonLink
-                    width={250}
-                    location={'games/' + this.props.account.ethAddress}
-                  >
-                    Create Game
-                  </ButtonLink>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <ButtonLink width={250} location={'games'}>
-                    Join Game
-                  </ButtonLink>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <Button>Log-Out</Button>
-                </ButtonContainer>
-              </ButtonsContainer>
-            </LobbyContainer>
-          </Container>
-          <BetsComponent
-            games={this.props.games}
-            gamesLoading={this.props.gamesLoading}
-            web3={this.props.web3}
-            contract={this.props.contract}
-            account={this.props.account}
-          />
-        </ParentContainer>
+        )}
       </div>
     );
   }

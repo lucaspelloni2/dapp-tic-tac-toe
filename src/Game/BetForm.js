@@ -431,7 +431,7 @@ class BetForm extends Component {
     );
   }
 
-  render() {
+  render(props) {
     return (
       <GameModal
         openModal={() => {

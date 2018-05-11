@@ -18,7 +18,7 @@ const Container = styled.div`
   text-align: center;
   width: 600px;
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-  max-height: 221px;
+  max-height: ${props => (props.maxHeight ? props.maxHeight : 221)}px;
   overflow: scroll;
   background-image: radial-gradient(
     farthest-side at 212% 174px,
@@ -271,7 +271,7 @@ class Bets extends Component {
     });
   }
 
-  render() {
+  render(props) {
     return (
       <div>
         {this.state.loading ? (
@@ -279,7 +279,7 @@ class Bets extends Component {
         ) : (
           <BetsContainer>
             <h1>All Bets</h1>
-            <Container>
+            <Container maxHeight={this.props.maxHeight}>
               <Table>
                 <tbody>
                   <tr>
