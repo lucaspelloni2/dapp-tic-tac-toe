@@ -20,10 +20,8 @@ $ cd tic-tac-toe
 $ yarn
 $ npm start
 ```
-  ## Current Smart Contract: 
+ ## Current Smart Contract: 
 
-
-### Current Smart Contract:  
 Address:  `0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD`  
  
   ### Authors
