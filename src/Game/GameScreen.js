@@ -225,6 +225,8 @@ class GameScreen extends Component {
               </ColumnContainer>
               <ColumnContainer>
                 <Bets
+                  games={this.props.games}
+                  gamesLoading={this.props.gamesLoading}
                   game={this.state.game}
                   playerX={this.state.playerX}
                   playerO={this.state.playerO}

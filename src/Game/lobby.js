@@ -16,7 +16,7 @@ const LobbyContainer = styled.div`
   display: flex;
   justify-content: space-evenly;
   width: 100%;
-  height: 500px;
+
   border-radius: 5px;
 `;
 
@@ -26,7 +26,9 @@ const ButtonsContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-const ButtonContainer = styled.div``;
+const ButtonContainer = styled.div`
+margin: 15px 0; 
+`;
 
 const UserProfileContainer = styled.div`
   display: flex;
@@ -111,20 +113,6 @@ class Lobby extends Component {
                   <ButtonLink width={250} location={'games'}>
                     Join Game
                   </ButtonLink>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <Button>Make Bet</Button>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <ButtonLink
-                    width={250}
-                    location={'bets'}
-                  >
-                    Join Bet
-                  </ButtonLink>
-                </ButtonContainer>
-                <ButtonContainer>
-                  <Button>Rules</Button>
                 </ButtonContainer>
                 <ButtonContainer>
                   <Button>Log-Out</Button>

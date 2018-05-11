@@ -108,7 +108,7 @@ class Bets extends Component {
     await this.getBets();
     this.interval = setInterval(async () => {
       await this.getBets();
-    }, 1500);
+    }, 3000);
   }
 
   componentWillUnmount() {
@@ -129,11 +129,11 @@ class Bets extends Component {
         }
         this.setState({bets: bets});
         if (this.state.sortedAsc) {
-          this.sortAsc();
+          this.sortBetValuesAsc();
         }
 
         if (this.state.sortedDesc) {
-          this.sortDesc();
+          this.sortBetValuesDesc();
         }
       })
       .catch(err => {
@@ -229,21 +229,17 @@ class Bets extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
-  sort() {
-    if (!(this.state.sortedAsc && this.state.sortedDesc)) {
-      this.sortAsc();
-    }
-
+  sortBetValues() {
     if (this.state.sortedDesc) {
-      this.sortAsc();
+      this.sortBetValuesAsc();
     }
 
     if (this.state.sortedAsc) {
-      this.sortDesc();
+      this.sortBetValuesDesc();
     }
   }
 
-  sortAsc() {
+  sortBetValuesAsc() {
     this.setState({isSortingLoading: true});
     const customSort = function(a, b) {
       return Number(a.value) - Number(b.value);
@@ -259,7 +255,7 @@ class Bets extends Component {
     });
   }
 
-  sortDesc() {
+  sortBetValuesDesc() {
     this.setState({isSortingLoading: true});
     const customSort = function(a, b) {
       return Number(b.value) - Number(a.value);
@@ -293,7 +289,7 @@ class Bets extends Component {
                     <th>
                       <Title>Status</Title>
                     </th>
-                    <ValueColumn onClick={e => this.sort()}>
+                    <ValueColumn onClick={e => this.sortBetValues()}>
                       <Title>Value</Title>
                       {this.state.sortedAsc ? (
                         <GameIcon icon={'sortup'} />
