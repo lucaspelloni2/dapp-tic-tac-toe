@@ -2,63 +2,67 @@ pragma solidity ^0.4.23;
 //pragma experimental ABIEncoderV2;
 
 contract TicTacToe {
-    //    address contractOwner;
 
+    // width (number of squares) of a board side
     uint constant boardSize = 3;
-    enum GameState {NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW}
-    enum BetState {NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT}
-    enum SquareState {EMPTY, X, O}
 
-    //    constructor() public {
-    //        contractOwner = msg.sender;
-    //    }
-
-    // Players
+    /*
+    *   Players
+    */
     mapping(address => Player) public players;        // address = key, Player is value
 
-    // Games
-    uint counter = 0;
-    mapping(uint => Game) public games;
-    uint[] openGameIds;
-
-    // bets
-    uint betCounter = 0;
-    mapping(uint => Bet) public bets;
-    uint[] openBetIds;
-
-    struct Player {
+    struct Player {// will be saved offchain in future
         bytes32 name;
         uint[] gameIds;
     }
 
+    /*
+    *   Games
+    */
+    uint counter = 0;
+    mapping(uint => Game) public games;
+    uint[] openGameIds;
+
+    enum GameState {NOT_EXISTING, EMPTY, WAITING_FOR_O, WAITING_FOR_X, READY, X_HAS_TURN, O_HAS_TURN, WINNER_X, WINNER_O, DRAW}
+    enum SquareState {EMPTY, X, O}
+
     struct Game {
         uint gameId;
-        bytes32 name;
+        bytes32 name;                                 // will be saved offchain in future
         address ownerAddr;
-
         GameState state;
-
         uint moveCounter;
-
         address playerOAddr;
         address playerXAddr;
-
         address winnerAddr;
-
         SquareState[boardSize][boardSize] board;
     }
 
+    /*
+    *   Bets
+    */
+    uint betCounter = 0;
+    mapping(uint => Bet) public bets;
+    uint[] openBetIds;
+
+    enum BetState {NOT_EXISTING, MISSING_X_BETTOR, MISSING_O_BETTOR, WITHDRAWN, FIXED, PAYEDOUT}
+
     struct Bet {
-        uint value;
-        uint gameId;
         uint betId;
+        uint gameId;
+        uint value;
         BetState state;
         address bettorOnOAddr;
         address bettorOnXAddr;
     }
 
-    event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
 
+
+    /*
+    *   lobby functions
+    */
+
+    event GameCreated(bool wasSuccess, uint gameId, GameState state, string message);
     function createGame(bytes32 gameName, bytes32 playerName) public {
         uint gameId = counter++;
         Game storage myGame = games[gameId];
@@ -75,7 +79,6 @@ contract TicTacToe {
         emit GameCreated(true, gameId, myGame.state, "Game created");
     }
 
-
     function getGameIds() public view returns (uint[] gameIds) {
         return openGameIds;
     }
@@ -83,15 +86,17 @@ contract TicTacToe {
     function getGames() public view returns (uint[] gameIds, GameState[] gameStates, bytes32[] gameNames
     , address[] owners, bytes32[] ownerNames, address[] playerXs, address[] playerOs) {
 
-        gameIds = new uint[](openGameIds.length);
-        gameStates = new GameState[](openGameIds.length);
-        gameNames = new bytes32[](openGameIds.length);
-        owners = new address[](openGameIds.length);
-        ownerNames = new bytes32[](openGameIds.length);
-        playerXs = new address[](openGameIds.length);
-        playerOs = new address[](openGameIds.length);
+        uint arrayLenght = openGameIds.length;
 
-        for (uint i = 0; i < openGameIds.length; i++) {
+        gameIds = new uint[](arrayLenght);
+        gameStates = new GameState[](arrayLenght);
+        gameNames = new bytes32[](arrayLenght);
+        owners = new address[](arrayLenght);
+        ownerNames = new bytes32[](arrayLenght);
+        playerXs = new address[](arrayLenght);
+        playerOs = new address[](arrayLenght);
+
+        for (uint i = 0; i < arrayLenght; i++) {
             Game memory game = games[openGameIds[i]];
             gameIds[i] = game.gameId;
             gameStates[i] = game.state;
@@ -116,7 +121,6 @@ contract TicTacToe {
         bettorOnX = new bytes32[](arrayLenght);
         bettorOnO = new bytes32[](arrayLenght);
 
-
         for (uint i = 0; i < arrayLenght; i++) {
             Bet memory bet = bets[openBetIds[i]];
             betIds[i] = bet.betId;
@@ -125,13 +129,11 @@ contract TicTacToe {
             values[i] = bet.value;
             bettorOnX[i] = players[bet.bettorOnXAddr].name;
             bettorOnO[i] = players[bet.bettorOnOAddr].name;
-
         }
         return (betIds, gameIds, betStates, values, bettorOnX, bettorOnO);
     }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
-
     function joinGame(uint gameId, bytes32 playerName) public {
         Game storage game = games[gameId];
 
@@ -147,7 +149,7 @@ contract TicTacToe {
             emit Joined(true, game.gameId, game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
-            //require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+//            require(game.playerOAddr != msg.sender, "Player is already part of this game.");
 
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
@@ -155,7 +157,7 @@ contract TicTacToe {
             emit Joined(true, game.gameId, game.state, playerName, "X");
         }
         else if (game.state == GameState.WAITING_FOR_O) {
-            //require(game.playerXAddr != msg.sender, "Player is already part of this game.");
+//            require(game.playerXAddr != msg.sender, "Player is already part of this game.");
 
             game.playerOAddr = msg.sender;
             game.state = GameState.READY;
@@ -164,9 +166,7 @@ contract TicTacToe {
         }
     }
 
-
     event Left(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
-
     function leaveGame(uint gameId) public {
         Game storage game = games[gameId];
         require(game.state != GameState.NOT_EXISTING, "The game does not exist.");
@@ -196,7 +196,6 @@ contract TicTacToe {
     }
 
     event GameStarted(bool wasSuccess, uint gameId, GameState state, string message);
-
     function startGame(uint gameId) public {
         Game storage game = games[gameId];
 
@@ -218,7 +217,7 @@ contract TicTacToe {
         }
     }
 
-    function getBoard(uint gameId) public view returns (SquareState[boardSize * boardSize] boardRep) {// apparently no string array can be returned yet in solidity
+    function getBoard(uint gameId) public view returns (SquareState[boardSize * boardSize] boardRep) {     // multidimensional arrays cannot be returned easily
         SquareState[boardSize][boardSize] memory board = games[gameId].board;
         uint i = 0;
         for (uint y = 0; y < boardSize; y++) {
@@ -229,8 +228,12 @@ contract TicTacToe {
         return boardRep;
     }
 
-    event MoveMade(bool success, uint gameId, GameState state, uint x, uint y, string symbol);
 
+    /*
+    *   during play functions
+    */
+
+    event MoveMade(bool success, uint gameId, GameState state, uint x, uint y, string symbol);
     function playMove(uint gameId, uint x, uint y) public {
         Game storage game = games[gameId];
 
@@ -242,8 +245,8 @@ contract TicTacToe {
         if (game.state == GameState.X_HAS_TURN) {
 
             require(game.playerXAddr == msg.sender
-            || game.moveCounter == boardSize * boardSize      // last move made automatically
-            , "Sender not equal player X");
+                    || game.moveCounter == boardSize * boardSize      // last move made automatically
+                    , "Sender not equal player X");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.X;
@@ -255,8 +258,8 @@ contract TicTacToe {
         else {
 
             require(game.playerOAddr == msg.sender
-            || game.moveCounter == boardSize * boardSize      // last move made automatically
-            , "Sender not equal player O");
+                    || game.moveCounter == boardSize * boardSize      // last move made automatically
+                    , "Sender not equal player O");
             require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.O;
@@ -362,8 +365,13 @@ contract TicTacToe {
             return GameState.WINNER_O;
     }
 
-    event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
 
+
+    /*
+    *   bet functions
+    */
+
+    event BetCreated(bool wasSuccess, uint betId, BetState state, string message);
     function createBet(uint gameId, bool bettingOnX) public payable {
 
         require(games[gameId].state >= GameState.EMPTY, "The game does not exist.");
@@ -376,7 +384,7 @@ contract TicTacToe {
         myBet.gameId = gameId;
         myBet.value = msg.value;
 
-        // x-betting
+        // saving bettor
         if (bettingOnX) {
             myBet.bettorOnXAddr = msg.sender;
             myBet.state = BetState.MISSING_O_BETTOR;
@@ -395,7 +403,6 @@ contract TicTacToe {
     }
 
     event JoinedBet(bool wasSuccess, uint betId, BetState state, string symbol);
-
     function joinBet(uint betId) payable public {
 
         Bet storage bet = bets[betId];
@@ -405,7 +412,8 @@ contract TicTacToe {
 
         require(msg.value == bet.value, "Not equal amount of value.");
         require(msg.sender != bet.bettorOnXAddr
-        || msg.sender != bet.bettorOnOAddr, "Same address on both sides.");
+                || msg.sender != bet.bettorOnOAddr
+                , "Same address on both sides.");
         require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
 
         if (bet.state == BetState.MISSING_X_BETTOR) {
@@ -421,20 +429,21 @@ contract TicTacToe {
         Bet storage bet = bets[betId];
 
         require(bet.state != BetState.NOT_EXISTING
-        && bet.state != BetState.WITHDRAWN, "The bet does not exist.");
+                && bet.state != BetState.WITHDRAWN
+                , "The bet does not exist.");
         require(bet.state == BetState.MISSING_X_BETTOR
-        || bet.state == BetState.MISSING_O_BETTOR, "Bet is already fixed. Someone already joined.");
+                || bet.state == BetState.MISSING_O_BETTOR
+                , "Bet is already fixed. Someone already joined.");
 
         require(msg.sender == bet.bettorOnXAddr
-        || msg.sender == bet.bettorOnOAddr, "Only the owner can withdraw his bet.");
+                || msg.sender == bet.bettorOnOAddr
+                , "Only the owner can withdraw his bet.");
 
         if (msg.sender == bet.bettorOnXAddr) {
             (bet.bettorOnXAddr).transfer(bet.value);
-            bet.bettorOnXAddr = address(0);
         }
         else {
             (bet.bettorOnOAddr).transfer(bet.value);
-            bet.bettorOnOAddr = address(0);
         }
 
         bet.state = BetState.WITHDRAWN;
@@ -448,10 +457,16 @@ contract TicTacToe {
             if (iBet.gameId == gameId) {
 
                 if (iBet.state == BetState.FIXED) {
+
+                    // bettorOnX wins
                     if (games[gameId].state == GameState.WINNER_X) {
                         (iBet.bettorOnXAddr).transfer(2 * (iBet.value));
+
+                    // bettorOnO wins
                     } else if (games[gameId].state == GameState.WINNER_O) {
                         (iBet.bettorOnOAddr).transfer(2 * (iBet.value));
+
+                    // draw
                     } else {
                         (iBet.bettorOnOAddr).transfer(iBet.value);
                         (iBet.bettorOnXAddr).transfer(iBet.value);
@@ -459,11 +474,11 @@ contract TicTacToe {
                     iBet.state = BetState.PAYEDOUT;
                 }
 
+                // handle not fixed games: transfer value back to owner
                 if (iBet.state == BetState.MISSING_O_BETTOR) {
                     (iBet.bettorOnXAddr).transfer(iBet.value);
                     iBet.state = BetState.WITHDRAWN;
                 }
-
                 if (iBet.state == BetState.MISSING_X_BETTOR) {
                     (iBet.bettorOnOAddr).transfer(iBet.value);
                     iBet.state = BetState.WITHDRAWN;
