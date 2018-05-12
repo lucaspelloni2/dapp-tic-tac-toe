@@ -3,6 +3,8 @@ pragma solidity ^0.4.23;
 
 contract TicTacToe {
 
+    using SafeMath for uint;
+
     // width (number of squares) of a board side
     uint constant boardSize = 3;
 
@@ -450,11 +452,11 @@ contract TicTacToe {
 
                     // bettorOnX wins
                     if (games[gameId].state == GameState.WINNER_X) {
-                        (iBet.bettorOnXAddr).transfer(2 * (iBet.value));
+                        (iBet.bettorOnXAddr).transfer(SafeMath.mul(2, iBet.value));
 
                     // bettorOnO wins
                     } else if (games[gameId].state == GameState.WINNER_O) {
-                        (iBet.bettorOnOAddr).transfer(2 * (iBet.value));
+                        (iBet.bettorOnOAddr).transfer(SafeMath.mul(2, iBet.value));
 
                     // draw
                     } else {
@@ -475,5 +477,51 @@ contract TicTacToe {
                 }
             }
         }
+    }
+}
+
+/*
+*   using SafeMath for proper value calculations
+*/
+//using: https://github.com/OpenZeppelin/openzeppelin-solidity/blob/c63b203c1d1800c9a8b5f51f0b444187fdc6c185/contracts/math/SafeMath.sol
+library SafeMath {
+
+    /**
+    * @dev Multiplies two numbers, throws on overflow.
+    */
+    function mul(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        if (a == 0) {
+            return 0;
+        }
+        c = a * b;
+        assert(c / a == b);
+        return c;
+    }
+
+    /**
+    * @dev Integer division of two numbers, truncating the quotient.
+    */
+    function div(uint256 a, uint256 b) internal pure returns (uint256) {
+        // assert(b > 0); // Solidity automatically throws when dividing by 0
+        // uint256 c = a / b;
+        // assert(a == b * c + a % b); // There is no case in which this doesn't hold
+        return a / b;
+    }
+
+    /**
+    * @dev Subtracts two numbers, throws on overflow (i.e. if subtrahend is greater than minuend).
+    */
+    function sub(uint256 a, uint256 b) internal pure returns (uint256) {
+        assert(b <= a);
+        return a - b;
+    }
+
+    /**
+    * @dev Adds two numbers, throws on overflow.
+    */
+    function add(uint256 a, uint256 b) internal pure returns (uint256 c) {
+        c = a + b;
+        assert(c >= a);
+        return c;
     }
 }
