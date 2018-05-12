@@ -14,9 +14,9 @@ const PlayIcon = styled.svg`
 `;
 
 const BetIcon = styled.svg`
-  width: 15px;
+  width: ${props => (props.width ? props.width : '15')}px;
   height: ${props => (props.height ? props.height : '35')}px;
-  fill: #03b8d4;
+  fill: ${props => (props.color ? props.color : '#03b8d4')};
   margin-bottom: 2px;
   margin-left: ${props => (props.marginLeft ? props.marginLeft : null)};
   margin-right: ${props => (props.marginRight ? props.marginRight : null)};

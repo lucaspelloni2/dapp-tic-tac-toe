@@ -5,8 +5,6 @@ import App from './App';
 import {Web3Provider} from 'react-web3';
 
 ReactDOM.render(
-  <Web3Provider>
-    <App />
-  </Web3Provider>,
+    <App />,
   document.getElementById('root')
 );

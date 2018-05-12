@@ -25,21 +25,27 @@ const Container = styled.div`
 class App extends Component {
   constructor() {
     super();
+
     let web3Instance = null;
     if (typeof web3 !== 'undefined') {
       this.web3Provider = web3.currentProvider;
       web3Instance = new Web3(web3.currentProvider);
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
-        'http://localhost:8545'
+        'http://localhost:7545'
       );
+
       web3Instance = new Web3(this.web3Provider);
-      console.log('new web3');
     }
+
+
+
     const tictactoeContract = new web3Instance.eth.Contract(
       ContractProps.CONTRACT_ABI,
       ContractProps.CONTRACT_ADDRESS
     );
+
+      console.log('This is your provider ', tictactoeContract);
 
     this.state = {
       account: {
@@ -55,6 +61,7 @@ class App extends Component {
 
   async componentDidMount() {
     await this.getUserAccount();
+    console.log("iij", this.state.account.ethAddress);
     await this.fetchGames();
     // this.interval = setInterval(async () => {
     //   if (!this.isSomeGameLoading()) {
@@ -68,7 +75,7 @@ class App extends Component {
     let games = [];
     return this.state.contract.methods
       .getGames()
-      .call({from: this.state.ethAddress})
+      .call({from: this.state.account.ethAddress})
       .then(res => {
         for (let i = 0; i < res.gameIds.length; i++) {
           let game = this.createGame(res, i);
@@ -129,12 +136,15 @@ class App extends Component {
   getUserAccount() {
     return this.state.web3.eth
       .getAccounts()
-      .then(addr => {
+      .then(addresses => {
+        let address = addresses[0];
+        console.log(address);
+
         let account = Object.assign({}, this.state.account);
-        account.ethAddress = addr.toString();
+        account.ethAddress = address;
         this.setState({account: account});
         return this.state.web3.eth
-          .getBalance(addr.toString())
+          .getBalance(address.toString())
           .then(bal => {
             let inEth = this.state.web3.utils.fromWei(bal, 'ether');
             let account = Object.assign({}, this.state.account);
