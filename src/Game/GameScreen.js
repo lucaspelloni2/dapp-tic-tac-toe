@@ -211,6 +211,7 @@ class GameScreen extends Component {
                 <Board
                   game={this.state.game}
                   board={this.state.board}
+                  account={this.props.account}
                   onChecked={tileChecked => {
                     this.playMove(tileChecked);
                   }}
