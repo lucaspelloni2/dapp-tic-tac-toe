@@ -203,18 +203,8 @@ contract TicTacToe {
         require(game.state == GameState.READY, "Not enough players to start the game.");
         require(game.ownerAddr == msg.sender, "Only the game owner can start the game.");
 
-        initialize(game);
         game.state = GameState.X_HAS_TURN;
         emit GameStarted(true, gameId, game.state, "game has been started.");
-    }
-
-    function initialize(Game game) pure private {
-        //SquareState[boardSize][boardSize] memory board = games[gameId].board;
-        for (uint y = 0; y < boardSize; y++) {
-            for (uint x = 0; x < boardSize; x++) {
-                game.board[y][x] = SquareState.EMPTY;
-            }
-        }
     }
 
     function getBoard(uint gameId) public view returns (SquareState[boardSize * boardSize] boardRep) {     // multidimensional arrays cannot be returned easily
