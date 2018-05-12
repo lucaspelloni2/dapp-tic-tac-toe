@@ -35,6 +35,14 @@ const Row = styled.tr`
   }
 `;
 
+const InactiveSquare = styled.td`
+  padding: 8px;
+  border-right: 5px solid #0186ae;
+  &:last-child {
+    border-right: 0;
+  }
+`;
+
 const Square = styled.td`
   &:hover {
     background-image: radial-gradient(
@@ -61,9 +69,9 @@ class Board extends Component {
       case '0':
         return '';
       case '1':
-        return <TicTacToeSymbols width={70} heigth={70} symbol={'X'} />;
+        return <TicTacToeSymbols width={70} heigth={70} symbol={'X'}/>;
       case '2':
-        return <TicTacToeSymbols width={70} heigth={70} symbol={'O'} />;
+        return <TicTacToeSymbols width={70} heigth={70} symbol={'O'}/>;
       default:
         return <div>default</div>;
     }
@@ -75,24 +83,37 @@ class Board extends Component {
         <BoardContainer>
           <Table>
             <tbody>
-              {new Array(3).fill(true).map((a, i) => {
-                return (
-                  <Row key={i}>
-                    {new Array(3).fill(true).map((b, j) => {
-                      return (
-                        <Square
+            {new Array(3).fill(true).map((a, i) => {
+              return (
+                <Row key={i}>
+                  {new Array(3).fill(true).map((b, j) => {
+                    return (
+                      (this.props.game.playerXAddr === this.props.account.ethAddress
+                        && this.props.game.status === 'X_HAS_TURN'
+                        && this.props.board[i * 3 + j] === '0')
+                      || (this.props.game.playerOAddr === this.props.account.ethAddress
+                        && this.props.game.status === 'O_HAS_TURN'
+                        && this.props.board[i * 3 + j] === '0')
+                        ? (<Square
                           key={i * 3 + j}
                           data-col={i}
                           data-row={j}
                           onClick={() => this.props.onChecked(i * 3 + j)}
                         >
                           {Board.renderSymbol(this.props.board[i * 3 + j])}
-                        </Square>
-                      );
-                    })}
-                  </Row>
-                );
-              })}
+                        </Square>)
+                        : (<InactiveSquare
+                          key={i * 3 + j}
+                          data-col={i}
+                          data-row={j}
+                        >
+                          {Board.renderSymbol(this.props.board[i * 3 + j])}
+                        </InactiveSquare>)
+                    );
+                  })}
+                </Row>
+              );
+            })}
             </tbody>
           </Table>
         </BoardContainer>
