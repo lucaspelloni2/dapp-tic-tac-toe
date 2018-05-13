@@ -151,7 +151,7 @@ contract TicTacToe {
             emit Joined(true, game.gameId, game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
-            require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+            // require(game.playerOAddr != msg.sender, "Player is already part of this game.");
 
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
