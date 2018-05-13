@@ -71,7 +71,7 @@ class GameBoard extends Component {
       .then(res => {
         console.log(res);
         for (let i = 0; i < res.length; i++) {
-          if (res[i] === '0') this.state.gameBoard[i] = '';
+          if (res[i] === 'w') this.state.gameBoard[i] = '';
           else if (res[i] === '1') this.state.gameBoard[i] = 'x';
           else this.state.gameBoard[i] = 'o';
         }
@@ -85,7 +85,7 @@ class GameBoard extends Component {
   playMove(gameId, x, y) {
     this.props.contract.methods
       .playMove(gameId, x, y) //this.props.web3.utils.toBN(
-      .send({from: this.props.account.ethAddress, gas: 3000000})
+      .send({from: this.props.account.ethAddress, gas: 4678127})
       .on('transactionHash', tx => {
         // this.addNewTx(tx, game.id, Status.GAME_JOINED);
         // this.setLoadingToTrue(game);
@@ -114,7 +114,7 @@ class GameBoard extends Component {
       .send({
         from: this.props.account.ethAddress,
         value: this.props.web3.utils.toWei(betValueInEth, 'ether'),
-        gas: 30000000
+        gas: 4678127
       })
       .on('transactionHash', tx => {
         //this.addNewTx(tx, game.id, Status.GAME_JOINED);

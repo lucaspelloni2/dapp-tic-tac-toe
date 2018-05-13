@@ -243,7 +243,7 @@ class BetForm extends Component {
       .send({
         from: this.props.account.ethAddress,
         value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether'),
-        gas: 30000000
+        gas: 4678127
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);
