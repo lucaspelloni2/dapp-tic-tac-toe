@@ -25,22 +25,25 @@ const Container = styled.div`
 class App extends Component {
   constructor() {
     super();
-
+    let CONTRACT_ADDRESS;
     let web3Instance = null;
     if (typeof web3 !== 'undefined') {
       this.web3Provider = web3.currentProvider;
       web3Instance = new Web3(web3.currentProvider);
+      // metamask
+      CONTRACT_ADDRESS = ContractProps.METAMASK_CONTRACT_ADDRESS;
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
         'http://localhost:7545'
       );
 
       web3Instance = new Web3(this.web3Provider);
+      CONTRACT_ADDRESS = ContractProps.LOCALHOST_CONTRACT_ADDRESS;
     }
 
     const tictactoeContract = new web3Instance.eth.Contract(
       ContractProps.CONTRACT_ABI,
-      ContractProps.CONTRACT_ADDRESS
+      CONTRACT_ADDRESS
     );
 
     console.log('This is your provider ', tictactoeContract);
