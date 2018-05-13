@@ -111,8 +111,11 @@ class JoinGame extends Component {
         this.props.setLoading(game, true);
       })
       .on('receipt', res => {
+        console.log();
         const returnValues = res.events.Joined.returnValues;
-        if (res.status === '0x1') {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log(
             this.props.web3.utils.toAscii(returnValues.playerName) +
               ' joined game ' +
@@ -140,8 +143,9 @@ class JoinGame extends Component {
         this.props.setLoading(game, true);
       })
       .on('receipt', res => {
-        console.log(res);
-        if (res.status === '0x1') {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log('game started successfully');
           this.props.setLoading(game, false);
           this.setState({receivedGame: game});

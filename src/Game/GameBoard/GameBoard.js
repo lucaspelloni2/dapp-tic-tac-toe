@@ -1,37 +1,29 @@
- import React, {Component} from 'react';
+import React, {Component} from 'react';
 import styled from 'styled-components';
-import BoardTile from "./BoardTile";
-import Announcement from "./Annoucement";
+import BoardTile from './BoardTile';
+import Announcement from './Annoucement';
 
 const Container = styled.div`
   text-align: center;
   margin: auto;
-  
 `;
 const Table = styled.div`
   width: 470px;
-    text-align: center;
+  text-align: center;
   margin-left: auto;
   margin-right: auto;
-  
 `;
-
 
 class GameBoard extends Component {
   constructor() {
     super();
     this.state = {
-      gameBoard: [
-        '', '', '',
-        '', '', '',
-        '', '', ''
-      ],
+      gameBoard: ['', '', '', '', '', '', '', '', ''],
       turn: 'x',
       winner: null,
       moves: 0,
       player: 'x'
-    }
-
+    };
   }
 
   getGame(gameId) {
@@ -51,7 +43,7 @@ class GameBoard extends Component {
         console.log(game);
       })
       .catch(err => {
-        console.log('error getting game ' + gameId + ": " + err);
+        console.log('error getting game ' + gameId + ': ' + err);
       });
   }
 
@@ -66,7 +58,9 @@ class GameBoard extends Component {
         console.log(player);
       })
       .catch(err => {
-        console.log('error getting player with address ' + address + ": " + err);
+        console.log(
+          'error getting player with address ' + address + ': ' + err
+        );
       });
   }
 
@@ -77,31 +71,30 @@ class GameBoard extends Component {
       .then(res => {
         console.log(res);
         for (let i = 0; i < res.length; i++) {
-          if (res[i] === '0')
-            this.state.gameBoard[i] = '';
-          else if (res[i] === '1')
-            this.state.gameBoard[i] = 'x';
-          else
-            this.state.gameBoard[i] = 'o';
+          if (res[i] === '0') this.state.gameBoard[i] = '';
+          else if (res[i] === '1') this.state.gameBoard[i] = 'x';
+          else this.state.gameBoard[i] = 'o';
         }
         console.log(this.state.gameBoard);
       })
       .catch(err => {
-        console.log('error getting board from game ' + gameId + ": " + err);
+        console.log('error getting board from game ' + gameId + ': ' + err);
       });
   }
 
   playMove(gameId, x, y) {
     this.props.contract.methods
-      .playMove(gameId, x, y)              //this.props.web3.utils.toBN(
+      .playMove(gameId, x, y) //this.props.web3.utils.toBN(
       .send({from: this.props.account.ethAddress})
       .on('transactionHash', tx => {
         // this.addNewTx(tx, game.id, Status.GAME_JOINED);
         // this.setLoadingToTrue(game);
       })
       .on('receipt', res => {
-        //console.log(res);
-        if (res.status === '0x1') {
+        console.log(res);
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log('play successful');
           this.getBoard(gameId);
           this.getGame(gameId);
@@ -109,7 +102,7 @@ class GameBoard extends Component {
           console.log('play not successful');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
         //console.log('new game joined ' + confirmationNr);
       });
@@ -118,9 +111,10 @@ class GameBoard extends Component {
   createBet(gameId, isBetOnX, betValueInEth) {
     this.props.contract.methods
       .createBet(gameId, isBetOnX)
-      .send(
-        {from: this.props.account.ethAddress,
-          value: this.props.web3.utils.toWei(betValueInEth, 'ether')})
+      .send({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth, 'ether')
+      })
       .on('transactionHash', tx => {
         //this.addNewTx(tx, game.id, Status.GAME_JOINED);
         // this.setLoadingToTrue(game);
@@ -133,7 +127,7 @@ class GameBoard extends Component {
           console.log('bet could not be created');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -141,9 +135,10 @@ class GameBoard extends Component {
   joinBet(betId, betValueInEth) {
     this.props.contract.methods
       .joinBet(betId)
-      .send(
-        {from: this.props.account.ethAddress,
-          value: this.props.web3.utils.toWei(betValueInEth, 'ether')})
+      .send({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth, 'ether')
+      })
       .on('transactionHash', tx => {
         //this.addNewTx(tx, game.id, Status.GAME_JOINED);
         // this.setLoadingToTrue(game);
@@ -156,7 +151,7 @@ class GameBoard extends Component {
           console.log('bet could not be joined');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -177,40 +172,47 @@ class GameBoard extends Component {
         console.log(bet);
       })
       .catch(err => {
-        console.log('error getting bet ' + betId + ": " + err);
+        console.log('error getting bet ' + betId + ': ' + err);
       });
   }
-
 
   render() {
     return (
       <Container>
-        <Announcement winner={this.state.winner} turn={this.state.turn} player={this.state.player}/>
+        <Announcement
+          winner={this.state.winner}
+          turn={this.state.turn}
+          player={this.state.player}
+        />
         <Table>
-          {
-            this.state.gameBoard.map(function (value, i) {
+          {this.state.gameBoard.map(
+            function(value, i) {
               return (
-                <BoardTile key={i}
-                           loc={i}
-                           value={value}
-                           updateBoard={this.updateBoard.bind(this)}
-                           turn={this.state.turn}/>
+                <BoardTile
+                  key={i}
+                  loc={i}
+                  value={value}
+                  updateBoard={this.updateBoard.bind(this)}
+                  turn={this.state.turn}
+                />
               );
-            }.bind(this))}
+            }.bind(this)
+          )}
         </Table>
       </Container>
-    )
+    );
   }
 
-
   updateBoard(loc, player) {
-
     //console.log(loc);
     //check for invalid move
     if (this.state.turn !== this.state.player || this.state.winner) {
       return;
     }
-    if (this.state.gameBoard[loc] === 'x' || this.state.gameBoard[loc] === 'o') {
+    if (
+      this.state.gameBoard[loc] === 'x' ||
+      this.state.gameBoard[loc] === 'o'
+    ) {
       return;
     }
 
@@ -228,7 +230,8 @@ class GameBoard extends Component {
 
     1 mod 3  = 1   x
     1 / 2	    = 0	  y
-    */  
+    */
+
     console.log(loc % 3);
     console.log(Math.trunc(loc / 3));
     //TODO make gameId dynamic
@@ -237,7 +240,6 @@ class GameBoard extends Component {
     //this.createBet(0, false, '0.04');
     //this.getBet(1);
     //this.joinBet(1, '0.04');
-
 
     console.log(this.props.account.ethAddress);
     // for testing purposes.. does not work yet.
@@ -252,11 +254,9 @@ class GameBoard extends Component {
       this.setState({winner: 'draw'});
     }
 
-
-    this.setState({turn: (this.state.turn === 'x') ? 'o' : 'x'});
-    this.setState({player: (this.state.player === 'x') ? 'o' : 'x'});
-    this.setState({moves: this.state.moves + 1})
-
+    this.setState({turn: this.state.turn === 'x' ? 'o' : 'x'});
+    this.setState({player: this.state.player === 'x' ? 'o' : 'x'});
+    this.setState({moves: this.state.moves + 1});
   }
 }
 

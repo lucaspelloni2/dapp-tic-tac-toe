@@ -389,7 +389,7 @@ class BetForm extends Component {
             <div style={{marginLeft: 5}}>
               <GameToolTip
                 overlay={
-                  'ETH Balance: ' + this.props.account.ethBalance.substr(0, 8)
+                  'ETH Balance: ' + this.props.account.ethBalance.toString().substr(0, 8)
                 }
                 visible={this.state.isToolTipVisible}
                 placement={'right'}
@@ -462,9 +462,13 @@ class BetForm extends Component {
               <GameIcon icon={'add'} />
             </Row>
             <Row>
-              <Balance>
-                Your Balance: {this.props.account.ethBalance.substr(0, 5)} ETH
-              </Balance>
+              {this.props.account ? (
+                <Balance>
+                  Your Balance: {this.props.account.ethBalance.toString().substr(0, 5)} ETH
+                </Balance>
+              ) : (
+                <Balance>Your Balance: (..) ETH</Balance>
+              )}
             </Row>
           </Container>
         }

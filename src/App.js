@@ -38,14 +38,12 @@ class App extends Component {
       web3Instance = new Web3(this.web3Provider);
     }
 
-
-
     const tictactoeContract = new web3Instance.eth.Contract(
       ContractProps.CONTRACT_ABI,
       ContractProps.CONTRACT_ADDRESS
     );
 
-      console.log('This is your provider ', tictactoeContract);
+    console.log('This is your provider ', tictactoeContract);
 
     this.state = {
       account: {
@@ -60,8 +58,7 @@ class App extends Component {
   }
 
   async componentDidMount() {
-    await this.getUserAccount();
-    console.log(this.state.account);
+    await Promise.all([this.getUserAccount()]);
     await this.fetchGames();
     // this.interval = setInterval(async () => {
     //   if (!this.isSomeGameLoading()) {

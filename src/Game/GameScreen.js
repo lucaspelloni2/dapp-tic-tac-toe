@@ -163,8 +163,9 @@ class GameScreen extends Component {
         // this.setLoadingToTrue(this.state.game);
       })
       .on('receipt', async res => {
-        //console.log(res);
-        if (res.status === '0x1') {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log('play successful');
         } else {
           console.log('play not successful');

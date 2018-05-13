@@ -567,7 +567,7 @@ const ContractProps = {
     }
   ],
   CONTRACT_ADDRESS: '0xe59458f3a83cfa6a26faed4df4702ac17b59ba7a'
-  // CONTRACT_ADDRESS: '0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD'
+  // Robsten --> CONTRACT_ADDRESS: '0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD'
 };
 
 export default ContractProps;
