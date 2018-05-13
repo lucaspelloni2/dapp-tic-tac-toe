@@ -71,7 +71,7 @@ class GameBoard extends Component {
       .then(res => {
         console.log(res);
         for (let i = 0; i < res.length; i++) {
-          if (res[i] === 'w') this.state.gameBoard[i] = '';
+          if (res[i] === '0') this.state.gameBoard[i] = '';
           else if (res[i] === '1') this.state.gameBoard[i] = 'x';
           else this.state.gameBoard[i] = 'o';
         }
