@@ -72,6 +72,18 @@ const Create = LobbyIcon.extend``;
 const JoinSpecial = LobbyIcon.extend``;
 const Logout = LobbyIcon.extend``;
 
+const Withdraw = styled.svg`
+  width: 12px;
+  height: 12px;
+  fill: white;
+`;
+
+const WithdrawContainer = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: center;
+`;
+
 const GameIcon = props => {
   switch (props.icon) {
     case 'join':
@@ -164,6 +176,25 @@ const GameIcon = props => {
         <Logout xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path d="M497 273L329 441c-15 15-41 4.5-41-17v-96H152c-13.3 0-24-10.7-24-24v-96c0-13.3 10.7-24 24-24h136V88c0-21.4 25.9-32 41-17l168 168c9.3 9.4 9.3 24.6 0 34zM192 436v-40c0-6.6-5.4-12-12-12H96c-17.7 0-32-14.3-32-32V160c0-17.7 14.3-32 32-32h84c6.6 0 12-5.4 12-12V76c0-6.6-5.4-12-12-12H96c-53 0-96 43-96 96v192c0 53 43 96 96 96h84c6.6 0 12-5.4 12-12z" />
         </Logout>
+      );
+
+    case 'withdraw':
+      return (
+        <WithdrawContainer>
+          <Withdraw xmlns="http://www.w3.org/2000/svg" viewBox="0 0 640 512">
+            <path d="M0 448c0 17.67 14.33 32 32 32h576c17.67 0 32-14.33 32-32V128H0v320zm448-208c0-8.84 7.16-16 16-16h96c8.84 0 16 7.16 16 16v32c0 8.84-7.16 16-16 16h-96c-8.84 0-16-7.16-16-16v-32zm0 120c0-4.42 3.58-8 8-8h112c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H456c-4.42 0-8-3.58-8-8v-16zM64 264c0-4.42 3.58-8 8-8h304c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zm0 96c0-4.42 3.58-8 8-8h176c4.42 0 8 3.58 8 8v16c0 4.42-3.58 8-8 8H72c-4.42 0-8-3.58-8-8v-16zM624 32H16C7.16 32 0 39.16 0 48v48h640V48c0-8.84-7.16-16-16-16z" />
+          </Withdraw>
+
+          <BetIcon
+            xmlns="http://www.w3.org/2000/svg"
+            viewBox="0 0 320 512"
+            height={8}
+            width={8}
+            color={'#02ff31'}
+          >
+            <path d="M311.9 260.8L160 353.6 8 260.8 160 0l151.9 260.8zM160 383.4L8 290.6 160 512l152-221.4-152 92.8z" />
+          </BetIcon>
+        </WithdrawContainer>
       );
 
     default:

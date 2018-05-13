@@ -83,6 +83,8 @@ const Button = styled.div`
   cursor: pointer;
   transition: all 0.2s ease-out;
   width: 65px;
+  height: 34px;
+  margin: 3px 5px;
 `;
 
 const ValueColumn = styled.th`
@@ -93,9 +95,9 @@ const ValueColumn = styled.th`
 `;
 
 const Withdraw = styled.td`
-  font-weight: bold;
+  display: flex;
+  flex-direction: column;
   cursor: pointer;
-  color: red;
 `;
 
 class Bets extends Component {
@@ -187,7 +189,7 @@ class Bets extends Component {
           console.log('bet could not be joined');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -210,7 +212,7 @@ class Bets extends Component {
           console.log('bet withdraw not successful');
         }
       })
-      .on('confirmation', function (confirmationNr) {
+      .on('confirmation', function(confirmationNr) {
         // is returned for the first 24 block confirmations
       });
   }
@@ -242,12 +244,32 @@ class Bets extends Component {
             this.joinBet(bet);
           }}
         >
-          <GameIcon icon={'bet'} height={'14'}/>
+          <GameIcon icon={'bet'} height={'14'} />
           <Paragraph>BET</Paragraph>
         </Button>
       );
     } else {
       return null;
+    }
+  }
+
+  getWithdrawButton(bet) {
+    // TODO ON SC: bettorOnXAddr : return an address and not a name
+    // bet.bettorOnXAddr === this.props.account.ethAddress
+    // bet.bettorOnOAddr === this.props.account.ethAddress
+    if (
+      bet.status === BET_STATUS.MISSING_O_BETTOR ||
+      bet.status === BET_STATUS.MISSING_X_BETTOR
+    ) {
+      //
+      return (
+        <Button hoverColor={'#00ff32'} onClick={() => this.withdrawBet(bet.id)}>
+          <Withdraw>
+            <GameIcon icon={'withdraw'} />
+            <p style={{fontSize: 8, margin: 0}}>Withdraw</p>
+          </Withdraw>
+        </Button>
+      );
     }
   }
 
@@ -276,7 +298,7 @@ class Bets extends Component {
 
   sortBetValuesAsc() {
     this.setState({isSortingLoading: true});
-    const customSort = function (a, b) {
+    const customSort = function(a, b) {
       return Number(a.value) - Number(b.value);
     };
 
@@ -292,7 +314,7 @@ class Bets extends Component {
 
   sortBetValuesDesc() {
     this.setState({isSortingLoading: true});
-    const customSort = function (a, b) {
+    const customSort = function(a, b) {
       return Number(b.value) - Number(a.value);
     };
 
@@ -317,67 +339,62 @@ class Bets extends Component {
             <Container maxHeight={this.props.maxHeight}>
               <Table>
                 <tbody>
-                <tr>
-                  <th>
-                    <Title>Game Id</Title>
-                  </th>
-                  <th>
-                    <Title>Status</Title>
-                  </th>
-                  <ValueColumn onClick={e => this.sortBetValues()}>
-                    <Title>Value</Title>
-                    {this.state.sortedAsc ? (
-                      <GameIcon icon={'sortup'}/>
-                    ) : (
-                      <GameIcon icon={'sortdown'}/>
-                    )}
-                  </ValueColumn>
-                  <th>
-                    <Title>Who on X</Title>
-                  </th>
-                  <th>
-                    <Title>Who on O</Title>
-                  </th>
-                  <th/>
-                  <th/>
-                </tr>
+                  <tr>
+                    <th>
+                      <Title>Game Id</Title>
+                    </th>
+                    <th>
+                      <Title>Status</Title>
+                    </th>
+                    <ValueColumn onClick={e => this.sortBetValues()}>
+                      <Title>Value</Title>
+                      {this.state.sortedAsc ? (
+                        <GameIcon icon={'sortup'} />
+                      ) : (
+                        <GameIcon icon={'sortdown'} />
+                      )}
+                    </ValueColumn>
+                    <th>
+                      <Title>Who on X</Title>
+                    </th>
+                    <th>
+                      <Title>Who on O</Title>
+                    </th>
+                    <th />
+                    <th />
+                  </tr>
                 </tbody>
                 <tbody>
-                {this.state.bets.map(bet => (
-                  <tr key={bet.id}>
-                    <td>{bet.gameId}</td>
-                    <td>{this.getElement(bet)}</td>
-                    <td>
-                      <Element color={'#024169'} border={'#02b8d4'}>
-                        <ValueContainer>
-                          <Value>
-                            {Math.round(
-                              this.props.web3.utils.fromWei(
-                                bet.value,
-                                'ether'
-                              ) * 1000
-                            ) / 1000}
-                          </Value>
-                          <GameIcon
-                            icon={'bet'}
-                            marginLeft={'auto'}
-                            marginRight={'5px'}
-                            height={'20'}
-                          />
-                        </ValueContainer>
-                      </Element>
-                    </td>
-                    <td>{bet.bettorOnX}</td>
-                    <td>{bet.bettorOnO}</td>
-                    <td>{this.getButton(bet)}</td>
-                    {(bet.status === BET_STATUS.MISSING_O_BETTOR ) // && bet.bettorOnXAddr === this.props.account.ethAddress)
-                    || (bet.status === BET_STATUS.MISSING_X_BETTOR) // && bet.bettorOnOAddr === this.props.account.ethAddress)
-                      ? <Withdraw
-                        onClick={() => this.withdrawBet(bet.id)}>X</Withdraw>
-                      : <td></td>
-                    }
-                  </tr>
-                ))}
+                  {this.state.bets.map(bet => (
+                    <tr key={bet.id}>
+                      <td>{bet.gameId}</td>
+                      <td>{this.getElement(bet)}</td>
+                      <td>
+                        <Element color={'#024169'} border={'#02b8d4'}>
+                          <ValueContainer>
+                            <Value>
+                              {Math.round(
+                                this.props.web3.utils.fromWei(
+                                  bet.value,
+                                  'ether'
+                                ) * 1000
+                              ) / 1000}
+                            </Value>
+                            <GameIcon
+                              icon={'bet'}
+                              marginLeft={'auto'}
+                              marginRight={'5px'}
+                              height={'20'}
+                            />
+                          </ValueContainer>
+                        </Element>
+                      </td>
+                      <td>{bet.bettorOnX}</td>
+                      <td>{bet.bettorOnO}</td>
+                      <td>{this.getButton(bet)}</td>
+                      <td>{this.getWithdrawButton(bet)}</td>
+                    </tr>
+                  ))}
                 </tbody>
               </Table>
             </Container>
