@@ -16,7 +16,7 @@ const BetsContainer = styled.div`
 const Container = styled.div`
   padding: 15px;
   text-align: center;
-  width: 600px;
+  width: 680px;
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
   max-height: ${props => (props.maxHeight ? props.maxHeight : 221)}px;
   overflow: scroll;
@@ -52,7 +52,6 @@ const ValueContainer = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-evenly;
-  width: 80px;
 `;
 
 const Value = styled.span`
