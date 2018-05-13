@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import Spinner from './Spinner';
-import GameIcon from "./GameIcon";
+import GameIcon from './GameIcon';
 
 const Container = styled.div`
   padding: 1.5rem 2.5rem;
@@ -44,8 +44,6 @@ const StatusContainer = styled.div`
   );
 `;
 const TxConfirmation = styled.div``;
-
-
 
 const SpinnerContainer = styled.div`
   display: flex;
@@ -92,7 +90,7 @@ class MyTransactions extends Component {
       this.props.web3.eth
         .getTransaction(transaction.tx)
         .then(receipt => {
-          if (receipt.blockNumber) {
+          if (receipt) {
             transaction.blockNumber = receipt.blockNumber;
             transaction.confirmed = true;
             localStorage.setItem(
@@ -149,7 +147,7 @@ class MyTransactions extends Component {
                   <td>
                     <TxConfirmation>
                       {transaction.blockNumber ? (
-                        <GameIcon icon={'confirmation'}/>
+                        <GameIcon icon={'confirmation'} />
                       ) : (
                         <SpinnerContainer>
                           <Spinner width={30} height={30} />

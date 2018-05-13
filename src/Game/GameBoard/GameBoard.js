@@ -85,7 +85,7 @@ class GameBoard extends Component {
   playMove(gameId, x, y) {
     this.props.contract.methods
       .playMove(gameId, x, y) //this.props.web3.utils.toBN(
-      .send({from: this.props.account.ethAddress})
+      .send({from: this.props.account.ethAddress, gas: 3000000})
       .on('transactionHash', tx => {
         // this.addNewTx(tx, game.id, Status.GAME_JOINED);
         // this.setLoadingToTrue(game);
@@ -113,7 +113,8 @@ class GameBoard extends Component {
       .createBet(gameId, isBetOnX)
       .send({
         from: this.props.account.ethAddress,
-        value: this.props.web3.utils.toWei(betValueInEth, 'ether')
+        value: this.props.web3.utils.toWei(betValueInEth, 'ether'),
+        gas: 30000000
       })
       .on('transactionHash', tx => {
         //this.addNewTx(tx, game.id, Status.GAME_JOINED);
@@ -121,7 +122,9 @@ class GameBoard extends Component {
       })
       .on('receipt', res => {
         //console.log(res);
-        if (res.status === '0x1') {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log('bet created successfully');
         } else {
           console.log('bet could not be created');
