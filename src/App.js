@@ -61,7 +61,7 @@ class App extends Component {
 
   async componentDidMount() {
     await this.getUserAccount();
-    console.log("iij", this.state.account.ethAddress);
+    console.log(this.state.account);
     await this.fetchGames();
     // this.interval = setInterval(async () => {
     //   if (!this.isSomeGameLoading()) {

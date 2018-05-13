@@ -90,7 +90,7 @@ class CreateGame extends Component {
         this.props.web3.utils.fromAscii(this.state.gameName),
         this.props.web3.utils.fromAscii(localStorage.getItem('username'))
       )
-      .send({from: this.props.account.ethAddress})
+      .send({from: this.props.account.ethAddress, gas: 3000000})
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.gameName);
       })
