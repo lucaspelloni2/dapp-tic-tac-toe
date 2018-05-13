@@ -7,26 +7,11 @@ class BetsComponent extends Component {
     super();
   }
 
-  render(props) {
+  render() {
     return (
       <div>
-        <Bets
-          game={this.props.game}
-          games={this.props.games}
-          gamesLoading={this.props.gamesLoading}
-          web3={this.props.web3}
-          contract={this.props.contract}
-          account={this.props.account}
-          maxHeight={this.props.maxHeight}
-        />
-        <BetForm
-          account={this.props.account}
-          game={this.props.game}
-          web3={this.props.web3}
-          contract={this.props.contract}
-          games={this.props.games}
-          gamesLoading={this.props.gamesLoading}
-        />
+        <Bets {...this.props} />
+        <BetForm {...this.props} />
       </div>
     );
   }

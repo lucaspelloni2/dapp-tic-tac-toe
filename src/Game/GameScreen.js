@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import MetaMaskLogo from './MetamaskLogo';
 import MyTransactions from './MyTransactions';
 import GameSpinner from './GameSpinner';
 import Board from './Board';
@@ -8,11 +7,9 @@ import Transaction from './Transaction';
 import Status from './Status';
 import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
-import Bets from './Bets';
-import BetForm from './BetForm';
-import Prompt from './Prompt';
-import Popup from 'react-popup';
 import BetsComponent from './BetsComponent';
+import OpponentLoader from './OpponentLoader';
+import GAME_STATUS from './GameStatus';
 
 const TopContainer = styled.div`
   display: flex;
@@ -28,14 +25,10 @@ const ParentContainer = styled.div`
   justify-content: space-evenly;
 `;
 
-const MetaContainer = styled.div`
-  margin-bottom: 60px;
-  margin-top: -35px;
-`;
-
 const ColumnContainer = styled.div`
   display: flex;
   flex-direction: column;
+  position: relative;
 `;
 
 class GameScreen extends Component {
@@ -62,14 +55,22 @@ class GameScreen extends Component {
       playerX: playerX,
       playerO: playerO,
       board: board,
-      loading: false
+      loading: false,
+      amIPlayerX: false
     });
+
+    if (this.props.account.ethAddress === this.state.game.playerXAddr) {
+      this.setState({amIPlayerX: true});
+    }
+
+    const isMyTurn = this.isMyTurn();
+    this.setState({isMyTurn: isMyTurn});
 
     this.interval = setInterval(async () => {
       await this.getGame(gameId);
       let board = await this.getBoard(gameId);
       this.setState({board: board});
-    }, 2000);
+    }, 1000);
 
     // META MASK CANT HANDLE EVENTS AT THE MOMENT, FOLLOW ISSUE:  https://github.com/MetaMask/metamask-extension/issues/3642
     // this.props.contract.events.MoveMade({
@@ -108,6 +109,8 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
+        const isMyTurn = this.isMyTurn();
+        this.setState({isMyTurn: isMyTurn});
       })
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
@@ -145,12 +148,6 @@ class GameScreen extends Component {
   }
 
   async playMove(selectedTile) {
-    // this.setState({
-    //     board: {
-    //         ...this.state.board,
-    //         [selectedTile]: '1'
-    //     }
-    // });
     this.props.contract.methods
       .playMove(
         this.state.game.gameId,
@@ -190,6 +187,22 @@ class GameScreen extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
+  isMyTurn() {
+    let isMyTurn = false;
+    if (
+      this.state.amIPlayerX &&
+      this.state.game.status === GAME_STATUS.X_HAS_TURN
+    ) {
+      isMyTurn = true;
+    } else if (
+      !this.state.amIPlayerX &&
+      this.state.game.status === GAME_STATUS.O_HAS_TURN
+    ) {
+      isMyTurn = true;
+    }
+    return isMyTurn;
+  }
+
   render() {
     return (
       <div style={{marginBottom: '4em'}}>
@@ -197,11 +210,6 @@ class GameScreen extends Component {
           <GameSpinner />
         ) : (
           <div>
-            {/*<TopContainer>*/}
-            {/*<MetaContainer>*/}
-            {/*<MetaMaskLogo />*/}
-            {/*</MetaContainer>*/}
-            {/*</TopContainer>*/}
             <ParentContainer>
               <ColumnContainer>
                 <GameTopInfo
@@ -216,7 +224,11 @@ class GameScreen extends Component {
                   onChecked={tileChecked => {
                     this.playMove(tileChecked);
                   }}
+                  isMyTurn={this.state.isMyTurn}
                 />
+                {this.isMyTurn() ? null : (
+                  <OpponentLoader game={this.state.game} />
+                )}
               </ColumnContainer>
               <ColumnContainer>
                 <BetsComponent

@@ -63,7 +63,6 @@ const Title = styled.p`
   font-size: 38px;
 `;
 
-
 const PlayerX = Player.extend``;
 const PlayerO = Player.extend``;
 
@@ -93,7 +92,12 @@ class GameTopInfo extends Component {
             <PlayerX isTurn={this.props.game.status === GAME_STATUS.X_HAS_TURN}>
               <TicTacToeSymbols symbol={'X'} width={30} height={30} />
             </PlayerX>
-            <PlayerName>{this.props.playerX.playerName}</PlayerName>
+            <PlayerName>
+              {this.props.playerX.playerName} ({this.props.game.playerXAddr.substr(
+                0,
+                5
+              )})
+            </PlayerName>
           </XContainer>
           <VsContainer>
             <h2>VS</h2>
@@ -102,7 +106,12 @@ class GameTopInfo extends Component {
             <PlayerO isTurn={this.props.game.status === GAME_STATUS.O_HAS_TURN}>
               <TicTacToeSymbols symbol={'O'} width={30} height={30} />
             </PlayerO>
-            <PlayerName>{this.props.playerO.playerName}</PlayerName>
+            <PlayerName>
+              {this.props.playerO.playerName} ({this.props.game.playerOAddr.substr(
+                0,
+                5
+              )})
+            </PlayerName>
           </OContainer>
         </PlayerContainer>
         <CurrentTurn>{this.getCurrentPlayer()}</CurrentTurn>
