@@ -135,6 +135,23 @@ contract TicTacToe {
         return (betIds, gameIds, betStates, values, bettorOnX, bettorOnO);
     }
 
+    function getBettorAddresses() public view returns (uint[] betIds, address[] bettorOnXAddr, address[] bettorOnOAddr) {
+
+        uint arrayLenght = openBetIds.length;
+
+        betIds = new uint[](arrayLenght);
+        bettorOnXAddr = new address[](arrayLenght);
+        bettorOnOAddr = new address[](arrayLenght);
+
+        for (uint i = 0; i < arrayLenght; i++) {
+            Bet memory bet = bets[openBetIds[i]];
+            betIds[i] = bet.betId;
+            bettorOnXAddr[i] = bet.bettorOnXAddr;
+            bettorOnOAddr[i] = bet.bettorOnOAddr;
+        }
+        return (betIds, bettorOnXAddr, bettorOnOAddr);
+    }
+
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
     function joinGame(uint gameId, bytes32 playerName) public {
         Game storage game = games[gameId];
