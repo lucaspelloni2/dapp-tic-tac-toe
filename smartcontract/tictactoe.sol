@@ -420,14 +420,13 @@ contract TicTacToe {
         require(bet.state < BetState.WITHDRAWN, "Not possible to join this bet.");
 
         require(msg.value == bet.value, "Not equal amount of value.");
-        require(msg.sender != bet.bettorOnXAddr
-                || msg.sender != bet.bettorOnOAddr
-                , "Same address on both sides.");
         require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
 
         if (bet.state == BetState.MISSING_X_BETTOR) {
+            require(bet.bettorOnOAddr != msg.sender, "Same address on both sides.");
             bet.bettorOnXAddr = msg.sender;
         } else {
+            require(bet.bettorOnXAddr != msg.sender, "Same address on both sides.");
             bet.bettorOnOAddr = msg.sender;
         }
         bet.state = BetState.FIXED;
