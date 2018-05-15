@@ -5,7 +5,7 @@ import StatusRender from './StatusRender';
 import BET_STATUS from './BetStatus';
 import Status from './Status';
 import Transaction from './Transaction';
-import Gas from "./Gas";
+import Gas from './Gas';
 
 const BetsContainer = styled.div`
   display: flex;
@@ -128,9 +128,13 @@ class Bets extends Component {
     return this.props.contract.methods
       .getBets()
       .call({from: this.props.account.ethAddress})
-      .then(res => {
+      .then(async res => {
+        console.log(res);
         for (let i = 0; i < res.betIds.length; i++) {
           let bet = this.getBet(res, i);
+          bet.bettorOnX = await this.getPlayer(bet.bettorOnXAddr);
+          bet.bettorOnO = await this.getPlayer(bet.bettorOnOAddr);
+
           if (bet !== null) {
             if (this.props.game) {
               // if a game is passed as prop in the bet component
@@ -156,13 +160,29 @@ class Bets extends Component {
       });
   }
 
+  async getPlayer(address) {
+    return this.props.contract.methods
+      .players(address)
+      .call({from: this.props.account.ethAddress})
+      .then(res => {
+        return this.props.web3.utils.hexToAscii(res);
+      })
+      .catch(err => {
+        console.log(
+          'error getting player with address ' + address + ': ' + err
+        );
+      });
+  }
+
   getBet(res, i) {
     return {
       id: res.betIds[i],
       gameId: res.gameIds[i],
       status: StatusRender.renderBetStatus(res.betStates[i]),
-      bettorOnO: this.hexToAscii(res.bettorOnO[i]),
-      bettorOnX: this.hexToAscii(res.bettorOnX[i]),
+      bettorOnO: null,
+      bettorOnX: null,
+      bettorOnOAddr: res.bettorOnOAddr[i],
+      bettorOnXAddr: res.bettorOnXAddr[i],
       value: res.values[i] //this.props.web3.fromWei(res.values[i].toString(), 'ether')
     };
   }
@@ -209,7 +229,9 @@ class Bets extends Component {
       })
       .on('receipt', res => {
         //console.log(res);
-        if (res.status === '0x1') {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           console.log('bet withdrawn successfully');
         } else {
           console.log('bet withdraw not successful');
@@ -257,12 +279,13 @@ class Bets extends Component {
   }
 
   getWithdrawButton(bet) {
-    // TODO ON SC: bettorOnXAddr : return an address and not a name
-    // bet.bettorOnXAddr === this.props.account.ethAddress
-    // bet.bettorOnOAddr === this.props.account.ethAddress
+    console.log(bet);
+
     if (
-      bet.status === BET_STATUS.MISSING_O_BETTOR ||
-      bet.status === BET_STATUS.MISSING_X_BETTOR
+      (bet.status === BET_STATUS.MISSING_O_BETTOR &&
+        bet.bettorOnXAddr === this.props.account.ethAddress) ||
+      (bet.status === BET_STATUS.MISSING_X_BETTOR &&
+        bet.bettorOnOAddr === this.props.account.ethAddress)
     ) {
       //
       return (
