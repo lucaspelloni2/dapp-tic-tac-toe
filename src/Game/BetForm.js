@@ -10,7 +10,7 @@ import 'react-select/dist/react-select.css';
 import '../tooltip.css';
 import Status from './Status';
 import Transaction from './Transaction';
-import Gas from "./Gas";
+import Gas from './Gas';
 
 const Container = styled.div`
   &:hover {
@@ -457,14 +457,18 @@ class BetForm extends Component {
           this.setState({
             secondModalIsOpen: true
           });
-          this.props.modalIsOpen(true);
+          if (this.props.game) {
+            this.props.modalIsOpen(true);
+          }
         }}
         closeModal={() => {
           this.setState({
             modalIsOpen: false,
             secondModalIsOpen: false
           });
-          this.props.modalIsOpen(false);
+          if (this.props.game) {
+            this.props.modalIsOpen(false);
+          }
         }}
         modalIsOpen={this.state.secondModalIsOpen}
         customStyles={bigModal}
