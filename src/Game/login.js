@@ -133,7 +133,15 @@ class Login extends Component {
                 <InputField
                   placeholder={'Username'}
                   onChange={this.handleChange.bind(this)}
-                />
+
+                  onKeyPress={(event) => {
+                    if(event.key == 'Enter'){
+                      this.setState({
+                        clickedLogin: true
+                      });
+                    }
+                  }}
+                  />
               </InputLabel>
             </LoginRow>
             <ButtonLinkContainer>
