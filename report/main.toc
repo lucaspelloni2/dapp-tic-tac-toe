@@ -4,7 +4,9 @@
 CHAPTER \par 
 \contentsline {chapter}{\numberline {1}Introduction}{1}
 \contentsline {chapter}{\numberline {2}Technologies}{2}
-\contentsline {chapter}{\numberline {3}Project Structure}{3}
+\contentsline {chapter}{\numberline {3}Implementation of the game}{3}
+\contentsline {section}{\numberline {3.1}Project Structure}{3}
+\contentsline {section}{\numberline {3.2}Game Walk-through}{3}
 \contentsline {chapter}{\numberline {4}Discusion}{4}
 \contentsline {section}{\numberline {4.1}Challenges and Problems}{4}
 \contentsline {section}{\numberline {4.2}Future work}{4}
