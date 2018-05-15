@@ -14,7 +14,6 @@ const BoardContainer = styled.div`
     #03b8d4 1200px
   );
   pointer-events: ${props => (props.isMyTurn ? null : 'none')};
-  cursor: ${props => (props.isMyTurn ? 'pointer' : 'not-allowed')};
   opacity: ${props => (props.isMyTurn ? 1 : 0.15)};
   //border: 1px solid #03b8d4;
 `;
@@ -44,6 +43,7 @@ const InactiveSquare = styled.td`
   &:last-child {
     border-right: 0;
   }
+  cursor: ${'not-allowed'};
 `;
 
 const Square = styled.td`
@@ -54,6 +54,7 @@ const Square = styled.td`
       #03b8d4 1200px
     );
   }
+  cursor: ${props => (props.isMyTurn ? 'pointer' : 'not-allowed')};
   padding: 8px;
   border-right: 5px solid #0186ae;
   &:last-child {
@@ -102,6 +103,7 @@ class Board extends Component {
                           data-col={i}
                           data-row={j}
                           onClick={() => this.props.onChecked(i * 3 + j)}
+                          isMyTurn={this.props.isMyTurn}
                         >
                           {Board.renderSymbol(this.props.board[i * 3 + j])}
                         </Square>
