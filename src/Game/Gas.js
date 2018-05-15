@@ -1,15 +1,16 @@
+const MAX_GAS = 46607271;
 const GAS = {
-  MAX_GAS:        4660727,
+
 
   //with optimization
-  CREATE_GAME:    this.MAX_GAS,
-  JOIN_GAME:      this.MAX_GAS,
-  LEAVE_GAME:     this.MAX_GAS,
-  START_GAME:     this.MAX_GAS,
-  PLAY_MOVE:      this.MAX_GAS,
-  CREATE_BET:     this.MAX_GAS,
+  CREATE_GAME:    MAX_GAS,
+  JOIN_GAME:      MAX_GAS,
+  LEAVE_GAME:     MAX_GAS,
+  START_GAME:     MAX_GAS,
+  PLAY_MOVE:      MAX_GAS,
+  CREATE_BET:     MAX_GAS,
   JOIN_BET:       45358,
-  WITHDRAW_BET:   this.MAX_GAS
+  WITHDRAW_BET:   MAX_GAS
 
 
 /*
