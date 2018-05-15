@@ -261,7 +261,7 @@ contract TicTacToe {
             emit MoveMade(true, gameId, game.state, x, y, "O");
         }
 
-        if (game.moveCounter == boardSize * boardSize - 1 && game.state < GameState.WINNER_X) {
+        if (game.moveCounter == boardSize*boardSize - 1 && game.state < GameState.WINNER_X) {
             doLastMoveAutomatically(game);
         }
     }
@@ -313,7 +313,7 @@ contract TicTacToe {
             }
         }
 
-        //check diagonal
+        //check diagonal: (x-y) 0-0, 1-1, 2-2
         if (x == y) {
             for (i = 0; i < boardSize; i++) {
                 if (game.board[i][i] != symbol) {
@@ -328,10 +328,10 @@ contract TicTacToe {
             }
         }
 
-        // check anti diagonal
+        // check antidiagonal: (x-y) 2-0, 1-1, 0-2
         if (x + y == (boardSize - 1)) {
             for (i = 0; i < boardSize; i++) {
-                if (game.board[x][boardSize - 1 - i] != symbol) {//!equalStrings(game.board[x][(boardSize-1) - 1], symbol)) {
+                if (game.board[i][boardSize - 1 - i] != symbol) {
                     break;
                 }
                 else if (i == (boardSize - 1)) {
@@ -342,7 +342,6 @@ contract TicTacToe {
                 }
             }
         }
-
         //check for draw
         if (game.moveCounter == boardSize * boardSize) {
             game.state = GameState.DRAW;
