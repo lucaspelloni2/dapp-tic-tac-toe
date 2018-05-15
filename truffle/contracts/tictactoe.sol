@@ -347,6 +347,7 @@ contract TicTacToe {
         //check for draw
         if (game.moveCounter == boardSize * boardSize) {
             game.state = GameState.DRAW;
+            payoutBets(game.gameId);
         }
     }
 
