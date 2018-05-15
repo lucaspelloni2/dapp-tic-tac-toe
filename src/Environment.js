@@ -1,3 +1,2 @@
-const PROD = true;
-
+const PROD = false;
 export default PROD;

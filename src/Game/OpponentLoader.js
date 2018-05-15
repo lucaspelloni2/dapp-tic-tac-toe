@@ -51,12 +51,16 @@ class OpponentLoader extends Component {
 
   render() {
     return (
-      <Container>
-        <OpponentSpinner />
-        <WaitingForContainer>
-          <WaitingFor>{this.renderTurn()}</WaitingFor>
-        </WaitingForContainer>
-      </Container>
+      <div>
+        {this.props.isModalOpen ? null : (
+          <Container>
+            <OpponentSpinner />
+            <WaitingForContainer>
+              <WaitingFor>{this.renderTurn()}</WaitingFor>
+            </WaitingForContainer>
+          </Container>
+        )}
+      </div>
     );
   }
 }

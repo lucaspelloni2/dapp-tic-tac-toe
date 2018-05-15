@@ -57,7 +57,8 @@ class GameScreen extends Component {
       playerO: playerO,
       board: board,
       loading: false,
-      amIPlayerX: false
+      amIPlayerX: false,
+      isModalOpen: false
     });
 
     if (this.props.account.ethAddress === this.state.game.playerXAddr) {
@@ -161,7 +162,7 @@ class GameScreen extends Component {
         selectedTile % 3,
         Math.trunc(selectedTile / 3)
       ) //this.props.web3.utils.toBN(
-      .send({from: this.props.account.ethAddress})
+      .send({from: this.props.account.ethAddress, gas: 495949})
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.game.gameId, Status.MOVE_MADE);
         // this.setLoadingToTrue(this.state.game);
@@ -234,7 +235,7 @@ class GameScreen extends Component {
                   isMyTurn={this.state.isMyTurn}
                 />
                 {this.state.isMyTurn ? null : (
-                  <OpponentLoader game={this.state.game} />
+                  <OpponentLoader isModalOpen={this.state.isModalOpen} game={this.state.game} />
                 )}
               </ColumnContainer>
               <ColumnContainer>
@@ -245,6 +246,9 @@ class GameScreen extends Component {
                   games={this.props.games}
                   gamesLoading={this.props.gamesLoading}
                   game={this.state.game}
+                  modalIsOpen={async isModalOpen => {
+                    this.setState({isModalOpen: isModalOpen});
+                  }}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>
