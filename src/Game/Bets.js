@@ -129,7 +129,6 @@ class Bets extends Component {
       .getBets()
       .call({from: this.props.account.ethAddress})
       .then(async res => {
-        console.log(res);
         for (let i = 0; i < res.betIds.length; i++) {
           let bet = this.getBet(res, i);
           bet.bettorOnX = await this.getPlayer(bet.bettorOnXAddr);
@@ -279,8 +278,6 @@ class Bets extends Component {
   }
 
   getWithdrawButton(bet) {
-    console.log(bet);
-
     if (
       (bet.status === BET_STATUS.MISSING_O_BETTOR &&
         bet.bettorOnXAddr === this.props.account.ethAddress) ||
