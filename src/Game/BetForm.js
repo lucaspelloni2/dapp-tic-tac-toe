@@ -457,12 +457,14 @@ class BetForm extends Component {
           this.setState({
             secondModalIsOpen: true
           });
+          this.props.modalIsOpen(true);
         }}
         closeModal={() => {
           this.setState({
             modalIsOpen: false,
             secondModalIsOpen: false
           });
+          this.props.modalIsOpen(false);
         }}
         modalIsOpen={this.state.secondModalIsOpen}
         customStyles={bigModal}

@@ -11,6 +11,7 @@ import BetsComponent from './BetsComponent';
 import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
 import Gas from "./Gas";
+import PROD from './../Environment';
 
 const TopContainer = styled.div`
   display: flex;
@@ -57,15 +58,18 @@ class GameScreen extends Component {
       playerO: playerO,
       board: board,
       loading: false,
-      amIPlayerX: false
+      amIPlayerX: false,
+      isModalOpen: false
     });
 
     if (this.props.account.ethAddress === this.state.game.playerXAddr) {
       this.setState({amIPlayerX: true});
     }
 
-    const isMyTurn = this.isMyTurn();
-    this.setState({isMyTurn: isMyTurn});
+    if (!PROD) {
+      const isMyTurn = this.isMyTurn();
+      this.setState({isMyTurn: isMyTurn});
+    }
 
     this.interval = setInterval(async () => {
       await this.getGame(gameId);
@@ -110,7 +114,11 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
-        const isMyTurn = this.isMyTurn();
+        let isMyTurn = this.isMyTurn();
+
+        if (PROD) {
+          isMyTurn = true;
+        }
         this.setState({isMyTurn: isMyTurn});
       })
       .catch(err => {
@@ -230,8 +238,8 @@ class GameScreen extends Component {
                   }}
                   isMyTurn={this.state.isMyTurn}
                 />
-                {this.isMyTurn() ? null : (
-                  <OpponentLoader game={this.state.game} />
+                {this.state.isMyTurn ? null : (
+                  <OpponentLoader isModalOpen={this.state.isModalOpen} game={this.state.game} />
                 )}
               </ColumnContainer>
               <ColumnContainer>
@@ -242,6 +250,9 @@ class GameScreen extends Component {
                   games={this.props.games}
                   gamesLoading={this.props.gamesLoading}
                   game={this.state.game}
+                  modalIsOpen={async isModalOpen => {
+                    this.setState({isModalOpen: isModalOpen});
+                  }}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>
