@@ -255,6 +255,9 @@ class GameScreen extends Component {
                   modalIsOpen={async isModalOpen => {
                     this.setState({isModalOpen: isModalOpen});
                   }}
+                  updateUserAccount={async () => {
+                    await this.props.updateUserAccount();
+                  }}
                 />
                 <MyTransactions web3={this.props.web3} />
               </ColumnContainer>

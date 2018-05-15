@@ -258,6 +258,7 @@ class BetForm extends Component {
           res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
         if (isSuccess) {
           console.log('bet created successfully');
+          this.props.updateUserAccount();
         } else {
           console.log('bet could not be created');
         }

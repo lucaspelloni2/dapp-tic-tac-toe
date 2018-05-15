@@ -238,6 +238,9 @@ class App extends Component {
                       account={this.state.account}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
+                      updateUserAccount={async () => {
+                        await this.getUserAccount();
+                      }}
                     />
                   )}
                 />
