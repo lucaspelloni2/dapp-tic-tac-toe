@@ -151,7 +151,7 @@ contract TicTacToe {
             emit Joined(true, game.gameId, game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
-            require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+//            require(game.playerOAddr != msg.sender, "Player is already part of this game.");
 
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
@@ -285,12 +285,11 @@ contract TicTacToe {
             return;
         }
 
-        SquareState[boardSize][boardSize] memory board = game.board;
         SquareState symbol = game.board[y][x];
 
         //check column
         for (uint i = 0; i < boardSize; i++) {
-            if (board[i][x] != symbol) {
+            if (game.board[i][x] != symbol) {
                 break;
             }
             else if (i == (boardSize - 1)) {
@@ -303,7 +302,7 @@ contract TicTacToe {
 
         //check row
         for (i = 0; i < boardSize; i++) {
-            if (board[y][i] != symbol) {
+            if (game.board[y][i] != symbol) {
                 break;
             }
             else if (i == (boardSize - 1)) {
@@ -317,7 +316,7 @@ contract TicTacToe {
         //check diagonal
         if (x == y) {
             for (i = 0; i < boardSize; i++) {
-                if (board[i][i] != symbol) {
+                if (game.board[i][i] != symbol) {
                     break;
                 }
                 else if (i == (boardSize - 1)) {
@@ -332,7 +331,7 @@ contract TicTacToe {
         // check anti diagonal
         if (x + y == (boardSize - 1)) {
             for (i = 0; i < boardSize; i++) {
-                if (board[x][boardSize - 1 - i] != symbol) {//!equalStrings(board[x][(boardSize-1) - 1], symbol)) {
+                if (game.board[x][boardSize - 1 - i] != symbol) {//!equalStrings(game.board[x][(boardSize-1) - 1], symbol)) {
                     break;
                 }
                 else if (i == (boardSize - 1)) {
