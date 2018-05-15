@@ -1,0 +1,10 @@
+\nobreakspace {}\hfill Page\par 
+\contentsline {part}{LIST OF TABLES}{iv}
+\contentsline {part}{LIST OF FIGURES}{v}
+CHAPTER \par 
+\contentsline {chapter}{\numberline {1}Introduction}{1}
+\contentsline {chapter}{\numberline {2}Results}{2}
+\contentsline {chapter}{\numberline {3}Conclusion}{3}
+\contentsline {chapter}{\numberline {A}Raw Data}{4}
+\contentsline {part}{REFERENCES}{4}
+APPENDIX \par 
