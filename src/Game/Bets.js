@@ -5,6 +5,7 @@ import StatusRender from './StatusRender';
 import BET_STATUS from './BetStatus';
 import Status from './Status';
 import Transaction from './Transaction';
+import Gas from "./Gas";
 
 const BetsContainer = styled.div`
   display: flex;
@@ -175,7 +176,8 @@ class Bets extends Component {
       .joinBet(bet.id)
       .send({
         from: this.props.account.ethAddress,
-        value: bet.value
+        value: bet.value,
+        gas: Gas.JOIN_BET
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, bet.id, Status.JOINED_BET);
@@ -198,7 +200,8 @@ class Bets extends Component {
     this.props.contract.methods
       .withdrawBet(betId)
       .send({
-        from: this.props.account.ethAddress
+        from: this.props.account.ethAddress,
+        gas: Gas.WITHDRAW_BET
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, betId, Status.WITHDRAWN_BET);

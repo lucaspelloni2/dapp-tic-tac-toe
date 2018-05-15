@@ -10,6 +10,7 @@ import 'react-select/dist/react-select.css';
 import '../tooltip.css';
 import Status from './Status';
 import Transaction from './Transaction';
+import Gas from "./Gas";
 
 const Container = styled.div`
   &:hover {
@@ -243,7 +244,7 @@ class BetForm extends Component {
       .send({
         from: this.props.account.ethAddress,
         value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether'),
-        gas: 4678127
+        gas: Gas.CREATE_BET
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);

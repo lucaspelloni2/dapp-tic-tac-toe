@@ -10,6 +10,7 @@ import GameIcon from './GameIcon';
 import {Redirect} from 'react-router';
 import StatusRender from './StatusRender';
 import GAME_STATUS from './GameStatus';
+import Gas from "./Gas";
 
 const Container = styled.div`
   display: flex;
@@ -105,7 +106,10 @@ class JoinGame extends Component {
   joinGame(game, playerName) {
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
-      .send({from: this.props.account.ethAddress})
+      .send({
+        from: this.props.account.ethAddress,
+        gas: Gas.JOIN_GAME
+      })
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_JOINED);
         this.props.setLoading(game, true);
@@ -137,7 +141,10 @@ class JoinGame extends Component {
   startGame(game) {
     this.props.contract.methods
       .startGame(game.id)
-      .send({from: this.props.account.ethAddress})
+      .send({
+        from: this.props.account.ethAddress,
+        gas: Gas.START_GAME
+      })
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_STARTED);
         this.props.setLoading(game, true);

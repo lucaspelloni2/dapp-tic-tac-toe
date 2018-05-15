@@ -6,6 +6,7 @@ import MetaMaskLogo from './MetamaskLogo';
 import Status from './Status';
 import Transaction from './Transaction';
 import ArrowWithPath from './ArrowWithPath';
+import Gas from './Gas';
 
 const CreateGameContainer = styled.div`
   display: flex;
@@ -90,7 +91,7 @@ class CreateGame extends Component {
         this.props.web3.utils.fromAscii(this.state.gameName),
         this.props.web3.utils.fromAscii(localStorage.getItem('username'))
       )
-      .send({from: this.props.account.ethAddress, gas: 4678127})
+      .send({from: this.props.account.ethAddress, gas: Gas.CREATE_GAME})
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.gameName);
       })

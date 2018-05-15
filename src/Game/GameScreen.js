@@ -12,6 +12,7 @@ import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
 import Header from "./Header";
+import Gas from "./Gas";
 
 const TopContainer = styled.div`
   display: flex;
@@ -163,7 +164,10 @@ class GameScreen extends Component {
         selectedTile % 3,
         Math.trunc(selectedTile / 3)
       ) //this.props.web3.utils.toBN(
-      .send({from: this.props.account.ethAddress, gas: 495949})
+      .send({
+        from: this.props.account.ethAddress,
+        gas: Gas.PLAY_MOVE
+      })
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.game.gameId, Status.MOVE_MADE);
         // this.setLoadingToTrue(this.state.game);
