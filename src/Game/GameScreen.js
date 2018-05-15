@@ -10,6 +10,7 @@ import GameTopInfo from './GameTopInfo';
 import BetsComponent from './BetsComponent';
 import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
+import PROD from './../Environment';
 
 const TopContainer = styled.div`
   display: flex;
@@ -63,8 +64,10 @@ class GameScreen extends Component {
       this.setState({amIPlayerX: true});
     }
 
-    const isMyTurn = this.isMyTurn();
-    this.setState({isMyTurn: isMyTurn});
+    if (!PROD) {
+      const isMyTurn = this.isMyTurn();
+      this.setState({isMyTurn: isMyTurn});
+    }
 
     this.interval = setInterval(async () => {
       await this.getGame(gameId);
@@ -109,7 +112,11 @@ class GameScreen extends Component {
           playerOAddr: res.playerOAddr
         };
         this.setState({game: game});
-        const isMyTurn = this.isMyTurn();
+        let isMyTurn = this.isMyTurn();
+
+        if (PROD) {
+          isMyTurn = true;
+        }
         this.setState({isMyTurn: isMyTurn});
       })
       .catch(err => {
@@ -226,7 +233,7 @@ class GameScreen extends Component {
                   }}
                   isMyTurn={this.state.isMyTurn}
                 />
-                {this.isMyTurn() ? null : (
+                {this.state.isMyTurn ? null : (
                   <OpponentLoader game={this.state.game} />
                 )}
               </ColumnContainer>
