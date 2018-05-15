@@ -216,7 +216,6 @@ class BetForm extends Component {
 
   handleChange = selectedGame => {
     this.setState({selectedGame: selectedGame});
-    console.log('selected ', selectedGame);
   };
 
   handleBetOn(value) {

@@ -75,20 +75,21 @@ class CreateGame extends Component {
   constructor() {
     super();
     this.state = {
-      gameName: '',
+      gameName: null,
       clicked: false
     };
+
   }
 
   handleChange(e) {
-    this.setState({gameName: e.target.value, clicked: false});
-    localStorage.setItem('gameName', e.target.value);
+    this.setState({gameName: e.target.value});
+    //localStorage.setItem('gameName', e.target.value);
   }
 
-  createGame() {
+  createGame(gameName) {
     this.props.contract.methods
       .createGame(
-        this.props.web3.utils.fromAscii(this.state.gameName),
+        this.props.web3.utils.fromAscii(gameName),
         this.props.web3.utils.fromAscii(localStorage.getItem('username'))
       )
       .send({from: this.props.account.ethAddress, gas: Gas.CREATE_GAME})
@@ -96,10 +97,11 @@ class CreateGame extends Component {
         this.addNewTx(tx, this.state.gameName);
       })
       .on('receipt', res => {
-        console.log('receipt', res);
+        console.log(res);
+        this.props.fetchGames();
       })
       .on('confirmation', function(gameId) {
-        console.log('new game created! ' + gameId);
+       // console.log('new game created! ' + gameId);
       });
   }
 
@@ -167,12 +169,9 @@ class CreateGame extends Component {
                 </LoginRow>
 
                 <ButtonLinkContainer>
-                  {this.state.clicked && this.createGame()}
                   <button
                     onClick={() => {
-                      this.setState({
-                        clicked: true
-                      });
+                      this.createGame(this.state.gameName)
                     }}
                   >
                     Create Game

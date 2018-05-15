@@ -64,11 +64,11 @@ class App extends Component {
     await Promise.all([this.getUserAccount()]);
     await this.fetchGames();
     // this.interval = setInterval(async () => {
-    //   if (!this.isSomeGameLoading()) {
+    //   // if (!this.isSomeGameLoading()) {
     //     await this.fetchGames();
     //     console.log('fetching games..');
-    //   }
-    // }, 500);
+    //   // }
+    // }, 1200);
   }
 
   fetchGames() {
@@ -221,6 +221,9 @@ class App extends Component {
                       web3={this.state.web3}
                       contract={this.state.contract}
                       account={this.state.account}
+                      fetchGames={async () => {
+                        await this.fetchGames();
+                      }}
                     />
                   )}
                 />
