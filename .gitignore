@@ -24,3 +24,4 @@ backend/node_modules
 truffle/build/
 truffle/build/contracts/Migrations.json
 truffle/build/contracts/TicTacToe.json
+src/Environment.js
