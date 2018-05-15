@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  15 MAY 2018 22:48
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  15 MAY 2018 23:59
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -542,16 +542,26 @@ Chapter 2.
 
  (./chapter3.tex
 Chapter 3.
-) [3
+<res/project_structure.png, id=42, 794.97pt x 614.295pt>
+File: res/project_structure.png Graphic file (type png)
+<use res/project_structure.png>
+Package pdftex.def Info: res/project_structure.png  used on input line 5.
+(pdftex.def)             Requested size: 317.98236pt x 245.71364pt.
+<res/sc_uml.jpeg, id=43, 1442.38875pt x 1044.90375pt>
+File: res/sc_uml.jpeg Graphic file (type jpg)
+<use res/sc_uml.jpeg>
+Package pdftex.def Info: res/sc_uml.jpeg  used on input line 15.
+(pdftex.def)             Requested size: 317.3265pt x 229.87953pt.
+[3
 
 
 
-]
+ <./res/project_structure.png>]) [4 <./res/sc_uml.jpeg>]
 \openout2 = `chapter4.aux'.
 
  (./chapter4.tex
 Chapter 4.
-) [4
+) [5
 
 
 
@@ -568,7 +578,7 @@ No file main.bbl.
 
 (./appendix1.tex
 Appendix A.
-) [5
+) [6
 
 
 
@@ -583,22 +593,23 @@ Appendix A.
 (./chapter3.aux) (./chapter4.aux) (./chapter5.aux) (./chapter6.aux)
 (./appendix1.aux) (./vita.aux)) ) 
 Here is how much of TeX's memory you used:
- 3773 strings out of 492649
- 50398 string characters out of 6129622
- 127090 words of memory out of 5000000
- 7531 multiletter control sequences out of 15000+600000
- 10631 words of font info for 42 fonts, out of 8000000 for 9000
+ 3791 strings out of 492649
+ 50700 string characters out of 6129622
+ 127110 words of memory out of 5000000
+ 7542 multiletter control sequences out of 15000+600000
+ 10938 words of font info for 43 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
  41i,10n,43p,652b,275s stack positions out of 5000i,500n,10000p,200000b,80000s
 </usr/local/texlive/2018/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/
-public/amsfonts/cm/cmr12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pu
-blic/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/publi
-c/amsfonts/cm/cmr8.pfb>
-Output written on main.pdf (10 pages, 100766 bytes).
+1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
+/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/p
+ublic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pub
+lic/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public
+/amsfonts/cm/cmr8.pfb>
+Output written on main.pdf (11 pages, 563367 bytes).
 PDF statistics:
- 66 PDF objects out of 1000 (max. 8388607)
- 45 compressed objects within 1 object stream
+ 76 PDF objects out of 1000 (max. 8388607)
+ 50 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

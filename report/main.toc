@@ -10,10 +10,10 @@ CHAPTER \par
 \contentsline {section}{\numberline {2.4}Ganache}{2}
 \contentsline {chapter}{\numberline {3}Implementation of the game}{3}
 \contentsline {section}{\numberline {3.1}Project Structure}{3}
-\contentsline {section}{\numberline {3.2}Game Walk-through}{3}
-\contentsline {chapter}{\numberline {4}Discusion}{4}
-\contentsline {section}{\numberline {4.1}Challenges and Problems}{4}
-\contentsline {section}{\numberline {4.2}Future work}{4}
-\contentsline {chapter}{\numberline {A}Raw Data}{5}
-\contentsline {part}{REFERENCES}{5}
+\contentsline {section}{\numberline {3.2}Game Walk-through}{4}
+\contentsline {chapter}{\numberline {4}Discusion}{5}
+\contentsline {section}{\numberline {4.1}Challenges and Problems}{5}
+\contentsline {section}{\numberline {4.2}Future work}{5}
+\contentsline {chapter}{\numberline {A}Raw Data}{6}
+\contentsline {part}{REFERENCES}{6}
 APPENDIX \par 
