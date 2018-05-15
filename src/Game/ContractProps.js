@@ -1,574 +1,596 @@
 const ContractProps = {
   CONTRACT_ABI: [
     {
-      constant: true,
-      inputs: [
+      "constant": true,
+      "inputs": [
         {
-          name: '',
-          type: 'uint256'
+          "name": "",
+          "type": "uint256"
         }
       ],
-      name: 'games',
-      outputs: [
+      "name": "games",
+      "outputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'name',
-          type: 'bytes32'
+          "name": "name",
+          "type": "bytes32"
         },
         {
-          name: 'ownerAddr',
-          type: 'address'
+          "name": "ownerAddr",
+          "type": "address"
         },
         {
-          name: 'state',
-          type: 'uint8'
+          "name": "state",
+          "type": "uint8"
         },
         {
-          name: 'moveCounter',
-          type: 'uint256'
+          "name": "moveCounter",
+          "type": "uint256"
         },
         {
-          name: 'playerOAddr',
-          type: 'address'
+          "name": "playerOAddr",
+          "type": "address"
         },
         {
-          name: 'playerXAddr',
-          type: 'address'
+          "name": "playerXAddr",
+          "type": "address"
         },
         {
-          name: 'winnerAddr',
-          type: 'address'
+          "name": "winnerAddr",
+          "type": "address"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [],
-      name: 'getBetIds',
-      outputs: [
+      "constant": true,
+      "inputs": [],
+      "name": "getBetIds",
+      "outputs": [
         {
-          name: 'betIds',
-          type: 'uint256[]'
+          "name": "betIds",
+          "type": "uint256[]"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [
+      "constant": true,
+      "inputs": [
         {
-          name: '',
-          type: 'uint256'
+          "name": "",
+          "type": "uint256"
         }
       ],
-      name: 'bets',
-      outputs: [
+      "name": "bets",
+      "outputs": [
         {
-          name: 'value',
-          type: 'uint256'
+          "name": "betId",
+          "type": "uint256"
         },
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'betId',
-          type: 'uint256'
+          "name": "value",
+          "type": "uint256"
         },
         {
-          name: 'state',
-          type: 'uint8'
+          "name": "state",
+          "type": "uint8"
         },
         {
-          name: 'bettorOnOAddr',
-          type: 'address'
+          "name": "bettorOnOAddr",
+          "type": "address"
         },
         {
-          name: 'bettorOnXAddr',
-          type: 'address'
+          "name": "bettorOnXAddr",
+          "type": "address"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'betId',
-          type: 'uint256'
+          "name": "betId",
+          "type": "uint256"
         }
       ],
-      name: 'joinBet',
-      outputs: [],
-      payable: true,
-      stateMutability: 'payable',
-      type: 'function'
+      "name": "joinBet",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         }
       ],
-      name: 'leaveGame',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "leaveGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [
+      "constant": true,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         }
       ],
-      name: 'getBoard',
-      outputs: [
+      "name": "getBoard",
+      "outputs": [
         {
-          name: 'boardRep',
-          type: 'uint8[9]'
+          "name": "boardRep",
+          "type": "uint8[9]"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'bettingOnX',
-          type: 'bool'
+          "name": "bettingOnX",
+          "type": "bool"
         }
       ],
-      name: 'createBet',
-      outputs: [],
-      payable: true,
-      stateMutability: 'payable',
-      type: 'function'
+      "name": "createBet",
+      "outputs": [],
+      "payable": true,
+      "stateMutability": "payable",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameName',
-          type: 'bytes32'
+          "name": "gameName",
+          "type": "bytes32"
         },
         {
-          name: 'playerName',
-          type: 'bytes32'
+          "name": "playerName",
+          "type": "bytes32"
         }
       ],
-      name: 'createGame',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "createGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'x',
-          type: 'uint256'
+          "name": "x",
+          "type": "uint256"
         },
         {
-          name: 'y',
-          type: 'uint256'
+          "name": "y",
+          "type": "uint256"
         }
       ],
-      name: 'playMove',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "playMove",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [],
-      name: 'getGameIds',
-      outputs: [
+      "constant": true,
+      "inputs": [],
+      "name": "getGameIds",
+      "outputs": [
         {
-          name: 'gameIds',
-          type: 'uint256[]'
+          "name": "gameIds",
+          "type": "uint256[]"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'betId',
-          type: 'uint256'
+          "name": "betId",
+          "type": "uint256"
         }
       ],
-      name: 'withdrawBet',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "withdrawBet",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [],
-      name: 'getBets',
-      outputs: [
+      "constant": true,
+      "inputs": [],
+      "name": "getBets",
+      "outputs": [
         {
-          name: 'betIds',
-          type: 'uint256[]'
+          "name": "betIds",
+          "type": "uint256[]"
         },
         {
-          name: 'gameIds',
-          type: 'uint256[]'
+          "name": "gameIds",
+          "type": "uint256[]"
         },
         {
-          name: 'betStates',
-          type: 'uint8[]'
+          "name": "betStates",
+          "type": "uint8[]"
         },
         {
-          name: 'values',
-          type: 'uint256[]'
+          "name": "values",
+          "type": "uint256[]"
         },
         {
-          name: 'bettorOnX',
-          type: 'bytes32[]'
+          "name": "bettorOnX",
+          "type": "bytes32[]"
         },
         {
-          name: 'bettorOnO',
-          type: 'bytes32[]'
+          "name": "bettorOnO",
+          "type": "bytes32[]"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          name: 'playerName',
-          type: 'bytes32'
+          "name": "playerName",
+          "type": "bytes32"
         }
       ],
-      name: 'joinGame',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "joinGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [],
-      name: 'getGames',
-      outputs: [
+      "constant": true,
+      "inputs": [],
+      "name": "getGames",
+      "outputs": [
         {
-          name: 'gameIds',
-          type: 'uint256[]'
+          "name": "gameIds",
+          "type": "uint256[]"
         },
         {
-          name: 'gameStates',
-          type: 'uint8[]'
+          "name": "gameStates",
+          "type": "uint8[]"
         },
         {
-          name: 'gameNames',
-          type: 'bytes32[]'
+          "name": "gameNames",
+          "type": "bytes32[]"
         },
         {
-          name: 'owners',
-          type: 'address[]'
+          "name": "owners",
+          "type": "address[]"
         },
         {
-          name: 'ownerNames',
-          type: 'bytes32[]'
+          "name": "ownerNames",
+          "type": "bytes32[]"
         },
         {
-          name: 'playerXs',
-          type: 'address[]'
+          "name": "playerXs",
+          "type": "address[]"
         },
         {
-          name: 'playerOs',
-          type: 'address[]'
+          "name": "playerOs",
+          "type": "address[]"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: true,
-      inputs: [
+      "constant": true,
+      "inputs": [
         {
-          name: '',
-          type: 'address'
+          "name": "",
+          "type": "address"
         }
       ],
-      name: 'players',
-      outputs: [
+      "name": "players",
+      "outputs": [
         {
-          name: 'name',
-          type: 'bytes32'
+          "name": "name",
+          "type": "bytes32"
         }
       ],
-      payable: false,
-      stateMutability: 'view',
-      type: 'function'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      constant: false,
-      inputs: [
+      "constant": false,
+      "inputs": [
         {
-          name: 'gameId',
-          type: 'uint256'
+          "name": "gameId",
+          "type": "uint256"
         }
       ],
-      name: 'startGame',
-      outputs: [],
-      payable: false,
-      stateMutability: 'nonpayable',
-      type: 'function'
+      "name": "startGame",
+      "outputs": [],
+      "payable": false,
+      "stateMutability": "nonpayable",
+      "type": "function"
     },
     {
-      anonymous: false,
-      inputs: [
+      "constant": true,
+      "inputs": [],
+      "name": "getBettorAddresses",
+      "outputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "name": "betIds",
+          "type": "uint256[]"
         },
         {
-          indexed: false,
-          name: 'gameId',
-          type: 'uint256'
+          "name": "bettorOnXAddr",
+          "type": "address[]"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
-        },
-        {
-          indexed: false,
-          name: 'message',
-          type: 'string'
+          "name": "bettorOnOAddr",
+          "type": "address[]"
         }
       ],
-      name: 'GameCreated',
-      type: 'event'
+      "payable": false,
+      "stateMutability": "view",
+      "type": "function"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'gameId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'playerName',
-          type: 'bytes32'
-        },
-        {
-          indexed: false,
-          name: 'symbol',
-          type: 'string'
+          "indexed": false,
+          "name": "message",
+          "type": "string"
         }
       ],
-      name: 'Joined',
-      type: 'event'
+      "name": "GameCreated",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'gameId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'playerName',
-          type: 'bytes32'
+          "indexed": false,
+          "name": "playerName",
+          "type": "bytes32"
         },
         {
-          indexed: false,
-          name: 'symbol',
-          type: 'string'
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
         }
       ],
-      name: 'Left',
-      type: 'event'
+      "name": "Joined",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'gameId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'message',
-          type: 'string'
+          "indexed": false,
+          "name": "playerName",
+          "type": "bytes32"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
         }
       ],
-      name: 'GameStarted',
-      type: 'event'
+      "name": "Left",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'success',
-          type: 'bool'
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'gameId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'x',
-          type: 'uint256'
-        },
-        {
-          indexed: false,
-          name: 'y',
-          type: 'uint256'
-        },
-        {
-          indexed: false,
-          name: 'symbol',
-          type: 'string'
+          "indexed": false,
+          "name": "message",
+          "type": "string"
         }
       ],
-      name: 'MoveMade',
-      type: 'event'
+      "name": "GameStarted",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "indexed": false,
+          "name": "success",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'betId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "gameId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'message',
-          type: 'string'
+          "indexed": false,
+          "name": "x",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "y",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
         }
       ],
-      name: 'BetCreated',
-      type: 'event'
+      "name": "MoveMade",
+      "type": "event"
     },
     {
-      anonymous: false,
-      inputs: [
+      "anonymous": false,
+      "inputs": [
         {
-          indexed: false,
-          name: 'wasSuccess',
-          type: 'bool'
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
         },
         {
-          indexed: false,
-          name: 'betId',
-          type: 'uint256'
+          "indexed": false,
+          "name": "betId",
+          "type": "uint256"
         },
         {
-          indexed: false,
-          name: 'state',
-          type: 'uint8'
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
         },
         {
-          indexed: false,
-          name: 'symbol',
-          type: 'string'
+          "indexed": false,
+          "name": "message",
+          "type": "string"
         }
       ],
-      name: 'JoinedBet',
-      type: 'event'
+      "name": "BetCreated",
+      "type": "event"
+    },
+    {
+      "anonymous": false,
+      "inputs": [
+        {
+          "indexed": false,
+          "name": "wasSuccess",
+          "type": "bool"
+        },
+        {
+          "indexed": false,
+          "name": "betId",
+          "type": "uint256"
+        },
+        {
+          "indexed": false,
+          "name": "state",
+          "type": "uint8"
+        },
+        {
+          "indexed": false,
+          "name": "symbol",
+          "type": "string"
+        }
+      ],
+      "name": "JoinedBet",
+      "type": "event"
     }
   ],
   LOCALHOST_CONTRACT_ADDRESS: '0xe59458f3a83cfa6a26faed4df4702ac17b59ba7a',
-  METAMASK_CONTRACT_ADDRESS: '0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD'
-  // Robsten --> CONTRACT_ADDRESS: '0xadB164ca4A38d607e7Ae89eFeB9458F73400f5BD'
+  METAMASK_CONTRACT_ADDRESS: '0x5238F690A682Dcb9e876136A9d5d734c5e560782'
+  // Robsten --> CONTRACT_ADDRESS: '0x5238F690A682Dcb9e876136A9d5d734c5e560782'
 };
 
 export default ContractProps;
