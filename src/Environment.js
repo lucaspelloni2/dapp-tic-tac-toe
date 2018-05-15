@@ -1,2 +1,2 @@
-const PROD = false;
-export default PROD;
+const DEV = true;
+export default DEV;
