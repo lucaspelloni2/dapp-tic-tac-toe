@@ -112,7 +112,7 @@ contract TicTacToe {
     }
 
     function getBets() public view returns (uint[] betIds, uint[] gameIds, BetState[] betStates,
-        uint[] values, bytes32[] bettorOnX, bytes32[] bettorOnO) {
+        uint[] values, address[] bettorOnXAddr, address[] bettorOnOAddr) {
 
         uint arrayLenght = openBetIds.length;
 
@@ -120,8 +120,8 @@ contract TicTacToe {
         gameIds = new uint[](arrayLenght);
         betStates = new BetState[](arrayLenght);
         values = new uint[](arrayLenght);
-        bettorOnX = new bytes32[](arrayLenght);
-        bettorOnO = new bytes32[](arrayLenght);
+        bettorOnXAddr = new address[](arrayLenght);
+        bettorOnOAddr = new address[](arrayLenght);
 
         for (uint i = 0; i < arrayLenght; i++) {
             Bet memory bet = bets[openBetIds[i]];
@@ -129,28 +129,28 @@ contract TicTacToe {
             gameIds[i] = bet.gameId;
             betStates[i] = bet.state;
             values[i] = bet.value;
-            bettorOnX[i] = players[bet.bettorOnXAddr].name;
-            bettorOnO[i] = players[bet.bettorOnOAddr].name;
-        }
-        return (betIds, gameIds, betStates, values, bettorOnX, bettorOnO);
-    }
-
-    function getBettorAddresses() public view returns (uint[] betIds, address[] bettorOnXAddr, address[] bettorOnOAddr) {
-
-        uint arrayLenght = openBetIds.length;
-
-        betIds = new uint[](arrayLenght);
-        bettorOnXAddr = new address[](arrayLenght);
-        bettorOnOAddr = new address[](arrayLenght);
-
-        for (uint i = 0; i < arrayLenght; i++) {
-            Bet memory bet = bets[openBetIds[i]];
-            betIds[i] = bet.betId;
             bettorOnXAddr[i] = bet.bettorOnXAddr;
             bettorOnOAddr[i] = bet.bettorOnOAddr;
         }
-        return (betIds, bettorOnXAddr, bettorOnOAddr);
+        return (betIds, gameIds, betStates, values, bettorOnXAddr, bettorOnOAddr);
     }
+
+//    function getBettorAddresses() public view returns (uint[] betIds, address[] bettorOnXAddr, address[] bettorOnOAddr) {
+//
+//        uint arrayLenght = openBetIds.length;
+//
+//        betIds = new uint[](arrayLenght);
+//        bettorOnXAddr = new address[](arrayLenght);
+//        bettorOnOAddr = new address[](arrayLenght);
+//
+//        for (uint i = 0; i < arrayLenght; i++) {
+//            Bet memory bet = bets[openBetIds[i]];
+//            betIds[i] = bet.betId;
+//            bettorOnXAddr[i] = bet.bettorOnXAddr;
+//            bettorOnOAddr[i] = bet.bettorOnOAddr;
+//        }
+//        return (betIds, bettorOnXAddr, bettorOnOAddr);
+//    }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
     function joinGame(uint gameId, bytes32 playerName) public {

@@ -112,7 +112,7 @@ contract TicTacToe {
     }
 
     function getBets() public view returns (uint[] betIds, uint[] gameIds, BetState[] betStates,
-        uint[] values, bytes32[] bettorOnX, bytes32[] bettorOnO) {
+        uint[] values, address[] bettorOnXAddr, address[] bettorOnOAddr) {
 
         uint arrayLenght = openBetIds.length;
 
@@ -120,8 +120,8 @@ contract TicTacToe {
         gameIds = new uint[](arrayLenght);
         betStates = new BetState[](arrayLenght);
         values = new uint[](arrayLenght);
-        bettorOnX = new bytes32[](arrayLenght);
-        bettorOnO = new bytes32[](arrayLenght);
+        bettorOnXAddr = new address[](arrayLenght);
+        bettorOnOAddr = new address[](arrayLenght);
 
         for (uint i = 0; i < arrayLenght; i++) {
             Bet memory bet = bets[openBetIds[i]];
@@ -129,11 +129,28 @@ contract TicTacToe {
             gameIds[i] = bet.gameId;
             betStates[i] = bet.state;
             values[i] = bet.value;
-            bettorOnX[i] = players[bet.bettorOnXAddr].name;
-            bettorOnO[i] = players[bet.bettorOnOAddr].name;
+            bettorOnXAddr[i] = bet.bettorOnXAddr;
+            bettorOnOAddr[i] = bet.bettorOnOAddr;
         }
-        return (betIds, gameIds, betStates, values, bettorOnX, bettorOnO);
+        return (betIds, gameIds, betStates, values, bettorOnXAddr, bettorOnOAddr);
     }
+
+//    function getBettorAddresses() public view returns (uint[] betIds, address[] bettorOnXAddr, address[] bettorOnOAddr) {
+//
+//        uint arrayLenght = openBetIds.length;
+//
+//        betIds = new uint[](arrayLenght);
+//        bettorOnXAddr = new address[](arrayLenght);
+//        bettorOnOAddr = new address[](arrayLenght);
+//
+//        for (uint i = 0; i < arrayLenght; i++) {
+//            Bet memory bet = bets[openBetIds[i]];
+//            betIds[i] = bet.betId;
+//            bettorOnXAddr[i] = bet.bettorOnXAddr;
+//            bettorOnOAddr[i] = bet.bettorOnOAddr;
+//        }
+//        return (betIds, bettorOnXAddr, bettorOnOAddr);
+//    }
 
     event Joined(bool wasSuccess, uint gameId, GameState state, bytes32 playerName, string symbol);
     function joinGame(uint gameId, bytes32 playerName) public {
@@ -151,7 +168,7 @@ contract TicTacToe {
             emit Joined(true, game.gameId, game.state, playerName, "O");
         }
         else if (game.state == GameState.WAITING_FOR_X) {
-            // require(game.playerOAddr != msg.sender, "Player is already part of this game.");
+//            require(game.playerOAddr != msg.sender, "Player is already part of this game.");
 
             game.playerXAddr = msg.sender;
             game.state = GameState.READY;
@@ -403,14 +420,13 @@ contract TicTacToe {
         require(bet.state < BetState.WITHDRAWN, "Not possible to join this bet.");
 
         require(msg.value == bet.value, "Not equal amount of value.");
-        require(msg.sender != bet.bettorOnXAddr
-                || msg.sender != bet.bettorOnOAddr
-                , "Same address on both sides.");
         require(games[bet.gameId].state < GameState.WINNER_X, "Game is already finished.");
 
         if (bet.state == BetState.MISSING_X_BETTOR) {
+            require(bet.bettorOnOAddr != msg.sender, "Same address on both sides.");
             bet.bettorOnXAddr = msg.sender;
         } else {
+            require(bet.bettorOnXAddr != msg.sender, "Same address on both sides.");
             bet.bettorOnOAddr = msg.sender;
         }
         bet.state = BetState.FIXED;
