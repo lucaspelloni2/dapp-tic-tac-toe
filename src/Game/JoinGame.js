@@ -11,6 +11,7 @@ import {Redirect} from 'react-router';
 import StatusRender from './StatusRender';
 import GAME_STATUS from './GameStatus';
 import Gas from "./Gas";
+import Header from "./Header";
 
 const Container = styled.div`
   display: flex;
@@ -300,6 +301,13 @@ class JoinGame extends Component {
           ) : null}
         </div>
         <div>
+            <Header
+                account={this.props.account}
+                addresses={this.props.addresses}
+                updateUserAccount={async selectedAddress => {
+                    this.props.updateUserAccount(selectedAddress);
+                }}
+            />
           <MetaMaskLogo />
           <ParentContainer>
             <Container>

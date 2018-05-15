@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import DEV from '../Environment';
 import GameIcon from './GameIcon';
+import Select from 'react-select';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -45,9 +46,21 @@ const DevEnv = styled.div`
   color: white;
 `;
 
+const RightContainer = styled.div`
+  margin-right: 3em;
+`;
 class Header extends Component {
   constructor() {
     super();
+    this.state = {
+      selectedAddress: null
+    };
+  }
+
+  componentDidMount() {
+    if (this.props.account) {
+      this.setState({selectedAddress: this.props.account.ethAddress});
+    }
   }
 
   renderLeftContent() {
@@ -70,13 +83,37 @@ class Header extends Component {
     );
   }
 
+  handleChange = selectedAddress => {
+    this.setState({selectedAddress: selectedAddress});
+    this.props.updateUserAccount(selectedAddress);
+  };
+
+  renderRightContent() {
+    if (this.props.addresses) {
+      return (
+        <RightContainer>
+          <Select
+            simpleValue
+            style={{width: 220}}
+            value={this.state.selectedAddress}
+            onChange={this.handleChange}
+            options={this.props.addresses.map(addr => ({
+              label: addr,
+              value: addr
+            }))}
+          />
+        </RightContainer>
+      );
+    }
+  }
+
   render() {
     return (
       <div>
         <BorderTop />
         <HeaderContainer>
           <Left>{this.renderLeftContent()}</Left>
-          <Right />
+          <Right>{this.renderRightContent()}</Right>
         </HeaderContainer>
         <BorderBottom />
       </div>

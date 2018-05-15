@@ -14,6 +14,7 @@ import CreateGame from './Game/CreateGame';
 import GameBoard from './Game/GameBoard/GameBoard';
 import GameScreen from './Game/GameScreen';
 import StatusRender from './Game/StatusRender';
+import DEV from './Environment';
 
 let web3 = window.web3;
 
@@ -56,19 +57,34 @@ class App extends Component {
       web3: web3Instance,
       contract: tictactoeContract,
       games: [],
+      addresses: [],
+      selectedAddress: null,
       gamesLoading: true
     };
   }
 
   async componentDidMount() {
-    await Promise.all([this.getUserAccount()]);
+    let addresses = await this.getUserAddresses();
+    this.setState({addresses: addresses});
+    await this.fetchUserInfo();
     await this.fetchGames();
+
     // this.interval = setInterval(async () => {
     //   // if (!this.isSomeGameLoading()) {
     //     await this.fetchGames();
     //     console.log('fetching games..');
     //   // }
     // }, 1200);
+  }
+
+  async fetchUserInfo(address) {
+    if (!address) {
+      address = this.state.addresses[0];
+    }
+    let account = Object.assign({}, this.state.account);
+    account.ethAddress = address;
+    this.setState({account: account});
+    await this.getUserBalance(address);
   }
 
   fetchGames() {
@@ -133,30 +149,28 @@ class App extends Component {
     return this.state.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
   }
 
-  getUserAccount() {
+  getUserAddresses() {
     return this.state.web3.eth
       .getAccounts()
       .then(addresses => {
-        let address = addresses[0];
-        console.log(address);
-
-        let account = Object.assign({}, this.state.account);
-        account.ethAddress = address;
-        this.setState({account: account});
-        return this.state.web3.eth
-          .getBalance(address.toString())
-          .then(bal => {
-            let inEth = this.state.web3.utils.fromWei(bal, 'ether');
-            let account = Object.assign({}, this.state.account);
-            account.ethBalance = inEth;
-            this.setState({account: account});
-          })
-          .catch(err => {
-            console.log('error getting balance' + err);
-          });
+        return addresses;
       })
       .catch(err => {
         console.log('error getting address ' + err);
+      });
+  }
+
+  getUserBalance(address) {
+    return this.state.web3.eth
+      .getBalance(address.toString())
+      .then(bal => {
+        let inEth = this.state.web3.utils.fromWei(bal, 'ether');
+        let account = Object.assign({}, this.state.account);
+        account.ethBalance = inEth;
+        this.setState({account: account});
+      })
+      .catch(err => {
+        console.log('error getting balance' + err);
       });
   }
 
@@ -181,7 +195,13 @@ class App extends Component {
                     />
                   )}
                 />
-                <Route path="/login" exact component={Login} />
+                <Route
+                  path="/login"
+                  exact
+                  render={props => (
+                    <Login {...props} account={this.state.account} />
+                  )}
+                />
                 <Route
                   path="/games"
                   exact
@@ -208,6 +228,10 @@ class App extends Component {
                           await this.fetchGames();
                           console.log('fetching games..');
                         }
+                      }}
+                      addresses={this.state.addresses}
+                      updateUserAccount={async selectedAddress => {
+                        await this.fetchUserInfo(selectedAddress);
                       }}
                     />
                   )}
@@ -238,8 +262,9 @@ class App extends Component {
                       account={this.state.account}
                       games={this.state.games}
                       gamesLoading={this.state.gamesLoading}
-                      updateUserAccount={async () => {
-                        await this.getUserAccount();
+                      addresses={this.state.addresses}
+                      updateUserAccount={async selectedAddress => {
+                        await this.fetchUserInfo(selectedAddress);
                       }}
                     />
                   )}

@@ -566,7 +566,7 @@ const ContractProps = {
       "type": "event"
     }
   ],
-  LOCALHOST_CONTRACT_ADDRESS: '0xa7ef4c2dd9a7bdcfbdb65e5b6a636a8f4bb7b00b',
+  LOCALHOST_CONTRACT_ADDRESS: '0xe59458f3a83cfa6a26faed4df4702ac17b59ba7a',
   METAMASK_CONTRACT_ADDRESS: '0x8149a9df0998bb6f913a53087c5f6807a777c9a4'
   // Robsten --> CONTRACT_ADDRESS: '0x8149a9df0998bb6f913a53087c5f6807a777c9a4'
 };

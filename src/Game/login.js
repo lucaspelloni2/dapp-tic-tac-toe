@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import Context from './Context';
 import {Redirect} from 'react-router-dom';
 import MetaMaskLogo from './MetamaskLogo';
+import Transaction from './Transaction';
 
 const Container = styled.div`
   display: flex;
@@ -77,6 +78,18 @@ class Login extends Component {
     localStorage.setItem('username', e.target.value);
   }
 
+  insertNewUser(username, address) {
+    let user = {
+      address: address,
+      username: username
+    };
+    let users = localStorage.getItem('users')
+      ? JSON.parse(localStorage.getItem('users'))
+      : [];
+    users.push(user);
+    localStorage.setItem('users', JSON.stringify(users));
+  }
+
   login() {
     if (localStorage.getItem('username')) {
       return <Redirect to="/lobby" />;
@@ -133,21 +146,21 @@ class Login extends Component {
                 <InputField
                   placeholder={'Username'}
                   onChange={this.handleChange.bind(this)}
-
-                  onKeyPress={(event) => {
-                    if(event.key == 'Enter'){
+                  onKeyPress={event => {
+                    if (event.key === 'Enter') {
                       this.setState({
                         clickedLogin: true
                       });
                     }
                   }}
-                  />
+                />
               </InputLabel>
             </LoginRow>
             <ButtonLinkContainer>
               {this.state.clickedLogin && this.login()}
               <button
                 onClick={() => {
+                  //this.insertNewUser(e.target.value, this.props.account.ethAddress);
                   this.setState({
                     clickedLogin: true
                   });

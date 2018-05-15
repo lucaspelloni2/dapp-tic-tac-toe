@@ -11,8 +11,8 @@ import BetsComponent from './BetsComponent';
 import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
-import Header from "./Header";
-import Gas from "./Gas";
+import Header from './Header';
+import Gas from './Gas';
 
 const TopContainer = styled.div`
   display: flex;
@@ -223,7 +223,13 @@ class GameScreen extends Component {
           <GameSpinner />
         ) : (
           <div>
-            <Header/>
+            <Header
+              account={this.props.account}
+              addresses={this.props.addresses}
+              updateUserAccount={async selectedAddress => {
+                this.props.updateUserAccount(selectedAddress);
+              }}
+            />
             <ParentContainer>
               <ColumnContainer>
                 <GameTopInfo
@@ -241,7 +247,10 @@ class GameScreen extends Component {
                   isMyTurn={this.state.isMyTurn}
                 />
                 {this.state.isMyTurn ? null : (
-                  <OpponentLoader isModalOpen={this.state.isModalOpen} game={this.state.game} />
+                  <OpponentLoader
+                    isModalOpen={this.state.isModalOpen}
+                    game={this.state.game}
+                  />
                 )}
               </ColumnContainer>
               <ColumnContainer>
