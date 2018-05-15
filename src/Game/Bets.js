@@ -258,8 +258,10 @@ class Bets extends Component {
 
   getButton(bet) {
     if (
-      bet.status === BET_STATUS.MISSING_X_BETTOR ||
-      bet.status === BET_STATUS.MISSING_O_BETTOR
+      (bet.status === BET_STATUS.MISSING_O_BETTOR &&
+        bet.bettorOnXAddr !== this.props.account.ethAddress) ||
+      (bet.status === BET_STATUS.MISSING_X_BETTOR &&
+        bet.bettorOnOAddr !== this.props.account.ethAddress)
     ) {
       return (
         <Button
@@ -268,23 +270,16 @@ class Bets extends Component {
             this.joinBet(bet);
           }}
         >
-          <GameIcon icon={'bet'} height={'14'} />
+          <GameIcon icon={'bet'} height={'14'}/>
           <Paragraph>BET</Paragraph>
         </Button>
       );
-    } else {
-      return null;
-    }
-  }
-
-  getWithdrawButton(bet) {
-    if (
+    } else if (
       (bet.status === BET_STATUS.MISSING_O_BETTOR &&
         bet.bettorOnXAddr === this.props.account.ethAddress) ||
       (bet.status === BET_STATUS.MISSING_X_BETTOR &&
         bet.bettorOnOAddr === this.props.account.ethAddress)
     ) {
-      //
       return (
         <Button hoverColor={'#00ff32'} onClick={() => this.withdrawBet(bet.id)}>
           <Withdraw>
@@ -293,6 +288,8 @@ class Bets extends Component {
           </Withdraw>
         </Button>
       );
+    } else {
+      return null;
     }
   }
 
@@ -384,7 +381,6 @@ class Bets extends Component {
                       <Title>Who on O</Title>
                     </th>
                     <th />
-                    <th />
                   </tr>
                 </tbody>
                 <tbody>
@@ -415,7 +411,6 @@ class Bets extends Component {
                       <td>{bet.bettorOnX}</td>
                       <td>{bet.bettorOnO}</td>
                       <td>{this.getButton(bet)}</td>
-                      <td>{this.getWithdrawButton(bet)}</td>
                     </tr>
                   ))}
                 </tbody>
