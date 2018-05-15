@@ -22,7 +22,7 @@ $ npm start
 ```
  ## Current Smart Contract: 
 
-Address:  `0x8149a9df0998bb6f913a53087c5f6807a777c9a4`
+Address:  `0x0a8962932852d84d6982cbf3051486d7240c55a7`
  
   ### Authors
 ```
