@@ -4,6 +4,10 @@
 CHAPTER \par 
 \contentsline {chapter}{\numberline {1}Introduction}{1}
 \contentsline {chapter}{\numberline {2}Technologies}{2}
+\contentsline {section}{\numberline {2.1}Solidity}{2}
+\contentsline {section}{\numberline {2.2}Web3.js}{2}
+\contentsline {section}{\numberline {2.3}MetaMask}{2}
+\contentsline {section}{\numberline {2.4}Ganache}{2}
 \contentsline {chapter}{\numberline {3}Implementation of the game}{3}
 \contentsline {section}{\numberline {3.1}Project Structure}{3}
 \contentsline {section}{\numberline {3.2}Game Walk-through}{3}
