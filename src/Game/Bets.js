@@ -165,7 +165,7 @@ class Bets extends Component {
       .players(address)
       .call({from: this.props.account.ethAddress})
       .then(res => {
-        return this.props.web3.utils.hexToAscii(res);
+        return this.hexToAscii(res);
       })
       .catch(err => {
         console.log(
