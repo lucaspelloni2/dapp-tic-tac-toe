@@ -1,0 +1,307 @@
+% Dissertation style file by John Shumway.
+% Attempts to meet requirements of the Graduate College of Arizona State 
+% University
+% No guarantees - PLEASE CHECK FORMAT CAREFULLY!
+% 
+% Setup the page layout (8 1/2 x 11 one and one-half spaced page, for 12pt font)
+% 1.25" side margins, 1.00" top and bottom margins
+% 
+%\geometry{top=71.0truept,hmargin=90.344truept,height=648.0truept,includefoot,
+%letterpaper}%,showframe,showcrop}
+%
+\geometry{top=1.0in,hmargin=1.25in,height=9.0in,includefoot,
+letterpaper}%,showframe,showcrop}
+%
+% Define singlespace and doublespace commands for 12pt fonts.
+%
+\newcommand{\doublespace} {
+  \renewcommand{\baselinestretch}{1.66}\small\normalsize
+}
+\newcommand{\oneandhalfspace} {
+  \renewcommand{\baselinestretch}{1.24}\small\normalsize
+}
+\newcommand{\singlespace} {
+  \renewcommand{\baselinestretch}{0.9}\small\normalsize
+}
+\singlespace
+
+%
+% Title page.
+%
+\title{\tt$\backslash$\string title}
+% Define "\chair" and \member commands for title page.
+\newcommand{\chair}[1]{\renewcommand{\@chair}{#1}}
+\newcommand{\@chair}{\tt$\backslash$\string chair}
+\newcommand{\memberOne}[1]{\renewcommand{\@memberOne}{#1}}
+\newcommand{\@memberOne}{\tt$\backslash$\string memberOne}
+\newcommand{\memberTwo}[1]{\renewcommand{\@memberTwo}{#1}}
+\newcommand{\@memberTwo}{\tt$\backslash$\string memberTwo}
+\newcommand{\memberThree}[1]{\renewcommand{\@memberThree}{#1}}
+\newcommand{\@memberThree}{\tt$\backslash$\string memberThree}
+% Define "\subtitle" command for Title Page.
+\newcommand{\subtitle}[1]{\renewcommand{\@subtitle}{#1}}
+\newcommand{\@subtitle}{\tt$\backslash$\string subtitle}
+% Define "\paperType" command for Title Page.
+% (should set to "Dissertation" or "Thesis)
+\newcommand{\paperType}[1]{\renewcommand{\@paperType}{#1}}
+\newcommand{\@paperType}{\tt$\backslash$\string paperType}
+%
+% Redefine maketitle
+\newlength{\fiveblanklines}\setlength{\fiveblanklines}{0.7 in}
+\newlength{\tenblanklines}\setlength{\tenblanklines}{1.5 in}
+\newlength{\oneblanklines}\setlength{\oneblanklines}{0.15 in}
+\renewcommand\maketitle{
+  \enlargethispage{0.5in} %make extra room where page number would go
+  \thispagestyle{empty}
+  \noindent
+  \begin{minipage}[t][647.0truept][t]{\linewidth}
+  \begin{center}
+    \@title
+  \end{center}
+  \vspace{\fiveblanklines}
+  \begin{center}
+    \singlespace
+	\@subtitle
+  \end{center}
+  \vspace{\tenblanklines}
+  \begin{center}
+    \@chair,  Chair\\
+    \vspace{\oneblanklines}
+    \@memberOne\\
+    \@memberTwo\\
+    \@memberThree\\
+  \end{center}
+   \vfill
+   \begin{center}
+   \doublespace
+   \includegraphics[width=4.5cm]{logo_uzh}\hfill\includegraphics[width=3.5cm]{logo_csg}
+   \end{center} 
+\end{minipage}
+\clearpage
+}
+
+%
+% redefine abstract environment
+%
+\renewenvironment{abstract}{
+  \setcounter{page}{1}
+  \begin{center}
+    \doublespace
+    ABSTRACT
+  \end{center}
+} {
+  \clearpage
+}
+
+%
+% make acknowledgements environment
+%
+\newenvironment{acknowledgements}{
+  \begin{center}
+    \doublespace
+    ACKNOWLEDGEMENTS
+  \end{center}
+} {
+  \clearpage
+}
+
+%
+% define \dedicationpage
+%
+%\newcommand{\dedicationpage}[1]{
+%\clearpage\vspace*{0.5\textheight}
+%\centerline{\itshape #1}\clearpage
+\newcommand{\dedicationpage}[1]{
+\begin{center}
+   \doublespace
+   {\itshape #1}
+\end{center}
+\clearpage
+}
+
+%
+% Fix the table of contents
+%
+%
+% Get leader dots right.  They should all be spaced the same and need to be
+% added for chapters and parts.
+%
+\renewcommand{\cftchapdotsep}{1.7}
+\renewcommand{\cftchapleader}{\cftdotfill{\cftchapdotsep}}
+\renewcommand{\cftpartdotsep}{1.7}
+\renewcommand{\cftpartleader}{\cftdotfill{\cftpartdotsep}}
+\renewcommand{\cftsecdotsep}{1.7}
+\renewcommand{\cftsubsecdotsep}{1.7}
+\renewcommand{\cfttabdotsep}{1.7}
+\renewcommand{\cftfigdotsep}{1.7}
+%
+% Fonts for the chapter titles and part titles.
+%
+\renewcommand{\cftchapfont}{\rm}
+\renewcommand{\cftpartfont}{\rm}
+\renewcommand{\cftchappagefont}{\rm}
+\renewcommand{\cftpartpagefont}{\rm}
+%
+% Indentations: These are in accordance with the chart at the top of page 4 of
+% the document
+% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/tocloft/tocloft.pdf
+% I simply moved each of the following sections "up" one level to get the
+% indentations right.
+%
+\cftsetindents{chapter}{1.5em}{1.5em}
+\cftsetindents{section}{3.0em}{2.3em}
+\cftsetindents{subsection}{5.3em}{3.2em}
+%
+% Spacing between entries is taken care of by the double-spacing in this 
+% section, so no need for extra space before chapter or part entries.
+%
+\setlength{\cftbeforepartskip}{0truept}
+\setlength{\cftbeforechapskip}{0truept}
+%
+% Get the title for the TOC normal sized, centered, and at the right height.
+%
+\setlength{\cftbeforetoctitleskip}{-64.0truept}
+\setlength{\cftaftertoctitleskip}{0truept}
+%
+\renewcommand{\contentsname}{TABLE OF CONTENTS}
+\renewcommand{\cfttoctitlefont}{\hfill\normalsize\rm}
+\renewcommand{\cftaftertoctitle}{\hfill}
+%
+\newcommand{\cftlabel}{CHAPTER}
+%
+% Get rid of the header underline.
+\renewcommand{\headrulewidth}{0pt}
+%
+% Get the header on subsequent pages right.
+\renewcommand{\@cfttocstart}{ 
+   \newgeometry{top=1.0in,hmargin=1.25in,height=9.0in,
+   includehead,includefoot,letterpaper}%,showcrop,showframe}
+
+   \doublespace
+   \pagestyle{fancyplain}
+   \afterpage{\lhead{\cftlabel}\rhead{Page}}
+}
+
+\renewcommand{\@cfttocfinish}{
+   \restoregeometry\clearpage\afterpage{\lhead{}\rhead{}}
+}
+%
+% Get the title for the LOT normal sized, centered, and at the right height.
+%
+\setlength{\cftbeforelottitleskip}{-64.0truept}
+\setlength{\cftafterlottitleskip}{0truept}
+%
+\renewcommand{\listtablename}{LIST OF TABLES}
+\renewcommand{\cftlottitlefont}{\hfill\normalsize\rm}
+\renewcommand{\cftafterlottitle}{\hfill}
+% 
+% Get the title for the LOF normal sized, centered, and at the right height.
+%
+\setlength{\cftbeforeloftitleskip}{-64.0truept}
+\setlength{\cftafterloftitleskip}{0truept}
+%
+\renewcommand{\listfigurename}{LIST OF FIGURES}
+\renewcommand{\cftloftitlefont}{\hfill\normalsize\rm}
+\renewcommand{\cftafterloftitle}{\hfill}
+% 
+% Here is a hack.  The report class automatically adds a bit of extra vertical
+% space between table and figure entries in the LOT and LOF if they are from 
+% different chapters.  I have simply commmented out the lines in the definition
+% of \@chapter which do this.  As far as I can tell, the tocloft package doesn't
+% have a command for this so a hack is necessary.
+%
+\def\@chapter[#1]#2{\ifnum \c@secnumdepth >\m@ne
+                        \refstepcounter{chapter}%
+                        \typeout{\@chapapp\space\thechapter.}%
+                        \addcontentsline{toc}{chapter}%
+                        {\protect\numberline{\thechapter}#1}%
+                    \else
+                        \addcontentsline{toc}{chapter}{#1}%
+                    \fi
+                    \chaptermark{#1}%
+
+                    %These two lines below are commented out.
+
+                    %\addtocontents{lof}{\protect\addvspace{10\p@}}%
+                    %\addtocontents{lot}{\protect\addvspace{10\p@}}%
+                    \if@twocolumn
+                      \@topnewpage[\@makechapterhead{#2}]%
+                    \else
+                      \@makechapterhead{#2}%
+                      \@afterheading
+                    \fi}
+
+%
+% Change some of the rules for float placement.
+%
+\setcounter{topnumber}{2}          %Maximum 2 floats on top
+\setcounter{bottomnumber}{1}       %Maximum 1 float on bottom
+%\renewcommand{\topfraction}{0.7}    %Top float max size is 70%
+%\renewcommand{\bottomfraction}{0.7} %Bottom float max size is 70%
+\renewcommand{\topfraction}{0.9}    %Top float max size is 70%
+\renewcommand{\bottomfraction}{0.8} %Bottom float max size is 70%
+\renewcommand{\floatpagefraction}{0.7}
+
+
+%
+% Fix chapter and section formats
+%
+% Chapters names are all caps, centered under "Chapter N"
+\renewcommand{\@makechapterhead}[1]{
+\begin{center}
+\chaptername\ \thechapter\vspace{\baselineskip}\\
+\uppercase\expandafter{#1}\vspace{\baselineskip}
+\end{center}
+}
+% Numbers chapters, sections, and subsections
+\setcounter{secnumdepth}{2}
+% Center section titles
+\renewcommand{\section}{\@startsection{section}{1}{0 in}{1em}{1em}{\centering}}
+% Center and italicize subsection titles
+\renewcommand{\subsection}{\@startsection{subsection}{2}{0 in}{1em}{1em}
+{\centering\slshape}}
+
+% This is a bit of a hack.  I couldn't figure out a better way, but surely there
+% is one.  What I want is for the title page of the appendix to appear with
+% just one double space between the words "Appendix A" and the title.  So, here,
+% I redefine the command with our \singlespace command, and then inside the 
+% actual appendix, I use \doublespace.  This gets the spacing of the appendix
+% title page right.
+
+\renewcommand\appendix{\par
+   \setcounter{chapter}{0}%
+   \setcounter{section}{0}%
+   \gdef\@chapapp{\appendixname}%
+   \gdef\thechapter{\@Alph\c@chapter}
+   
+   % I added this line.
+
+   \singlespace}
+
+%
+% Fix bibliography header.
+%
+\renewcommand\bibname{References}
+\renewcommand\bibsection{
+\begin{center}\uppercase\expandafter{\bibname}\vspace{1em}\end{center}
+}
+
+%
+% Modify figure captions so that they print singlespace.
+%
+\renewcommand{\@makecaption}[2]{% #1 is e.g. Figure 1, #2 is captiontext
+  \singlespace
+  {\textbf{#1:} #2\par}
+}
+
+%
+% Modify footnotes to be single spaced per footnote, double in between
+%
+
+\setlength{\footnotesep}{\baselineskip} %double space between footnotes
+
+\let\oldfootnoterule\footnoterule %dont put a gap between the line and the first footnote
+\def\footnoterule{\oldfootnoterule\vspace{-0.2\baselineskip}}
+
+\let\oldfn\footnote   %single space individual footnotes
+\renewcommand{\footnote}[1]{\singlespace\oldfn{#1}\doublespace}

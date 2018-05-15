@@ -1,0 +1,74 @@
+\documentclass[12pt,letterpaper]{report}
+\usepackage{natbib}
+\usepackage{geometry}
+%\usepackage{fancyheadings} fancyheadings is obsolete: replaced by fancyhdr. JL
+\usepackage{fancyhdr}
+\usepackage{afterpage}
+\usepackage{graphicx}
+\usepackage{amsmath,amssymb,amsbsy}
+\usepackage{dcolumn,array}
+\usepackage{tocloft}
+\usepackage{asudis}
+
+\begin{document}
+%-----------------------front matter
+\pagenumbering{roman}
+\title{Challenge Task 2018}
+\subtitle{Implementation of a Decentralized Application Tic Tac Toe}
+\paperType{Dissertation}
+\chair{Departements of Informatics - Communication Systems Group}
+\memberOne{Lucas Pelloni, leginumeber}
+\memberTwo{Severin Wullschleger leginumber}
+\memberThree{Andreas Schaufelbühl, 12-918-843}
+
+\maketitle
+\doublespace
+%\include{abstract}
+\dedicationpage{}
+%\include{ack}
+\tableofcontents
+% This puts the word "Page" right justified above everything else.
+\addtocontents{toc}{~\hfill Page\par}
+% Asking LaTeX for a new page here guarantees that the LOF is on a separate page
+% after the TOC ends.
+\newpage
+% Making the LOT and LOF "parts" rather than chapters gets them indented at
+% level -1 according to the chart: top of page 4 of the document at
+% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/tocloft/tocloft.pdf
+\addcontentsline{toc}{part}{LIST OF TABLES}
+\renewcommand{\cftlabel}{Table}
+\listoftables
+% This gets the headers for the LOT right on the first page.  Subsequent pages
+% are handled by the fancyhdr code in the asudis.sty file.
+\addtocontents{lot}{Table~\hfill Page \par}
+\newpage
+\addcontentsline{toc}{part}{LIST OF FIGURES}
+\addtocontents{toc}{CHAPTER \par}
+\renewcommand{\cftlabel}{Figure}
+\listoffigures
+% This gets the headers for the LOF right on the first page.  Subsequent pages
+% are handled by the fancyhdr code in the asudis.sty file.
+\addtocontents{lof}{Figure~\hfill Page \par}
+%-----------------------body
+\doublespace
+\pagenumbering{arabic}
+\include{chapter1}
+\include{chapter2}
+\include{chapter3}
+\include{chapter4}
+\include{chapter5}
+\include{chapter6}
+%-----------------------back matter
+{\singlespace
+% Making the references a "part" rather than a chapter gets it indented at
+% level -1 according to the chart: top of page 4 of the document at
+% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/tocloft/tocloft.pdf
+\addcontentsline{toc}{part}{REFERENCES}
+\bibliographystyle{asudis}
+\bibliography{dis}}
+\renewcommand{\chaptername}{APPENDIX}
+\addtocontents{toc}{APPENDIX \par}
+\appendix
+\include{appendix1}
+\include{vita}
+\end{document}
