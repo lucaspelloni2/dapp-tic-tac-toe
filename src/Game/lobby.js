@@ -6,6 +6,7 @@ import BetsComponent from './BetsComponent';
 import GameSpinner from './GameSpinner';
 import UserProfile from './UserProfile';
 import GameIcon from './GameIcon';
+import Header from "./Header";
 
 const ParentContainer = styled.div``;
 
@@ -73,6 +74,7 @@ class Lobby extends Component {
           <GameSpinner />
         ) : (
           <div>
+            <Header/>
             <ParentContainer>
               <UserProfile username={this.state.username} />
               <div style={{marginTop: -110, marginBottom: 122}}>

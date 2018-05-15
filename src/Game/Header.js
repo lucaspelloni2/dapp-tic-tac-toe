@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
-import MetaMaskLogo from './MetamaskLogo';
+import DEV from '../Environment';
 import GameIcon from './GameIcon';
 
 const HeaderContainer = styled.div`
@@ -10,7 +10,7 @@ const HeaderContainer = styled.div`
   background: white;
   display: flex;
   align-items: center;
-  color: black; 
+  color: black;
 `;
 
 const BorderBottom = styled.div`
@@ -23,9 +23,26 @@ const BorderTop = BorderBottom.extend`
   background: linear-gradient(90deg, rgb(1, 178, 208), rgb(0, 74, 153));
 `;
 
-const Left = styled.div``;
+const Left = styled.div`
+  display: flex;
+  align-items: center;
+`;
+
+const LeftContainer = styled.div`
+  display: flex;
+  align-items: center;
+`;
 const Right = styled.div`
   margin-left: auto;
+`;
+
+const DevEnv = styled.div`
+  border: 1px solid ${props => (props.border ? props.border : props.color)};
+  border-radius: 4px;
+  padding: 4px;
+  background: ${props => props.color};
+  margin-left: 1em;
+  color: white;
 `;
 
 class Header extends Component {
@@ -33,21 +50,33 @@ class Header extends Component {
     super();
   }
 
+  renderLeftContent() {
+    return (
+      <LeftContainer>
+        <GameIcon
+          color={'#016b9b'}
+          width={45}
+          height={45}
+          marginBottom={0}
+          icon={'bet'}
+        />
+
+        {DEV ? (
+          <DevEnv color={'#d42517'} border={'#d42517'}>
+            DEV ENVIRONMENT
+          </DevEnv>
+        ) : null}
+      </LeftContainer>
+    );
+  }
+
   render() {
     return (
       <div>
         <BorderTop />
         <HeaderContainer>
-          <Left>
-            <GameIcon
-              color={'#016b9b'}
-              width={45}
-              height={45}
-              marginBottom={0}
-              icon={'bet'}
-            />
-          </Left>
-          <Right></Right>
+          <Left>{this.renderLeftContent()}</Left>
+          <Right />
         </HeaderContainer>
         <BorderBottom />
       </div>

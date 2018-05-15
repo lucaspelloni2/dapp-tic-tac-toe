@@ -10,8 +10,9 @@ import GameTopInfo from './GameTopInfo';
 import BetsComponent from './BetsComponent';
 import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
+import DEV from './../Environment';
+import Header from "./Header";
 import Gas from "./Gas";
-import PROD from './../Environment';
 
 const TopContainer = styled.div`
   display: flex;
@@ -66,7 +67,7 @@ class GameScreen extends Component {
       this.setState({amIPlayerX: true});
     }
 
-    if (!PROD) {
+    if (!DEV) {
       const isMyTurn = this.isMyTurn();
       this.setState({isMyTurn: isMyTurn});
     }
@@ -116,7 +117,7 @@ class GameScreen extends Component {
         this.setState({game: game});
         let isMyTurn = this.isMyTurn();
 
-        if (PROD) {
+        if (DEV) {
           isMyTurn = true;
         }
         this.setState({isMyTurn: isMyTurn});
@@ -222,6 +223,7 @@ class GameScreen extends Component {
           <GameSpinner />
         ) : (
           <div>
+            <Header/>
             <ParentContainer>
               <ColumnContainer>
                 <GameTopInfo
