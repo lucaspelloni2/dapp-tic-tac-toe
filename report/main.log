@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  16 MAY 2018 23:15
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  16 MAY 2018 23:47
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -396,12 +396,12 @@ e
 <logo_uzh.pdf, id=1, 154.5775pt x 49.18375pt>
 File: logo_uzh.pdf Graphic file (type pdf)
 <use logo_uzh.pdf>
-Package pdftex.def Info: logo_uzh.pdf  used on input line 69.
+Package pdftex.def Info: logo_uzh.pdf  used on input line 70.
 (pdftex.def)             Requested size: 128.0374pt x 40.74292pt.
 <logo_csg.png, id=2, 250.9375pt x 205.76875pt>
 File: logo_csg.png Graphic file (type png)
 <use logo_csg.png>
-Package pdftex.def Info: logo_csg.png  used on input line 69.
+Package pdftex.def Info: logo_csg.png  used on input line 70.
 (pdftex.def)             Requested size: 99.58464pt x 81.65924pt.
 
 [1
@@ -480,17 +480,17 @@ although it is yet undefined on input line 3.
 Package acronym Info: Label `acro:sc' newly defined as it shall be overridden
 although it is yet undefined on input line 3.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 3--77
+Underfull \hbox (badness 10000) in paragraph at lines 3--78
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3--77
+Underfull \hbox (badness 10000) in paragraph at lines 3--78
 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 3--77
+Underfull \hbox (badness 10000) in paragraph at lines 3--78
 
  []
 
@@ -565,7 +565,7 @@ LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <6> not available
  (./chapter4.tex
 Chapter 4.
 )
-Underfull \hbox (badness 10000) in paragraph at lines 6--83
+Underfull \hbox (badness 10000) in paragraph at lines 6--84
 
  []
 
@@ -590,7 +590,7 @@ No file main.bbl.
 Here is how much of TeX's memory you used:
  6057 strings out of 492649
  81046 string characters out of 6129622
- 290096 words of memory out of 5000000
+ 289091 words of memory out of 5000000
  9769 multiletter control sequences out of 15000+600000
  11280 words of font info for 45 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
@@ -603,7 +603,7 @@ e/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/2
 018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/2018
 /texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2018/
 texmf-dist/fonts/type1/public/amsfonts/cm/cmtt8.pfb>
-Output written on main.pdf (14 pages, 605885 bytes).
+Output written on main.pdf (14 pages, 605902 bytes).
 PDF statistics:
  94 PDF objects out of 1000 (max. 8388607)
  63 compressed objects within 1 object stream
