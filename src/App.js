@@ -11,11 +11,10 @@ import Lobby from './Game/lobby';
 import ContractProps from './Game/ContractProps';
 import JoinGame from './Game/JoinGame';
 import CreateGame from './Game/CreateGame';
-import GameBoard from './Game/GameBoard/GameBoard';
 import GameScreen from './Game/GameScreen';
 import StatusRender from './Game/StatusRender';
-import DEV from './Environment';
 import GameSpinner from './Game/GameSpinner';
+import Web3Providers from './Game/Web3Providers';
 
 let web3 = window.web3;
 
@@ -29,11 +28,13 @@ class App extends Component {
     super();
     let CONTRACT_ADDRESS;
     let web3Instance = null;
+    let provider;
     if (typeof web3 !== 'undefined') {
       this.web3Provider = web3.currentProvider;
       web3Instance = new Web3(web3.currentProvider);
       // metamask
       CONTRACT_ADDRESS = ContractProps.METAMASK_CONTRACT_ADDRESS;
+      provider = Web3Providers.META_MASK;
     } else {
       this.web3Provider = new Web3.providers.HttpProvider(
         'http://localhost:7545'
@@ -41,14 +42,13 @@ class App extends Component {
 
       web3Instance = new Web3(this.web3Provider);
       CONTRACT_ADDRESS = ContractProps.LOCALHOST_CONTRACT_ADDRESS;
+      provider = Web3Providers.LOCALHOST;
     }
 
     const tictactoeContract = new web3Instance.eth.Contract(
       ContractProps.CONTRACT_ABI,
       CONTRACT_ADDRESS
     );
-
-    console.log('This is your provider ', tictactoeContract);
 
     this.state = {
       account: {
@@ -61,7 +61,8 @@ class App extends Component {
       addresses: [],
       selectedAddress: null,
       gamesLoading: true,
-      userLoading: true
+      userLoading: true,
+      provider: provider
     };
   }
 
@@ -70,12 +71,6 @@ class App extends Component {
     this.setState({addresses: addresses});
     await this.fetchUserInfo();
     await this.fetchGames();
-    // this.interval = setInterval(async () => {
-    //   // if (!this.isSomeGameLoading()) {
-    //     await this.fetchGames();
-    //     console.log('fetching games..');
-    //   // }
-    // }, 1200);
   }
 
   async fetchUserInfo(address) {
@@ -95,7 +90,7 @@ class App extends Component {
       .getGames()
       .call({from: this.state.account.ethAddress})
       .then(res => {
-        for (let i = res.gameIds.length-1; i >= 0 ; i--) {
+        for (let i = res.gameIds.length - 1; i >= 0; i--) {
           let game = this.createGame(res, i);
           if (game !== null) {
             games.push(game);
@@ -202,6 +197,7 @@ class App extends Component {
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
                           }}
+                          provider={this.state.provider}
                         />
                       )}
                     />
@@ -216,6 +212,7 @@ class App extends Component {
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
                           }}
+                          provider={this.state.provider}
                         />
                       )}
                     />
@@ -250,6 +247,7 @@ class App extends Component {
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
                           }}
+                          provider={this.state.provider}
                         />
                       )}
                     />
@@ -269,6 +267,7 @@ class App extends Component {
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
                           }}
+                          provider={this.state.provider}
                         />
                       )}
                     />
@@ -287,19 +286,7 @@ class App extends Component {
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
                           }}
-                        />
-                      )}
-                    />
-                    <Route
-                      // path="/games/:address/:gameId"
-                      path="/board"
-                      exact
-                      render={props => (
-                        <GameBoard
-                          {...props}
-                          web3={this.state.web3}
-                          contract={this.state.contract}
-                          account={this.state.account}
+                          provider={this.state.provider}
                         />
                       )}
                     />

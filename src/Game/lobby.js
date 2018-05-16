@@ -4,7 +4,6 @@ import ButtonLink from './Link';
 import MetaMaskLogo from './MetamaskLogo';
 import BetsComponent from './BetsComponent';
 import GameSpinner from './GameSpinner';
-import UserProfile from './UserProfile';
 import GameIcon from './GameIcon';
 import Header from './Header';
 
@@ -80,9 +79,11 @@ class Lobby extends Component {
             <Header
               account={this.props.account}
               addresses={this.props.addresses}
+              provider={this.props.provider}
               updateUserAccount={async selectedAddress => {
                 this.props.updateUserAccount(selectedAddress);
               }}
+
             />
             <ParentContainer>
               <div style={{marginBottom: 130}}>

@@ -1,2 +1,2 @@
-const DEV = false;
+const DEV = true;
 export default DEV;

@@ -14,9 +14,8 @@ const Container = styled.div`
 
 const Overlay = styled.div`
   position: absolute;
-  margin-top: 7.5em;
-  width: 490px;
-  height: 140px;
+  margin-top: 9em;
+  width: 515px;
   transition: 0.2s ease-in-out;
   background-color: rgba(255, 255, 255, 0.95);
   box-shadow: 0 0 11px 0 rgba(0, 0, 0, 0.21);
@@ -47,6 +46,10 @@ const Tag = styled.div`
     ${props => props.seccolor} 0,
     ${props => props.color} 1200px
   );
+  width: 125px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 `;
 
 const Info = styled.div`
@@ -61,6 +64,7 @@ const Data = styled.div`
   align-items: center;
   color: #577083;
   font-weight: bold;
+  margin-left: 8px;
 `;
 
 class UserAccount extends Component {
@@ -75,25 +79,28 @@ class UserAccount extends Component {
     return (
       <UserInfo>
         <Info>
-          <Tag seccolor={'#0177a2'} color={'#02b8d4'}>
-            ETH Address
+          <Tag seccolor={'#f6841b'} color={'#ff6205'}>
+            ETH Address <GameIcon icon={'address'}/>
           </Tag>
-          <div style={{width: 10}} />
           <Data>{this.props.account.ethAddress}</Data>
         </Info>
         <Info>
-          <Tag seccolor={'#f6841b'} border={'#f6841b'} color={'#ff6205'}>
-            ETH Balance
+          <Tag seccolor={'#0177a2'} color={'#02b8d4'}>
+            ETH Balance <GameIcon color={'white'} width={15} height={15} icon={'bet'} />
           </Tag>
-          <div style={{width: 10}} />
           <Data>{this.props.account.ethBalance}</Data>
         </Info>
         <Info>
           <Tag seccolor={'#03b8d4'} color={'#03b8d4'}>
-            Username
+            Username <GameIcon icon={'username'}/>
           </Tag>
-          <div style={{width: 25}} />
           <Data>{localStorage.getItem('username')}</Data>
+        </Info>
+        <Info>
+          <Tag seccolor={'#a005ff'} color={'#a005ff'}>
+            Web3 Provider  <GameIcon icon={'web3provider'}/>
+          </Tag>
+          <Data>{this.props.provider}</Data>
         </Info>
       </UserInfo>
     );

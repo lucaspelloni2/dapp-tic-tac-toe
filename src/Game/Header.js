@@ -97,7 +97,6 @@ class Header extends Component {
     if (this.props.account && DEV) {
       this.setState({selectedAddress: this.props.account.ethAddress});
     }
-    console.log(this.props.account);
   }
 
   renderLeftContent() {
@@ -147,7 +146,7 @@ class Header extends Component {
       return (
         <RightContainer>
           <div>{this.renderTabs()}</div>
-          <div>{this.renderUserAccount()}</div>
+          {this.props.account ? <div>{this.renderUserAccount()}</div> : null}
         </RightContainer>
       );
     }
@@ -177,7 +176,7 @@ class Header extends Component {
   renderUserAccount() {
     return (
       <UserContainer>
-        <UserAccount account={this.props.account} />
+        <UserAccount provider={this.props.provider} account={this.props.account} />
       </UserContainer>
     );
   }

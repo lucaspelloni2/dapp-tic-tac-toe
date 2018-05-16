@@ -229,6 +229,7 @@ class GameScreen extends Component {
               updateUserAccount={async selectedAddress => {
                 this.props.updateUserAccount(selectedAddress);
               }}
+              provider={this.props.provider}
             />
             <ParentContainer>
               <ColumnContainer>
