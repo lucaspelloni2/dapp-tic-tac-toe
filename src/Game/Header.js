@@ -3,6 +3,7 @@ import styled from 'styled-components';
 import DEV from '../Environment';
 import GameIcon from './GameIcon';
 import Select from 'react-select';
+import {Link} from 'react-router-dom';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -47,7 +48,33 @@ const DevEnv = styled.div`
 `;
 
 const RightContainer = styled.div`
+  display: flex;
+  align-items: center;
   margin-right: 3em;
+`;
+
+const TabsContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const Tab = styled.div`
+  &:hover {
+    color: #01a2ca;
+    border-bottom-color: #01a2ca;
+    font-size: 17.5px;
+  }
+  transition: 0.15s ease-in-out;
+  font-size: 17px;
+  color: #026899;
+  cursor: pointer;
+  padding: 0 20px;
+  font-weight: bold;
+  height: 60px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 `;
 class Header extends Component {
   constructor() {
@@ -93,6 +120,7 @@ class Header extends Component {
     if (this.props.addresses && DEV) {
       return (
         <RightContainer>
+          <div>{this.renderTabs()}</div>
           <Select
             simpleValue
             style={{width: 220}}
@@ -106,6 +134,28 @@ class Header extends Component {
         </RightContainer>
       );
     }
+  }
+
+  renderTabs() {
+    return (
+      <TabsContainer>
+        <Tab>
+          <Link style={{textDecoration: 'none'}} to="/games/create">
+            Create a Game
+          </Link>
+        </Tab>
+        <Tab>
+          <Link style={{textDecoration: 'none'}} to="/lobby">
+            Lobby
+          </Link>
+        </Tab>
+        <Tab>
+          <Link style={{textDecoration: 'none'}} to="/games">
+            Join a Game
+          </Link>
+        </Tab>
+      </TabsContainer>
+    );
   }
 
   render() {

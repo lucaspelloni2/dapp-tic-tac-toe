@@ -254,7 +254,7 @@ class App extends Component {
                       )}
                     />
                     <Route
-                      path="/games/:address"
+                      path="/games/create"
                       exact
                       render={props => (
                         <CreateGame

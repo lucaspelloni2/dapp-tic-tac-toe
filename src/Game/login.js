@@ -5,6 +5,7 @@ import {Redirect} from 'react-router-dom';
 import MetaMaskLogo from './MetamaskLogo';
 import Header from './Header';
 
+
 const Container = styled.div`
   display: flex;
   flex-direction: column;
