@@ -321,7 +321,10 @@ class JoinGame extends Component {
   renderLastCreatedGame(game) {
     console.log(this.state.createdGameName);
     if (this.state.createdGameName) {
-      if (this.state.createdGameName === game.name) {
+      if (
+        this.state.createdGameName === game.name &&
+        game.owner === this.props.account.ethAddress
+      ) {
         return (
           <BellContainer>
             <GameIcon icon={'bell'} />
