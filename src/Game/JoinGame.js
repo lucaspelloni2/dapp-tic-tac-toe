@@ -319,10 +319,10 @@ class JoinGame extends Component {
   }
 
   renderLastCreatedGame(game) {
-    console.log(this.state.createdGameName);
-    if (this.state.createdGameName) {
+    const createdGame = JSON.parse(localStorage.getItem('last')); // this.state.createdGameName
+    if (createdGame) {
       if (
-        this.state.createdGameName === game.name &&
+        createdGame === game.name &&
         game.owner === this.props.account.ethAddress
       ) {
         return (

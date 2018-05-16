@@ -96,6 +96,7 @@ class CreateGame extends Component {
       })
       .on('receipt', res => {
         this.props.fetchGames();
+        localStorage.setItem('last', JSON.stringify(gameName));
         this.state.createdGameName = gameName;
       })
       .on('confirmation', function(gameId) {
