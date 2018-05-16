@@ -247,7 +247,11 @@ class JoinGame extends Component {
       else return this.renderBetButton(game, 'Bet');
 
     if (game.status === 'WAITING_FOR_X' || game.status === 'WAITING_FOR_O')
-      return this.renderJoinButton(game, 'Join');
+      if (game.playerX === this.props.account.ethAddress || game.playerO === this.props.account.ethAddress) {
+        return this.renderBetButton(game, 'Bet');
+      } else {
+        return this.renderJoinButton(game, 'Join');
+      }
   }
 
   getGameStatus(status) {
