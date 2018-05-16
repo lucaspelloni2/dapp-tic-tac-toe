@@ -4,6 +4,7 @@ import DEV from '../Environment';
 import GameIcon from './GameIcon';
 import Select from 'react-select';
 import {Link} from 'react-router-dom';
+import UserAccount from './UserAccount';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -76,6 +77,14 @@ const Tab = styled.div`
   justify-content: center;
   align-items: center;
 `;
+
+const UserContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 20px;
+`;
+
 class Header extends Component {
   constructor() {
     super();
@@ -121,6 +130,7 @@ class Header extends Component {
       return (
         <RightContainer>
           <div>{this.renderTabs()}</div>
+          <div>{this.renderUserAccount()}</div>
           <Select
             simpleValue
             style={{width: 220}}
@@ -155,6 +165,13 @@ class Header extends Component {
           </Link>
         </Tab>
       </TabsContainer>
+    );
+  }
+  renderUserAccount() {
+    return (
+      <UserContainer>
+        <UserAccount account={this.props.account} />
+      </UserContainer>
     );
   }
 

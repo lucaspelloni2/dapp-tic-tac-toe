@@ -6,7 +6,7 @@ import BetsComponent from './BetsComponent';
 import GameSpinner from './GameSpinner';
 import UserProfile from './UserProfile';
 import GameIcon from './GameIcon';
-import Header from "./Header";
+import Header from './Header';
 
 const ParentContainer = styled.div``;
 
@@ -45,8 +45,11 @@ const ButtonContainer = styled.div`
   margin: 10px 0;
 `;
 
-const Button = styled.button`
-  width: 250px;
+const Column = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
 `;
 
 const Separator = styled.div`
@@ -74,16 +77,15 @@ class Lobby extends Component {
           <GameSpinner />
         ) : (
           <div>
-              <Header
-                  account={this.props.account}
-                  addresses={this.props.addresses}
-                  updateUserAccount={async selectedAddress => {
-                      this.props.updateUserAccount(selectedAddress);
-                  }}
-              />
+            <Header
+              account={this.props.account}
+              addresses={this.props.addresses}
+              updateUserAccount={async selectedAddress => {
+                this.props.updateUserAccount(selectedAddress);
+              }}
+            />
             <ParentContainer>
-              <UserProfile username={this.state.username} />
-              <div style={{marginTop: -110, marginBottom: 122}}>
+              <div style={{marginBottom: 130}}>
                 <MetaMaskLogo />
               </div>
               <Container>
@@ -92,29 +94,29 @@ class Lobby extends Component {
                 {/*Please select an option*/}
                 {/*</p>*/}
                 <LobbyContainer>
-                  <ButtonsContainer>
-                    <ButtonContainer>
-                      <ButtonLink
-                        width={250}
-                        location={'games/create'}
-                      >
-                        Create Game
-                        <GameIcon icon={'create'} />
-                      </ButtonLink>
-                    </ButtonContainer>
-                    <ButtonContainer>
-                      <ButtonLink width={250} location={'games'}>
-                        Join Game
-                        <GameIcon icon={'join2'} />
-                      </ButtonLink>
-                    </ButtonContainer>
-                    <ButtonContainer>
-                      <ButtonLink width={250} location={''}>
-                        Logout
-                        <GameIcon icon={'logout'} />
-                      </ButtonLink>
-                    </ButtonContainer>
-                  </ButtonsContainer>
+                  <Column>
+                      <h1>Lobby</h1>
+                    <ButtonsContainer>
+                      <ButtonContainer>
+                        <ButtonLink width={250} location={'games/create'}>
+                          Create Game
+                          <GameIcon icon={'create'} />
+                        </ButtonLink>
+                      </ButtonContainer>
+                      <ButtonContainer>
+                        <ButtonLink width={250} location={'games'}>
+                          Join Game
+                          <GameIcon icon={'join2'} />
+                        </ButtonLink>
+                      </ButtonContainer>
+                      <ButtonContainer>
+                        <ButtonLink width={250} location={''}>
+                          Logout
+                          <GameIcon icon={'logout'} />
+                        </ButtonLink>
+                      </ButtonContainer>
+                    </ButtonsContainer>
+                  </Column>
                   <Separator />
                   <div>
                     <BetsComponent
