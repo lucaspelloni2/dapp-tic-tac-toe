@@ -15,7 +15,7 @@ const Container = styled.div`
 const Overlay = styled.div`
   position: absolute;
   margin-top: 7.5em;
-  width: 475px;
+  width: 490px;
   height: 140px;
   transition: 0.2s ease-in-out;
   background-color: rgba(255, 255, 255, 0.95);
