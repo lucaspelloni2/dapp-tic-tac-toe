@@ -127,12 +127,16 @@ class JoinGame extends Component {
     }
   }
 
-  joinGame(game, playerName) {
+  async joinGame(game, playerName) {
+    const gasAmount = await this.props.contract.methods
+      .joinGame(game.id, this.props.web3.utils.fromAscii(playerName)
+      ).estimateGas({from: this.props.account.ethAddress});
+
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
       .send({
         from: this.props.account.ethAddress,
-        gas: Gas.JOIN_GAME
+        gas: gasAmount
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_JOINED);
@@ -162,12 +166,16 @@ class JoinGame extends Component {
       });
   }
 
-  startGame(game) {
+  async startGame(game) {
+    const gasAmount = await this.props.contract.methods
+      .startGame(game.id)
+      .estimateGas({from: this.props.account.ethAddress});
+
     this.props.contract.methods
       .startGame(game.id)
       .send({
         from: this.props.account.ethAddress,
-        gas: Gas.START_GAME
+        gas: gasAmount
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, game.id, Status.GAME_STARTED);
