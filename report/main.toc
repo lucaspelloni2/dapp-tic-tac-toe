@@ -1,7 +1,3 @@
-\nobreakspace {}\hfill Page\par 
-\contentsline {part}{LIST OF TABLES}{iv}
-\contentsline {part}{LIST OF FIGURES}{v}
-CHAPTER \par 
 \contentsline {chapter}{\numberline {1}Introduction}{1}
 \contentsline {chapter}{\numberline {2}Technologies}{2}
 \contentsline {chapter}{\numberline {3}Implementation of the game}{4}
@@ -12,5 +8,3 @@ CHAPTER \par
 \contentsline {chapter}{\numberline {4}Discusion}{13}
 \contentsline {section}{\numberline {4.1}Challenges and Problems}{13}
 \contentsline {section}{\numberline {4.2}Future work}{13}
-\contentsline {chapter}{\numberline {A}Raw Data}{14}
-\contentsline {part}{REFERENCES}{14}

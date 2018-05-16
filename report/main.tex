@@ -43,12 +43,12 @@
 	language=JavaScript,
 	backgroundcolor=\color{lightgray},
 	extendedchars=true,
-	basicstyle=\footnotesize\ttfamily,
+	basicstyle=\scriptsize\ttfamily\linespread{0},
 	showstringspaces=false,
 	showspaces=false,
 	numbers=left,
-	numberstyle=\footnotesize,
-	numbersep=0.1pt,
+	numberstyle=\scriptsize,
+	numbersep=1pt,
 	tabsize=1,
 	breaklines=true,
 	showtabs=false,
@@ -68,32 +68,8 @@
 
 \maketitle
 \doublespace
-%\include{abstract}
-\dedicationpage{}
-%\include{ack}
 \tableofcontents
-% This puts the word "Page" right justified above everything else.
-\addtocontents{toc}{~\hfill Page\par}
-% Asking LaTeX for a new page here guarantees that the LOF is on a separate page
-% after the TOC ends.
 \newpage
-% Making the LOT and LOF "parts" rather than chapters gets them indented at
-% level -1 according to the chart: top of page 4 of the document at
-% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/tocloft/tocloft.pdf
-\addcontentsline{toc}{part}{LIST OF TABLES}
-\renewcommand{\cftlabel}{Table}
-\listoftables
-% This gets the headers for the LOT right on the first page.  Subsequent pages
-% are handled by the fancyhdr code in the asudis.sty file.
-\addtocontents{lot}{Table~\hfill Page \par}
-\newpage
-\addcontentsline{toc}{part}{LIST OF FIGURES}
-\addtocontents{toc}{CHAPTER \par}
-\renewcommand{\cftlabel}{Figure}
-\listoffigures
-% This gets the headers for the LOF right on the first page.  Subsequent pages
-% are handled by the fancyhdr code in the asudis.sty file.
-\addtocontents{lof}{Figure~\hfill Page \par}
 %-----------------------body
 \doublespace
 \pagenumbering{arabic}
@@ -116,8 +92,6 @@
 \bibliographystyle{asudis}
 \bibliography{dis}}
 \renewcommand{\chaptername}{APPENDIX}
-\appendix
-\include{appendix1}
 \include{vita}
 
 \end{document}
