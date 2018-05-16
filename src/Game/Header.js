@@ -89,7 +89,7 @@ class Header extends Component {
   };
 
   renderRightContent() {
-    if (this.props.addresses) {
+    if (this.props.addresses && DEV) {
       return (
         <RightContainer>
           <Select
