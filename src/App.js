@@ -95,7 +95,7 @@ class App extends Component {
       .getGames()
       .call({from: this.state.account.ethAddress})
       .then(res => {
-        for (let i = 0; i < res.gameIds.length; i++) {
+        for (let i = res.gameIds.length-1; i >= 0 ; i--) {
           let game = this.createGame(res, i);
           if (game !== null) {
             games.push(game);

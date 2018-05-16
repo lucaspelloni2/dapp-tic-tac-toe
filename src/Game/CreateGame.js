@@ -120,7 +120,7 @@ class CreateGame extends Component {
     return (
       <div>
         {this.state.createdGameName ? (
-          <Redirect to={`/games?${this.state.createdGameName}`} />
+          <Redirect to={`/games?gameName=${this.state.createdGameName}`} />
         ) : (
           <div>
             <Header

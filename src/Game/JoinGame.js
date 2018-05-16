@@ -10,8 +10,8 @@ import GameIcon from './GameIcon';
 import {Redirect} from 'react-router';
 import StatusRender from './StatusRender';
 import GAME_STATUS from './GameStatus';
-import Gas from "./Gas";
-import Header from "./Header";
+import Gas from './Gas';
+import Header from './Header';
 
 const Container = styled.div`
   display: flex;
@@ -96,12 +96,35 @@ const StatusContainer = styled.div`
   );
 `;
 
+const BellText = styled.p`
+  margin: 0;
+`;
+
+const BellContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+  color: #02ff31;
+  border-bottom: 4px solid #02d4a5;
+`;
+
 class JoinGame extends Component {
   constructor() {
     super();
     this.state = {
-      receivedGame: null
+      receivedGame: null,
+      createGameName: null
     };
+  }
+
+  componentDidMount() {
+    const params = new URLSearchParams(this.props.location.search);
+    const createdGameName = params.get('gameName');
+
+    if (createdGameName) {
+      this.setState({createdGameName: createdGameName});
+    }
   }
 
   joinGame(game, playerName) {
@@ -247,7 +270,10 @@ class JoinGame extends Component {
       else return this.renderBetButton(game, 'Bet');
 
     if (game.status === 'WAITING_FOR_X' || game.status === 'WAITING_FOR_O')
-      if (game.playerX === this.props.account.ethAddress || game.playerO === this.props.account.ethAddress) {
+      if (
+        game.playerX === this.props.account.ethAddress ||
+        game.playerO === this.props.account.ethAddress
+      ) {
         return this.renderBetButton(game, 'Bet');
       } else {
         return this.renderJoinButton(game, 'Join');
@@ -292,6 +318,24 @@ class JoinGame extends Component {
     localStorage.setItem('txs', JSON.stringify(transactions));
   }
 
+  renderLastCreatedGame(game) {
+    console.log(this.state.createdGameName);
+    if (this.state.createdGameName) {
+      if (this.state.createdGameName === game.name) {
+        return (
+          <BellContainer>
+            <GameIcon icon={'bell'} />
+            <BellText>Last</BellText>
+          </BellContainer>
+        );
+      } else {
+        return null;
+      }
+    } else {
+      return null;
+    }
+  }
+
   render() {
     return (
       <div>
@@ -305,13 +349,13 @@ class JoinGame extends Component {
           ) : null}
         </div>
         <div>
-            <Header
-                account={this.props.account}
-                addresses={this.props.addresses}
-                updateUserAccount={async selectedAddress => {
-                    this.props.updateUserAccount(selectedAddress);
-                }}
-            />
+          <Header
+            account={this.props.account}
+            addresses={this.props.addresses}
+            updateUserAccount={async selectedAddress => {
+              this.props.updateUserAccount(selectedAddress);
+            }}
+          />
           <MetaMaskLogo />
           <ParentContainer>
             <Container>
@@ -325,6 +369,7 @@ class JoinGame extends Component {
                 <Table>
                   <tbody>
                     <tr>
+                      <th />
                       <th>
                         <Title>Game Id</Title>
                       </th>
@@ -343,6 +388,9 @@ class JoinGame extends Component {
                   <tbody>
                     {this.props.games.map(game => (
                       <tr key={game.id}>
+                        <td style={{width: 8}}>
+                          {this.renderLastCreatedGame(game)}
+                        </td>
                         <td>
                           <GameId>{game.id}</GameId>
                         </td>
@@ -371,13 +419,6 @@ class JoinGame extends Component {
             </Container>
             <MyTransactions marginTop={5} web3={this.props.web3} />
           </ParentContainer>
-
-          <ArrowWithPath
-            top={50}
-            location={'/games/' + this.props.account.ethAddress}
-          >
-            Create a game!
-          </ArrowWithPath>
         </div>
       </div>
     );
