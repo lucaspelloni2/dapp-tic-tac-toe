@@ -1,0 +1,76 @@
+\subsection{Check for Winner}\label{subsec:check}
+\begin{lstlisting}[caption={Check for Winner Function on the Smart Contract}, label={lst:check},language=JavaScript,escapechar=|]
+function checkForWinner(uint x, uint y, uint gameId, address currentPlayer) private {
+	Game storage game = games[gameId];
+	
+	//is winning already possible?
+	if (game.moveCounter < 2 * boardSize - 1) |\label{line2:win}|
+		return;
+	}
+	
+	SquareState symbol = game.board[y][x];
+	
+	//check column
+	for (uint i = 0; i < boardSize; i++) { |\label{line2:check1}|
+		if (game.board[i][x] != symbol) {
+			break;
+		}
+		else if (i == (boardSize - 1)) {
+			game.winnerAddr = currentPlayer;
+			game.state = getGameState(symbol);
+			payoutBets(game.gameId); |\label{line2:pay1}|
+			return;
+		}
+	}
+	
+	//check row
+	for (i = 0; i < boardSize; i++) {	|\label{line2:check2}|
+		if (game.board[y][i] != symbol) {
+			break;
+		}
+		else if (i == (boardSize - 1)) {
+			game.winnerAddr = currentPlayer;
+			game.state = getGameState(symbol);
+			payoutBets(game.gameId); |\label{line2:pay2}|
+			return;
+		}
+	}
+	
+	//check diagonal: (x-y) 0-0, 1-1, 2-2 
+	if (x == y) {					|\label{line2:check3}|
+		for (i = 0; i < boardSize; i++) {
+			if (game.board[i][i] != symbol) {
+				break;
+			}
+			else if (i == (boardSize - 1)) {
+				game.winnerAddr = currentPlayer;
+				game.state = getGameState(symbol);
+				payoutBets(game.gameId); |\label{line2:pay3}|
+				return;
+			}
+		}
+	}
+	
+	// check antidiagonal: (x-y) 2-0, 1-1, 0-2
+	if (x + y == (boardSize - 1)) {			|\label{line2:check4}|
+		for (i = 0; i < boardSize; i++) {
+			if (game.board[i][boardSize - 1 - i] != symbol) {
+				break;
+			}
+			else if (i == (boardSize - 1)) {
+				game.winnerAddr = currentPlayer;
+				game.state = getGameState(symbol);
+				payoutBets(game.gameId);|\label{line2:pay4}|
+				return;
+			}
+		}
+	}
+	//check for draw
+	if (game.moveCounter == boardSize * boardSize) { |\label{line2:check5}|
+		game.state = GameState.DRAW;
+		payoutBets(game.gameId); |\label{line2:pay5}|
+	}
+}
+\end{lstlisting}
+
+The logic for the evaluating the winner function is shown in Listing \ref{lst:check}. The function stop if the number of moves done are not enough to possibly have a winner (line \ref{line2:win}). After it goes through all possible combination of winning and checks if there are the same symbol a line (line \ref{line2:check1}, \ref{line2:check2}, \ref{line2:check3} and \ref{line2:check4}). If it does not found any winning row it checks at last for draw (line \ref{line2:check5}). Is there a winning line found or the game is a draw, the payout function gets called (line \ref{line2:pay1}, \ref{line2:pay2}, \ref{line2:pay3}, \ref{line2:pay4} and \ref{line2:pay5}).

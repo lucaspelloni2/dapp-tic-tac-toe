@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  16 MAY 2018 19:55
+This is pdfTeX, Version 3.14159265-2.6-1.40.19 (TeX Live 2018) (preloaded format=pdflatex 2018.5.15)  16 MAY 2018 20:57
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -275,8 +275,9 @@ File: color.cfg 2016/01/02 v1.6 sample color configuration
 )
 Package color Info: Driver file: pdftex.def on input line 147.
 )
-(./main.aux (./chapter1.aux) (./chapter2.aux) (./chapter3.aux) (./chapter4.aux)
-(./chapter5.aux) (./chapter6.aux) (./appendix1.aux) (./vita.aux))
+(./main.aux (./chapter1.aux) (./chapter2.aux) (./chapter3.aux)
+(./chapter3_code1.aux) (./chapter3_code2.aux) (./chapter4.aux) (./chapter5.aux)
+(./chapter6.aux) (./appendix1.aux) (./vita.aux))
 \openout1 = `main.aux'.
 
 LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 58.
@@ -454,12 +455,7 @@ LaTeX Font Info:    Try loading font information for U+msb on input line 2.
 
 (/usr/local/texlive/2018/texmf-dist/tex/latex/amsfonts/umsb.fd
 File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \hbox (badness 10000) in paragraph at lines 13--13
- []  
- []
-
-)
+))
 \tf@toc=\write4
 \openout4 = `main.toc'.
 
@@ -619,20 +615,33 @@ Underfull \hbox (badness 10000) in paragraph at lines 14--15
 
  []
 
-LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
-(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 19.
-[4]
-<res/sc_uml.jpeg, id=53, 1442.38875pt x 1044.90375pt>
+<res/sc_uml.jpeg, id=48, 1442.38875pt x 1044.90375pt>
 File: res/sc_uml.jpeg Graphic file (type jpg)
 <use res/sc_uml.jpeg>
-Package pdftex.def Info: res/sc_uml.jpeg  used on input line 66.
+Package pdftex.def Info: res/sc_uml.jpeg  used on input line 22.
 (pdftex.def)             Requested size: 317.3265pt x 229.87953pt.
- [5]) [6 <./res/sc_uml.jpeg>]
+) [4 <./res/sc_uml.jpeg>]
+\openout2 = `chapter3_code1.aux'.
+
+ (./chapter3_code1.tex
+LaTeX Font Info:    Font shape `OT1/cmtt/bx/n' in size <10> not available
+(Font)              Font shape `OT1/cmtt/m/n' tried instead on input line 3.
+ [5
+
+
+]) [6]
+\openout2 = `chapter3_code2.aux'.
+
+ (./chapter3_code2.tex
+[7
+
+
+] [8]) [9]
 \openout2 = `chapter4.aux'.
 
  (./chapter4.tex
 Chapter 4.
-) [7
+) [10
 
 
 
@@ -649,7 +658,7 @@ No file main.bbl.
 
 (./appendix1.tex
 Appendix A.
-) [8
+) [11
 
 
 
@@ -661,28 +670,28 @@ Appendix A.
 \openout2 = `vita.aux'.
 
  (./vita.tex) (./main.aux (./chapter1.aux) (./chapter2.aux)
-(./chapter3.aux) (./chapter4.aux) (./chapter5.aux) (./chapter6.aux)
-(./appendix1.aux) (./vita.aux)) ) 
+(./chapter3.aux) (./chapter3_code1.aux) (./chapter3_code2.aux) (./chapter4.aux)
+(./chapter5.aux) (./chapter6.aux) (./appendix1.aux) (./vita.aux)) ) 
 Here is how much of TeX's memory you used:
- 5998 strings out of 492649
- 80111 string characters out of 6129622
- 230165 words of memory out of 5000000
- 9718 multiletter control sequences out of 15000+600000
- 11458 words of font info for 45 fonts, out of 8000000 for 9000
+ 6039 strings out of 492649
+ 80715 string characters out of 6129622
+ 247011 words of memory out of 5000000
+ 9744 multiletter control sequences out of 15000+600000
+ 11627 words of font info for 46 fonts, out of 8000000 for 9000
  1141 hyphenation exceptions out of 8191
- 41i,12n,43p,785b,1800s stack positions out of 5000i,500n,10000p,200000b,80000s
-</usr/local/texlive/2018/texmf-dist/fonts/type
-1/public/amsfonts/cm/cmbx12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1
-/public/amsfonts/cm/cmr10.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/p
-ublic/amsfonts/cm/cmr12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/pub
-lic/amsfonts/cm/cmr7.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public
-/amsfonts/cm/cmr8.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/am
-sfonts/cm/cmsl12.pfb></usr/local/texlive/2018/texmf-dist/fonts/type1/public/ams
-fonts/cm/cmtt10.pfb>
-Output written on main.pdf (13 pages, 598560 bytes).
+ 41i,12n,43p,851b,1808s stack positions out of 5000i,500n,10000p,200000b,80000s
+</usr/local/
+texlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb></usr/local/t
+exlive/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb></usr/local/tex
+live/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/local/texli
+ve/2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb></usr/local/texlive/
+2018/texmf-dist/fonts/type1/public/amsfonts/cm/cmr8.pfb></usr/local/texlive/201
+8/texmf-dist/fonts/type1/public/amsfonts/cm/cmsl12.pfb></usr/local/texlive/2018
+/texmf-dist/fonts/type1/public/amsfonts/cm/cmtt10.pfb>
+Output written on main.pdf (16 pages, 606963 bytes).
 PDF statistics:
- 91 PDF objects out of 1000 (max. 8388607)
- 61 compressed objects within 1 object stream
+ 100 PDF objects out of 1000 (max. 8388607)
+ 67 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  21 words of extra memory for PDF output out of 10000 (max. 10000000)
 

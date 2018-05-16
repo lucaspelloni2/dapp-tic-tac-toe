@@ -10,10 +10,10 @@ CHAPTER \par
 \contentsline {section}{\numberline {2.4}Ganache}{2}
 \contentsline {chapter}{\numberline {3}Implementation of the game}{3}
 \contentsline {section}{\numberline {3.1}The Smart Contract}{3}
-\contentsline {subsection}{\numberline {3.1.1}1.Play Move Function\\}{4}
-\contentsline {section}{\numberline {3.2}Game Walk-through}{6}
-\contentsline {chapter}{\numberline {4}Discusion}{7}
-\contentsline {section}{\numberline {4.1}Challenges and Problems}{7}
-\contentsline {section}{\numberline {4.2}Future work}{7}
-\contentsline {chapter}{\numberline {A}Raw Data}{8}
-\contentsline {part}{REFERENCES}{8}
+\contentsline {subsection}{\numberline {3.1.1}Play Move Function}{5}
+\contentsline {subsection}{\numberline {3.1.2}Check for Winner}{7}
+\contentsline {chapter}{\numberline {4}Discusion}{10}
+\contentsline {section}{\numberline {4.1}Challenges and Problems}{10}
+\contentsline {section}{\numberline {4.2}Future work}{10}
+\contentsline {chapter}{\numberline {A}Raw Data}{11}
+\contentsline {part}{REFERENCES}{11}
