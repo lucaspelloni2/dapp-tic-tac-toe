@@ -5,14 +5,16 @@ import MyTransactions from './MyTransactions';
 import MetaMaskLogo from './MetamaskLogo';
 import Status from './Status';
 import Transaction from './Transaction';
-import ArrowWithPath from './ArrowWithPath';
 import Gas from './Gas';
+import Header from './Header';
+import {Redirect} from 'react-router-dom';
 
 const CreateGameContainer = styled.div`
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  margin-bottom: -49px;
 `;
 
 const Container = styled.div`
@@ -23,19 +25,21 @@ const Container = styled.div`
   width: ${props => props.width}px;
   padding: 1.5rem 2.5rem;
   text-align: center;
+
+  box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
+  background-image: radial-gradient(
+    farthest-side at 5% 174px,
+    #022a9b 0,
+    #03b8d4 1200px
+  );
 `;
 
 const LoginRow = styled.div`
   display: flex;
   height: 5rem;
-  padding-top: 1rem;
+  padding: 0.5rem 0;
   align-items: center;
   width: 100%;
-`;
-
-const SubTitle = styled.p`
-  font-size: 22px;
-  margin: 0 auto;
 `;
 
 const InputLabel = styled.label`
@@ -50,14 +54,8 @@ const InputField = styled.input`
   margin-left: auto;
 `;
 
-const ButtonLinkContainer = styled.div`
-  margin-top: 20px;
-  margin-right: -88px;
-`;
-
 const FieldsContainer = styled.div`
   width: 100%;
-  margin-right: 88px;
 `;
 
 const UserData = styled.p`
@@ -76,9 +74,9 @@ class CreateGame extends Component {
     super();
     this.state = {
       gameName: null,
-      clicked: false
+      clicked: false,
+      createdGameName: null
     };
-
   }
 
   handleChange(e) {
@@ -97,11 +95,11 @@ class CreateGame extends Component {
         this.addNewTx(tx, this.state.gameName);
       })
       .on('receipt', res => {
-        console.log(res);
         this.props.fetchGames();
+        this.state.createdGameName = gameName;
       })
       .on('confirmation', function(gameId) {
-       // console.log('new game created! ' + gameId);
+        // console.log('new game created! ' + gameId);
       });
   }
 
@@ -121,68 +119,78 @@ class CreateGame extends Component {
   render(props) {
     return (
       <div>
-        <MetaMaskLogo />
-        <ParentContainer>
-          <CreateGameContainer>
-            <Container width={640}>
-              <h1>Create a new Game</h1>
-              <SubTitle>Please fill the form below</SubTitle>
-              <FieldsContainer>
-                <LoginRow>
-                  <Context.Consumer>
-                    {account => (
+        {this.state.createdGameName ? (
+          <Redirect to={`/games?${this.state.createdGameName}`} />
+        ) : (
+          <div>
+            <Header
+              account={this.props.account}
+              addresses={this.props.addresses}
+              updateUserAccount={async selectedAddress => {
+                this.props.updateUserAccount(selectedAddress);
+              }}
+            />
+            <MetaMaskLogo />
+            <ParentContainer>
+              <CreateGameContainer>
+                <h1>Create a new Game</h1>
+                <Container width={640}>
+                  <FieldsContainer>
+                    <LoginRow>
+                      <Context.Consumer>
+                        {account => (
+                          <InputLabel>
+                            Address
+                            <UserData>{account.ethAddress}</UserData>
+                          </InputLabel>
+                        )}
+                      </Context.Consumer>
+                    </LoginRow>
+
+                    <LoginRow>
+                      <Context.Consumer>
+                        {account => (
+                          <InputLabel>
+                            {' '}
+                            Balance (ETH)
+                            <UserData>{account.ethBalance}</UserData>
+                          </InputLabel>
+                        )}
+                      </Context.Consumer>
+                    </LoginRow>
+
+                    <LoginRow>
                       <InputLabel>
-                        Address
-                        <UserData>{account.ethAddress}</UserData>
+                        Player name
+                        <UserData>{localStorage.getItem('username')}</UserData>
                       </InputLabel>
-                    )}
-                  </Context.Consumer>
-                </LoginRow>
+                    </LoginRow>
 
-                <LoginRow>
-                  <Context.Consumer>
-                    {account => (
+                    <LoginRow>
                       <InputLabel>
-                        {' '}
-                        Balance (ETH)
-                        <UserData>{account.ethBalance}</UserData>
+                        Game name
+                        <InputField
+                          placeholder={'Game name'}
+                          onChange={this.handleChange.bind(this)}
+                        />
                       </InputLabel>
-                    )}
-                  </Context.Consumer>
-                </LoginRow>
-
-                <LoginRow>
-                  <InputLabel>
-                    Player name
-                    <UserData>{localStorage.getItem('username')}</UserData>
-                  </InputLabel>
-                </LoginRow>
-
-                <LoginRow>
-                  <InputLabel>
-                    Game name
-                    <InputField
-                      placeholder={'Game name'}
-                      onChange={this.handleChange.bind(this)}
-                    />
-                  </InputLabel>
-                </LoginRow>
-
-                <ButtonLinkContainer>
+                    </LoginRow>
+                  </FieldsContainer>
+                </Container>
+                <LoginRow style={{justifyContent: 'center'}}>
                   <button
                     onClick={() => {
-                      this.createGame(this.state.gameName)
+                      this.createGame(this.state.gameName);
                     }}
                   >
                     Create Game
                   </button>
-                </ButtonLinkContainer>
-              </FieldsContainer>
-            </Container>
-          </CreateGameContainer>
-          <MyTransactions web3={this.props.web3} />
-        </ParentContainer>
-        <ArrowWithPath location={'/games'}>Join a game!</ArrowWithPath>
+                </LoginRow>
+              </CreateGameContainer>
+              <MyTransactions web3={this.props.web3} />
+            </ParentContainer>
+          </div>
+        )}
       </div>
     );
   }

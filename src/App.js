@@ -200,7 +200,7 @@ class App extends Component {
                           web3={this.state.web3}
                           addresses={this.state.addresses}
                           updateUserAccount={async selectedAddress => {
-                              await this.fetchUserInfo(selectedAddress);
+                            await this.fetchUserInfo(selectedAddress);
                           }}
                         />
                       )}
@@ -264,6 +264,10 @@ class App extends Component {
                           account={this.state.account}
                           fetchGames={async () => {
                             await this.fetchGames();
+                          }}
+                          addresses={this.state.addresses}
+                          updateUserAccount={async selectedAddress => {
+                            await this.fetchUserInfo(selectedAddress);
                           }}
                         />
                       )}
