@@ -1,0 +1,39 @@
+\subsection{Payout}\label{subsec:payout}
+\begin{lstlisting}[caption={Payout Function on the Smart Contract}, label={lst:payout},language=JavaScript,escapechar=|]
+function payoutBets(uint gameId) internal {
+	for (uint i = 0; i < openBetIds.length; i++) |\label{line3:loop1}|
+		Bet storage iBet = bets[openBetIds[i]];
+   
+		if (iBet.gameId == gameId) { |\label{line3:loop2}|
+			if (iBet.state == BetState.FIXED) {
+   
+				// bettorOnX wins
+				if (games[gameId].state == GameState.WINNER_X) {
+					(iBet.bettorOnXAddr).transfer(SafeMath.mul(2, iBet.value)); |\label{line3:safe1}|
+   
+				// bettorOnO wins
+				} else if (games[gameId].state == GameState.WINNER_O) {
+					(iBet.bettorOnOAddr).transfer(SafeMath.mul(2, iBet.value)); |\label{line3:safe2}|
+   
+				// draw
+				} else {
+					(iBet.bettorOnOAddr).transfer(iBet.value);
+					(iBet.bettorOnXAddr).transfer(iBet.value);
+				}
+				iBet.state = BetState.PAYEDOUT;
+			}
+   
+			// handle not fixed bets: transfer value back to owner
+			if (iBet.state == BetState.MISSING_O_BETTOR) { |\label{line3:back1}|
+			   (iBet.bettorOnXAddr).transfer(iBet.value);
+			   iBet.state = BetState.WITHDRAWN;
+			}
+			if (iBet.state == BetState.MISSING_X_BETTOR) {
+				(iBet.bettorOnOAddr).transfer(iBet.value);
+				iBet.state = BetState.WITHDRAWN;
+			} |\label{line3:back2}|
+		}
+	}
+}
+\end{lstlisting}
+If there is a winner or a draw the tokens reserved for the particular game get paid out with the payout method describe in Listing \ref{lst:payout}. As it can have multiple bets on one game the function runs through all bets checking if they are referencing on the finished game (line \ref{line3:loop1}-\ref{line3:loop2}). SafeMath is used for the payout to assure the amount is correct and prevent overflow (line \ref{line3:safe1} and \ref{line3:safe2}). When a bettor has not found an opponent to go along with his bet, the function pays back the value to the origin bettor (line \ref{line3:back1}-\ref{line3:back2}). 

@@ -12,8 +12,9 @@ CHAPTER \par
 \contentsline {section}{\numberline {3.1}The Smart Contract}{3}
 \contentsline {subsection}{\numberline {3.1.1}Play Move Function}{5}
 \contentsline {subsection}{\numberline {3.1.2}Check for Winner}{7}
-\contentsline {chapter}{\numberline {4}Discusion}{10}
-\contentsline {section}{\numberline {4.1}Challenges and Problems}{10}
-\contentsline {section}{\numberline {4.2}Future work}{10}
-\contentsline {chapter}{\numberline {A}Raw Data}{11}
-\contentsline {part}{REFERENCES}{11}
+\contentsline {subsection}{\numberline {3.1.3}Payout}{10}
+\contentsline {chapter}{\numberline {4}Discusion}{12}
+\contentsline {section}{\numberline {4.1}Challenges and Problems}{12}
+\contentsline {section}{\numberline {4.2}Future work}{12}
+\contentsline {chapter}{\numberline {A}Raw Data}{13}
+\contentsline {part}{REFERENCES}{13}
