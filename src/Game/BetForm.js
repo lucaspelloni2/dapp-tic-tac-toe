@@ -301,8 +301,8 @@ class BetForm extends Component {
               <FormRow>
                 <Label>The game you selected: </Label>
                 <ChildModalElement>
-                  {this.state.selectedGame.name} (ID:{' '}
-                  {this.state.selectedGame.id})
+                  {this.state.selectedGame.name.replace(/\u0000/g, '')} (ID:{' '}
+                  {this.state.selectedGame.gameId})
                 </ChildModalElement>
               </FormRow>
               <FormRow>
@@ -358,12 +358,12 @@ class BetForm extends Component {
               value={
                 this.state.selectedGame
                   ? {
-                      label: this.state.selectedGame.name,
+                      label: this.state.selectedGame.name.replace(/\u0000/g, ''),
                       value: this.state.selectedGame
                     }
                   : this.props.game
                     ? {
-                        label: this.props.game.name,
+                        label: this.props.game.name.replace(/\u0000/g, ''),
                         value: this.props.game
                       }
                     : null
