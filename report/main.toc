@@ -4,17 +4,13 @@
 CHAPTER \par 
 \contentsline {chapter}{\numberline {1}Introduction}{1}
 \contentsline {chapter}{\numberline {2}Technologies}{2}
-\contentsline {section}{\numberline {2.1}Solidity}{2}
-\contentsline {section}{\numberline {2.2}Web3.js}{2}
-\contentsline {section}{\numberline {2.3}MetaMask}{2}
-\contentsline {section}{\numberline {2.4}Ganache}{2}
-\contentsline {chapter}{\numberline {3}Implementation of the game}{3}
-\contentsline {section}{\numberline {3.1}The Smart Contract}{3}
-\contentsline {subsection}{\numberline {3.1.1}Play Move Function}{5}
-\contentsline {subsection}{\numberline {3.1.2}Check for Winner}{7}
-\contentsline {subsection}{\numberline {3.1.3}Payout}{10}
-\contentsline {chapter}{\numberline {4}Discusion}{12}
-\contentsline {section}{\numberline {4.1}Challenges and Problems}{12}
-\contentsline {section}{\numberline {4.2}Future work}{12}
-\contentsline {chapter}{\numberline {A}Raw Data}{13}
-\contentsline {part}{REFERENCES}{13}
+\contentsline {chapter}{\numberline {3}Implementation of the game}{4}
+\contentsline {section}{\numberline {3.1}The Smart Contract}{4}
+\contentsline {subsection}{\numberline {3.1.1}Play Move Function}{6}
+\contentsline {subsection}{\numberline {3.1.2}Check for Winner}{8}
+\contentsline {subsection}{\numberline {3.1.3}Payout}{11}
+\contentsline {chapter}{\numberline {4}Discusion}{13}
+\contentsline {section}{\numberline {4.1}Challenges and Problems}{13}
+\contentsline {section}{\numberline {4.2}Future work}{13}
+\contentsline {chapter}{\numberline {A}Raw Data}{14}
+\contentsline {part}{REFERENCES}{14}
