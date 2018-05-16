@@ -75,6 +75,7 @@ class Login extends Component {
   }
 
   handleChange(e) {
+      // TODO: SEVI save in the local storage different user names and addresses
     this.setState({username: e.target.value, clickedLogin: false});
     localStorage.setItem('username', e.target.value);
   }
