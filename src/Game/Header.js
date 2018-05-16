@@ -143,6 +143,13 @@ class Header extends Component {
           />
         </RightContainer>
       );
+    } else {
+      return (
+        <RightContainer>
+          <div>{this.renderTabs()}</div>
+          <div>{this.renderUserAccount()}</div>
+        </RightContainer>
+      );
     }
   }
 

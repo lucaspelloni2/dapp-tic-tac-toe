@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import GameIcon from './GameIcon';
-import GameTooltip from './ToolTip';
+import DEV from '../Environment';
 
 const Container = styled.div`
   display: flex;
@@ -24,9 +24,10 @@ const Overlay = styled.div`
   padding: 10px 16px;
   line-height: 20px;
   font-size: 14px;
-
   word-break: break-all;
   border-radius: 8px;
+
+  right: ${DEV ? null : '-50%'};
 `;
 
 const UserInfo = styled.div`
