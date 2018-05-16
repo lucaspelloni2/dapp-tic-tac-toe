@@ -74,7 +74,13 @@ class Lobby extends Component {
           <GameSpinner />
         ) : (
           <div>
-            <Header/>
+              <Header
+                  account={this.props.account}
+                  addresses={this.props.addresses}
+                  updateUserAccount={async selectedAddress => {
+                      this.props.updateUserAccount(selectedAddress);
+                  }}
+              />
             <ParentContainer>
               <UserProfile username={this.state.username} />
               <div style={{marginTop: -110, marginBottom: 122}}>

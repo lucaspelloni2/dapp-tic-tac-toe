@@ -58,9 +58,10 @@ class Header extends Component {
   }
 
   componentDidMount() {
-    if (this.props.account) {
+    if (this.props.account && DEV) {
       this.setState({selectedAddress: this.props.account.ethAddress});
     }
+    console.log(this.props.account);
   }
 
   renderLeftContent() {

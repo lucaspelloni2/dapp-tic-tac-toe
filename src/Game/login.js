@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import Context from './Context';
 import {Redirect} from 'react-router-dom';
 import MetaMaskLogo from './MetamaskLogo';
-import Transaction from './Transaction';
+import Header from './Header';
 
 const Container = styled.div`
   display: flex;
@@ -103,75 +103,84 @@ class Login extends Component {
 
   render() {
     return (
-      <Container>
-        <MetaMaskLogo />
-        <LoginContainer>
-          <h1>Tic Tac Toe</h1>
-          <SubTitle>Please insert your username</SubTitle>
-          <FieldsContainer>
-            <LoginRow>
-              <Context.Consumer>
-                {account => (
-                  <InputLabel>
-                    Address
-                    <InputField
-                      style={{backgroundColor: 'gainsboro'}}
-                      disabled
-                      value={account.ethAddress}
-                    />
-                  </InputLabel>
-                )}
-              </Context.Consumer>
-            </LoginRow>
+      <div>
+        <Header
+          account={this.props.account}
+          addresses={this.props.addresses}
+          updateUserAccount={async selectedAddress => {
+            this.props.updateUserAccount(selectedAddress);
+          }}
+        />
+        <Container>
+          <MetaMaskLogo />
+          <LoginContainer>
+            <h1>Tic Tac Toe</h1>
+            <SubTitle>Please insert your username</SubTitle>
+            <FieldsContainer>
+              <LoginRow>
+                <Context.Consumer>
+                  {account => (
+                    <InputLabel>
+                      Address
+                      <InputField
+                        style={{backgroundColor: 'gainsboro'}}
+                        disabled
+                        value={account.ethAddress}
+                      />
+                    </InputLabel>
+                  )}
+                </Context.Consumer>
+              </LoginRow>
 
-            <LoginRow>
-              <Context.Consumer>
-                {account => (
-                  <InputLabel>
-                    {' '}
-                    Balance (ETH)
-                    <InputField
-                      style={{backgroundColor: 'gainsboro'}}
-                      disabled
-                      value={account.ethBalance}
-                    />
-                  </InputLabel>
-                )}
-              </Context.Consumer>
-            </LoginRow>
+              <LoginRow>
+                <Context.Consumer>
+                  {account => (
+                    <InputLabel>
+                      {' '}
+                      Balance (ETH)
+                      <InputField
+                        style={{backgroundColor: 'gainsboro'}}
+                        disabled
+                        value={account.ethBalance}
+                      />
+                    </InputLabel>
+                  )}
+                </Context.Consumer>
+              </LoginRow>
 
-            <LoginRow>
-              <InputLabel>
-                Username
-                <InputField
-                  placeholder={'Username'}
-                  onChange={this.handleChange.bind(this)}
-                  onKeyPress={event => {
-                    if (event.key === 'Enter') {
-                      this.setState({
-                        clickedLogin: true
-                      });
-                    }
+              <LoginRow>
+                <InputLabel>
+                  Username
+                  <InputField
+                    placeholder={'Username'}
+                    onChange={this.handleChange.bind(this)}
+                    onKeyPress={event => {
+                      if (event.key === 'Enter') {
+                        this.setState({
+                          clickedLogin: true
+                        });
+                      }
+                    }}
+                  />
+                </InputLabel>
+              </LoginRow>
+              <ButtonLinkContainer>
+                {this.state.clickedLogin && this.login()}
+                <button
+                  onClick={() => {
+                    //this.insertNewUser(e.target.value, this.props.account.ethAddress);
+                    this.setState({
+                      clickedLogin: true
+                    });
                   }}
-                />
-              </InputLabel>
-            </LoginRow>
-            <ButtonLinkContainer>
-              {this.state.clickedLogin && this.login()}
-              <button
-                onClick={() => {
-                  //this.insertNewUser(e.target.value, this.props.account.ethAddress);
-                  this.setState({
-                    clickedLogin: true
-                  });
-                }}
-              >
-                Login
-              </button>
-            </ButtonLinkContainer>
-          </FieldsContainer>
-        </LoginContainer>
-      </Container>
+                >
+                  Login
+                </button>
+              </ButtonLinkContainer>
+            </FieldsContainer>
+          </LoginContainer>
+        </Container>
+      </div>
     );
   }
 }

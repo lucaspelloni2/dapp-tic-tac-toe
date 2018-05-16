@@ -15,6 +15,7 @@ import GameBoard from './Game/GameBoard/GameBoard';
 import GameScreen from './Game/GameScreen';
 import StatusRender from './Game/StatusRender';
 import DEV from './Environment';
+import GameSpinner from './Game/GameSpinner';
 
 let web3 = window.web3;
 
@@ -59,7 +60,8 @@ class App extends Component {
       games: [],
       addresses: [],
       selectedAddress: null,
-      gamesLoading: true
+      gamesLoading: true,
+      userLoading: true
     };
   }
 
@@ -68,7 +70,6 @@ class App extends Component {
     this.setState({addresses: addresses});
     await this.fetchUserInfo();
     await this.fetchGames();
-
     // this.interval = setInterval(async () => {
     //   // if (!this.isSomeGameLoading()) {
     //     await this.fetchGames();
@@ -85,6 +86,7 @@ class App extends Component {
     account.ethAddress = address;
     this.setState({account: account});
     await this.getUserBalance(address);
+    this.setState({userLoading: false});
   }
 
   fetchGames() {
@@ -176,118 +178,135 @@ class App extends Component {
 
   render() {
     return (
-      <Context.Provider value={this.state.account}>
-        <Container>
-          <BrowserRouter>
-            <div>
-              <Switch>
-                <Route
-                  path="/lobby"
-                  exact
-                  render={props => (
-                    <Lobby
-                      {...props}
-                      contract={this.state.contract}
-                      account={this.state.account}
-                      games={this.state.games}
-                      gamesLoading={this.state.gamesLoading}
-                      web3={this.state.web3}
+      <div>
+        {this.state.userLoading ? (
+          <GameSpinner />
+        ) : (
+          <Context.Provider value={this.state.account}>
+            <Container>
+              <BrowserRouter>
+                <div>
+                  <Switch>
+                    <Route
+                      path="/lobby"
+                      exact
+                      render={props => (
+                        <Lobby
+                          {...props}
+                          contract={this.state.contract}
+                          account={this.state.account}
+                          games={this.state.games}
+                          gamesLoading={this.state.gamesLoading}
+                          web3={this.state.web3}
+                          addresses={this.state.addresses}
+                          updateUserAccount={async selectedAddress => {
+                              await this.fetchUserInfo(selectedAddress);
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Route
-                  path="/login"
-                  exact
-                  render={props => (
-                    <Login {...props} account={this.state.account} />
-                  )}
-                />
-                <Route
-                  path="/games"
-                  exact
-                  render={props => (
-                    <JoinGame
-                      {...props}
-                      web3={this.state.web3}
-                      contract={this.state.contract}
-                      account={this.state.account}
-                      games={this.state.games}
-                      gamesLoading={this.state.gamesLoading}
-                      setLoading={async (game, isLoading) => {
-                        this.setState({
-                          games: this.state.games.map(g => {
-                            if (game.id === g.id) {
-                              return Object.assign({}, game, {
-                                isLoading: isLoading
-                              });
+                    <Route
+                      path="/login"
+                      exact
+                      render={props => (
+                        <Login
+                          {...props}
+                          account={this.state.account}
+                          addresses={this.state.addresses}
+                          updateUserAccount={async selectedAddress => {
+                            await this.fetchUserInfo(selectedAddress);
+                          }}
+                        />
+                      )}
+                    />
+                    <Route
+                      path="/games"
+                      exact
+                      render={props => (
+                        <JoinGame
+                          {...props}
+                          web3={this.state.web3}
+                          contract={this.state.contract}
+                          account={this.state.account}
+                          games={this.state.games}
+                          gamesLoading={this.state.gamesLoading}
+                          setLoading={async (game, isLoading) => {
+                            this.setState({
+                              games: this.state.games.map(g => {
+                                if (game.id === g.id) {
+                                  return Object.assign({}, game, {
+                                    isLoading: isLoading
+                                  });
+                                }
+                                return g;
+                              })
+                            });
+                            if (!isLoading) {
+                              await this.fetchGames();
+                              console.log('fetching games..');
                             }
-                            return g;
-                          })
-                        });
-                        if (!isLoading) {
-                          await this.fetchGames();
-                          console.log('fetching games..');
-                        }
-                      }}
-                      addresses={this.state.addresses}
-                      updateUserAccount={async selectedAddress => {
-                        await this.fetchUserInfo(selectedAddress);
-                      }}
+                          }}
+                          addresses={this.state.addresses}
+                          updateUserAccount={async selectedAddress => {
+                            await this.fetchUserInfo(selectedAddress);
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Route
-                  path="/games/:address"
-                  exact
-                  render={props => (
-                    <CreateGame
-                      {...props}
-                      web3={this.state.web3}
-                      contract={this.state.contract}
-                      account={this.state.account}
-                      fetchGames={async () => {
-                        await this.fetchGames();
-                      }}
+                    <Route
+                      path="/games/:address"
+                      exact
+                      render={props => (
+                        <CreateGame
+                          {...props}
+                          web3={this.state.web3}
+                          contract={this.state.contract}
+                          account={this.state.account}
+                          fetchGames={async () => {
+                            await this.fetchGames();
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Route
-                  path="/games/:address/:gameId"
-                  exact
-                  render={props => (
-                    <GameScreen
-                      {...props}
-                      web3={this.state.web3}
-                      contract={this.state.contract}
-                      account={this.state.account}
-                      games={this.state.games}
-                      gamesLoading={this.state.gamesLoading}
-                      addresses={this.state.addresses}
-                      updateUserAccount={async selectedAddress => {
-                        await this.fetchUserInfo(selectedAddress);
-                      }}
+                    <Route
+                      path="/games/:address/:gameId"
+                      exact
+                      render={props => (
+                        <GameScreen
+                          {...props}
+                          web3={this.state.web3}
+                          contract={this.state.contract}
+                          account={this.state.account}
+                          games={this.state.games}
+                          gamesLoading={this.state.gamesLoading}
+                          addresses={this.state.addresses}
+                          updateUserAccount={async selectedAddress => {
+                            await this.fetchUserInfo(selectedAddress);
+                          }}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Route
-                  // path="/games/:address/:gameId"
-                  path="/board"
-                  exact
-                  render={props => (
-                    <GameBoard
-                      {...props}
-                      web3={this.state.web3}
-                      contract={this.state.contract}
-                      account={this.state.account}
+                    <Route
+                      // path="/games/:address/:gameId"
+                      path="/board"
+                      exact
+                      render={props => (
+                        <GameBoard
+                          {...props}
+                          web3={this.state.web3}
+                          contract={this.state.contract}
+                          account={this.state.account}
+                        />
+                      )}
                     />
-                  )}
-                />
-                <Route path="/" exact component={WelcomePage} />
-              </Switch>
-            </div>
-          </BrowserRouter>
-        </Container>
-      </Context.Provider>
+                    <Route path="/" exact component={WelcomePage} />
+                  </Switch>
+                </div>
+              </BrowserRouter>
+            </Container>
+          </Context.Provider>
+        )}
+      </div>
     );
   }
 }
