@@ -241,7 +241,10 @@ class BetForm extends Component {
 
     const gasAmount = await this.props.contract.methods
       .createBet(gameId, isBetOnX)
-      .estimateGas({from: this.props.account.ethAddress});
+      .estimateGas({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')
+      });
 
     this.props.contract.methods
       .createBet(gameId, isBetOnX)
