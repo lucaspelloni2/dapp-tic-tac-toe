@@ -2,6 +2,8 @@ import React, {Component} from 'react';
 import styled, {keyframes} from 'styled-components';
 import GAME_STATUS from './GameStatus';
 import Keyframes from './PulsingAnimation';
+import Typist from 'react-typist';
+import 'react-typist/dist/Typist.css';
 
 const Container = styled.div`
   width: 100%;
@@ -47,7 +49,9 @@ class EndScreen extends Component {
     ) {
       return (
         <Message>
-          <Text>You won</Text>
+          <Text>
+            <Typist>You Won</Typist>
+          </Text>
         </Message>
       );
     } else if (
@@ -55,7 +59,13 @@ class EndScreen extends Component {
       this.props.game.status === GAME_STATUS.WINNER_O &&
       playersInGame.includes(myAddress)
     ) {
-      return <Message>You lost!</Message>;
+      return (
+        <Message>
+          <Text>
+            <Typist>You lost</Typist>
+          </Text>
+        </Message>
+      );
     } else if (
       !this.props.amIPlayerX &&
       this.props.game.status === GAME_STATUS.WINNER_O &&
@@ -67,7 +77,15 @@ class EndScreen extends Component {
       this.props.game.status === GAME_STATUS.WINNER_X &&
       playersInGame.includes(myAddress)
     ) {
-      return <Message>You lost!</Message>;
+      return (
+        <Message>
+          <Text>
+            <Typist avgTypingSpeed={700} startDelay={600}>
+              You lost
+            </Typist>
+          </Text>
+        </Message>
+      );
     } else if (this.props.game.status === GAME_STATUS.DRAW) {
       return <Message>It's a draw!</Message>;
     } else if (!playersInGame.includes(myAddress)) {
