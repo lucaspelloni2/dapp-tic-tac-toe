@@ -289,9 +289,9 @@ class BetForm extends Component {
   getDomain() {
     let domain = '';
     if (window.location.host.toString().includes('localhost')) {
-      domain = 'http://localhost:3000/games/see/';
+      domain = 'http://localhost:3000/games/';
     } else {
-      domain = 'games/see/';
+      domain = 'games/';
     }
     return domain;
   }

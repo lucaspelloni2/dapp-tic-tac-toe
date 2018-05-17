@@ -145,7 +145,7 @@ class Header extends Component {
     } else {
       return (
         <RightContainer>
-          <div>{this.renderTabs()}</div>
+          {this.props.account ? <div>{this.renderTabs()}</div> : null}
           {this.props.account ? <div>{this.renderUserAccount()}</div> : null}
         </RightContainer>
       );
@@ -176,7 +176,10 @@ class Header extends Component {
   renderUserAccount() {
     return (
       <UserContainer>
-        <UserAccount provider={this.props.provider} account={this.props.account} />
+        <UserAccount
+          provider={this.props.provider}
+          account={this.props.account}
+        />
       </UserContainer>
     );
   }

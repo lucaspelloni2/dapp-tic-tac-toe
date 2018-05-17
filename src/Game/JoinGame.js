@@ -353,7 +353,7 @@ class JoinGame extends Component {
         <div>
           {this.state.receivedGame ? (
             <Redirect
-              to={`/games/${this.props.account.ethAddress}/${
+              to={`/games/${
                 this.state.receivedGame.id
               }`}
             />

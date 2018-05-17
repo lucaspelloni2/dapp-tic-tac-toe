@@ -13,14 +13,7 @@ import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
 import Header from './Header';
 import Gas from './Gas';
-
-const TopContainer = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  flex-direction: column;
-  margin-top: 2em;
-`;
+import EndScreen from './EndScreen';
 
 const ParentContainer = styled.div`
   display: flex;
@@ -42,7 +35,8 @@ class GameScreen extends Component {
       board: null,
       playerX: null,
       playerO: null,
-      loading: true
+      loading: true,
+      isTerminated: false
     };
   }
 
@@ -63,20 +57,30 @@ class GameScreen extends Component {
       isModalOpen: false
     });
 
-    if (this.props.account.ethAddress === this.state.game.playerXAddr) {
-      this.setState({amIPlayerX: true});
-    }
+    console.log(this.state.game);
 
     if (!DEV) {
       const isMyTurn = this.isMyTurn();
       this.setState({isMyTurn: isMyTurn});
+    }
+    this.checkIfGameIsFinished();
+    if (this.props.account.ethAddress === this.state.game.playerXAddr) {
+      this.setState({amIPlayerX: true});
+    } else {
+      this.setState({amIPlayerX: false});
     }
 
     this.interval = setInterval(async () => {
       await this.getGame(gameId);
       let board = await this.getBoard(gameId);
       this.setState({board: board});
-    }, 1000);
+      this.checkIfGameIsFinished();
+      if (this.props.account.ethAddress === this.state.game.playerXAddr) {
+        this.setState({amIPlayerX: true});
+      } else {
+        this.setState({amIPlayerX: false});
+      }
+    }, 800);
 
     // META MASK CANT HANDLE EVENTS AT THE MOMENT, FOLLOW ISSUE:  https://github.com/MetaMask/metamask-extension/issues/3642
     // this.props.contract.events.MoveMade({
@@ -125,6 +129,16 @@ class GameScreen extends Component {
       .catch(err => {
         console.log('error getting game ' + gameId + ': ' + err);
       });
+  }
+
+  checkIfGameIsFinished() {
+    if (
+      this.state.game.status === GAME_STATUS.DRAW ||
+      this.state.game.status === GAME_STATUS.WINNER_O ||
+      this.state.game.status === GAME_STATUS.WINNER_X
+    ) {
+      this.setState({isTerminated: true});
+    }
   }
 
   getPlayer(address) {
@@ -253,6 +267,7 @@ class GameScreen extends Component {
                     this.playMove(tileChecked);
                   }}
                   isMyTurn={this.state.isMyTurn}
+                  isTerminated={this.state.isTerminated}
                 />
                 {this.state.isMyTurn ? null : (
                   <OpponentLoader
@@ -260,6 +275,13 @@ class GameScreen extends Component {
                     game={this.state.game}
                   />
                 )}
+                {this.state.isTerminated ? (
+                  <EndScreen
+                    account={this.props.account}
+                    game={this.state.game}
+                    amIPlayerX={this.state.amIPlayerX}
+                  />
+                ) : null}
               </ColumnContainer>
               <ColumnContainer>
                 <BetsComponent
