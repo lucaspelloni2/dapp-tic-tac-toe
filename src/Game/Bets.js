@@ -193,7 +193,10 @@ class Bets extends Component {
   async joinBet(bet) {
     const gasAmount = await this.props.contract.methods
       .joinBet(bet.id)
-      .estimateGas({from: this.props.account.ethAddress});
+      .estimateGas({
+        from: this.props.account.ethAddress,
+        value: bet.value
+      });
 
     this.props.contract.methods
       .joinBet(bet.id)
