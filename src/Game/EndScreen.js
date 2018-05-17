@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
-import styled from 'styled-components';
+import styled, {keyframes} from 'styled-components';
 import GAME_STATUS from './GameStatus';
+import Keyframes from './PulsingAnimation';
 
 const Container = styled.div`
   width: 100%;
@@ -18,6 +19,13 @@ const Container = styled.div`
   background: linear-gradient(90deg, #08d196, rgb(4, 114, 175));
   border-radius: 6px;
   color: white;
+  animation: ${Keyframes} 5s infinite;
+`;
+
+const Text = styled.p`
+  text-transform: uppercase;
+  letter-spacing: 3px;
+  font-size: 20px;
 `;
 
 const Message = styled.div``;
@@ -37,7 +45,11 @@ class EndScreen extends Component {
       this.props.game.status === GAME_STATUS.WINNER_X &&
       playersInGame.includes(myAddress)
     ) {
-      return <Message>You won!</Message>;
+      return (
+        <Message>
+          <Text>You won</Text>
+        </Message>
+      );
     } else if (
       this.props.amIPlayerX &&
       this.props.game.status === GAME_STATUS.WINNER_O &&
