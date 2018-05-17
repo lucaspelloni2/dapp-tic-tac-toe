@@ -325,7 +325,13 @@ class BetForm extends Component {
                 <ChildModalElement>{this.renderBettor()}</ChildModalElement>
               </FormRow>
               <LastRow>
-                <NotConfirm>Back</NotConfirm>
+                <NotConfirm
+                  onClick={() => {
+                    this.setState({
+                      modalIsOpen: false,
+                      secondModalIsOpen: true
+                    });
+                  }}>Back</NotConfirm>
                 <Confirm
                   onClick={() => {
                     this.createBet(
