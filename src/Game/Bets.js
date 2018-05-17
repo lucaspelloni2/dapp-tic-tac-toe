@@ -190,13 +190,17 @@ class Bets extends Component {
     return this.props.web3.utils.hexToAscii(byte32).replace(/\u0000/g, '');
   }
 
-  joinBet(bet) {
+  async joinBet(bet) {
+    const gasAmount = await this.props.contract.methods
+      .joinBet(bet.id)
+      .estimateGas({from: this.props.account.ethAddress});
+
     this.props.contract.methods
       .joinBet(bet.id)
       .send({
         from: this.props.account.ethAddress,
         value: bet.value,
-        gas: Gas.JOIN_BET
+        gas: gasAmount
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, bet.id, Status.JOINED_BET);
@@ -215,12 +219,16 @@ class Bets extends Component {
       });
   }
 
-  withdrawBet(betId) {
+  async withdrawBet(betId) {
+    const gasAmount = await this.props.contract.methods
+      .withdrawBet(betId)
+      .estimateGas({from: this.props.account.ethAddress});
+
     this.props.contract.methods
       .withdrawBet(betId)
       .send({
         from: this.props.account.ethAddress,
-        gas: Gas.WITHDRAW_BET
+        gas: gasAmount
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, betId, Status.WITHDRAWN_BET);
