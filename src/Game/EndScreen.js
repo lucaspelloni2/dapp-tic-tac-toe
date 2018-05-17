@@ -18,7 +18,9 @@ const Container = styled.div`
   pointer-events: none;
   -ms-transform: rotate(27deg);
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
-  background: linear-gradient(90deg, #08d196, rgb(4, 114, 175));
+  
+  background: linear-gradient(90deg, #08d196, rgb(4, 114, 175)); 
+
   border-radius: 6px;
   color: white;
   animation: ${Keyframes} 5s infinite;
@@ -48,9 +50,11 @@ class EndScreen extends Component {
       playersInGame.includes(myAddress)
     ) {
       return (
-        <Message>
+        <Message won>
           <Text>
-            <Typist>You Won</Typist>
+            <Typist avgTypingSpeed={700} startDelay={600}>
+              You Won
+            </Typist>
           </Text>
         </Message>
       );
@@ -60,9 +64,11 @@ class EndScreen extends Component {
       playersInGame.includes(myAddress)
     ) {
       return (
-        <Message>
+        <Message lost>
           <Text>
-            <Typist>You lost</Typist>
+            <Typist avgTypingSpeed={700} startDelay={600}>
+              You lost
+            </Typist>
           </Text>
         </Message>
       );
@@ -71,14 +77,22 @@ class EndScreen extends Component {
       this.props.game.status === GAME_STATUS.WINNER_O &&
       playersInGame.includes(myAddress)
     ) {
-      return <Message>You won!</Message>;
+      return (
+        <Message won>
+          <Text>
+            <Typist avgTypingSpeed={700} startDelay={600}>
+              You won
+            </Typist>
+          </Text>
+        </Message>
+      );
     } else if (
       !this.props.amIPlayerX &&
       this.props.game.status === GAME_STATUS.WINNER_X &&
       playersInGame.includes(myAddress)
     ) {
       return (
-        <Message>
+        <Message lost>
           <Text>
             <Typist avgTypingSpeed={700} startDelay={600}>
               You lost
@@ -87,19 +101,46 @@ class EndScreen extends Component {
         </Message>
       );
     } else if (this.props.game.status === GAME_STATUS.DRAW) {
-      return <Message>It's a draw!</Message>;
+      return (
+        <Message draw>
+          <Text>
+            <Typist avgTypingSpeed={700} startDelay={600}>
+              It's a draw
+            </Typist>
+          </Text>
+        </Message>
+      );
     } else if (!playersInGame.includes(myAddress)) {
       if (this.props.game.status === GAME_STATUS.WINNER_O) {
-        return <Message>O has won!</Message>;
+        return (
+          <Message>
+            <Text>
+              <Typist avgTypingSpeed={700} startDelay={600}>
+                O won the game
+              </Typist>
+            </Text>
+          </Message>
+        );
       } else if (this.props.game.status === GAME_STATUS.WINNER_X) {
-        return <Message>X has won!</Message>;
+        return (
+          <Message>
+            <Text>
+              <Typist avgTypingSpeed={700} startDelay={600}>
+                X won the game
+              </Typist>
+            </Text>
+          </Message>
+        );
       }
     }
   }
 
   render() {
-    console.log(' I AM PLAYER X ?', this.props.amIPlayerX);
-    return <Container>{this.renderMessage()}</Container>;
+    return (
+      <div>
+        <Container>{this.renderMessage()}</Container>
+      </div>
+    );
   }
 }
 
