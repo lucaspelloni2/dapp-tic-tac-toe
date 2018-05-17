@@ -231,19 +231,27 @@ class BetForm extends Component {
     this.setState({betAmount: amount});
   }
 
-  createBet(game, isBetOnX, betValueInEth) {
+  async createBet(game, isBetOnX, betValueInEth) {
     let gameId;
     if (this.props.game) {
       gameId = game.gameId;
     } else {
       gameId = game.id;
     }
+
+    const gasAmount = await this.props.contract.methods
+      .createBet(gameId, isBetOnX)
+      .estimateGas({
+        from: this.props.account.ethAddress,
+        value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether')
+      });
+
     this.props.contract.methods
       .createBet(gameId, isBetOnX)
       .send({
         from: this.props.account.ethAddress,
         value: this.props.web3.utils.toWei(betValueInEth.toString(), 'ether'),
-        gas: Gas.CREATE_BET
+        gas: gasAmount
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, gameId, Status.PLACED_BET);
@@ -317,7 +325,13 @@ class BetForm extends Component {
                 <ChildModalElement>{this.renderBettor()}</ChildModalElement>
               </FormRow>
               <LastRow>
-                <NotConfirm>Back</NotConfirm>
+                <NotConfirm
+                  onClick={() => {
+                    this.setState({
+                      modalIsOpen: false,
+                      secondModalIsOpen: true
+                    });
+                  }}>Back</NotConfirm>
                 <Confirm
                   onClick={() => {
                     this.createBet(
