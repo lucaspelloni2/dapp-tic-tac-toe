@@ -7264,6 +7264,12 @@ react-transition-group@^2.2.1:
     loose-envify "^1.3.1"
     prop-types "^15.6.1"
 
+react-typist@^2.0.4:
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/react-typist/-/react-typist-2.0.4.tgz#e7ee4de53ead913d363d38f07b700c00ce271be0"
+  dependencies:
+    prop-types "^15.5.10"
+
 react-web3@^0.4.5:
   version "0.4.5"
   resolved "https://registry.yarnpkg.com/react-web3/-/react-web3-0.4.5.tgz#c89b9fa51d02be26dcf02e59ee39fbf0d54b6805"
