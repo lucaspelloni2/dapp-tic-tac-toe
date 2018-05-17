@@ -88,11 +88,18 @@ class MyTransactions extends Component {
   fetchData() {
     return this.state.transactions.forEach(transaction => {
       this.props.web3.eth
-        .getTransaction(transaction.tx)
+        .getTransactionReceipt(transaction.tx)
         .then(receipt => {
           if (receipt) {
             transaction.blockNumber = receipt.blockNumber;
-            transaction.confirmed = true;
+            let isSuccess =
+              receipt.status.toString().includes('0x01') || receipt.status === '0x1'; // for private testnet || for metamask
+            if (isSuccess) {
+              transaction.confirmed = true;
+            }
+            else {
+              transaction.confirmed = false;
+            }
             localStorage.setItem(
               'txs',
               JSON.stringify(this.state.transactions)
@@ -147,10 +154,12 @@ class MyTransactions extends Component {
                   <td>
                     <TxConfirmation>
                       {transaction.blockNumber ? (
-                        <GameIcon icon={'confirmation'} />
+                        transaction.confirmed ?
+                          (<GameIcon icon={'confirmation'}/>)
+                          : (<GameIcon icon={'fail'}/>)
                       ) : (
                         <SpinnerContainer>
-                          <Spinner width={30} height={30} />
+                          <Spinner width={30} height={30}/>
                         </SpinnerContainer>
                       )}
                     </TxConfirmation>

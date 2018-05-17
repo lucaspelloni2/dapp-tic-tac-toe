@@ -143,7 +143,7 @@ class JoinGame extends Component {
         this.props.setLoading(game, true);
       })
       .on('receipt', res => {
-        console.log();
+        this.props.setLoading(game, false);
         const returnValues = res.events.Joined.returnValues;
         let isSuccess =
           res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
@@ -155,7 +155,6 @@ class JoinGame extends Component {
               ' and has symbol ' +
               returnValues.symbol
           );
-          this.props.setLoading(game, false);
         } else {
           console.log('not possible to join');
         }
@@ -182,11 +181,11 @@ class JoinGame extends Component {
         this.props.setLoading(game, true);
       })
       .on('receipt', res => {
+        this.props.setLoading(game, false);
         let isSuccess =
           res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
         if (isSuccess) {
           console.log('game started successfully');
-          this.props.setLoading(game, false);
           this.setState({receivedGame: game});
         } else {
           console.log('not possible to start game');
