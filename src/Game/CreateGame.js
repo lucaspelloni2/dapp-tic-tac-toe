@@ -92,24 +92,26 @@ class CreateGame extends Component {
       ).estimateGas({from: this.props.account.ethAddress});
 
     this.props.contract.methods
-        .createGame(
-          this.props.web3.utils.fromAscii(gameName),
-          this.props.web3.utils.fromAscii(localStorage.getItem('username'))
-        )
-        .send({from: this.props.account.ethAddress, gas: gasAmount})
-        .on('transactionHash', tx => {
-          this.addNewTx(tx, this.state.gameName);
-        })
-        .on('receipt', res => {
-          console.log(res);
+      .createGame(
+        this.props.web3.utils.fromAscii(gameName),
+        this.props.web3.utils.fromAscii(localStorage.getItem('username'))
+      )
+      .send({from: this.props.account.ethAddress, gas: gasAmount})
+      .on('transactionHash', tx => {
+        this.addNewTx(tx, this.state.gameName);
+      })
+      .on('receipt', res => {
+        let isSuccess =
+          res.status.toString().includes('0x01') || res.status === '0x1'; // for private testnet || for metamask
+        if (isSuccess) {
           this.props.fetchGames();
           localStorage.setItem('last', JSON.stringify(gameName));
           this.state.createdGameName = gameName;
-        })
-        .on('confirmation', function (gameId) {
-          // console.log('new game created! ' + gameId);
-        });
-
+        }
+      })
+      .on('confirmation', function (gameId) {
+        // console.log('new game created! ' + gameId);
+      });
   }
 
   addNewTx(tx, gameName) {
