@@ -77,6 +77,11 @@ class App extends Component {
     if (!address) {
       address = this.state.addresses[0];
     }
+    if (!address) {
+      alert('No web3 in dev!');
+      return;
+    }
+
     let account = Object.assign({}, this.state.account);
     account.ethAddress = address;
     this.setState({account: account});
@@ -272,7 +277,7 @@ class App extends Component {
                       )}
                     />
                     <Route
-                      path="/games/:address/:gameId"
+                      path="/games/:gameId"
                       exact
                       render={props => (
                         <GameScreen
