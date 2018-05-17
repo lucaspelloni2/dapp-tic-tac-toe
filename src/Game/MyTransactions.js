@@ -88,7 +88,7 @@ class MyTransactions extends Component {
   fetchData() {
     return this.state.transactions.forEach(transaction => {
       this.props.web3.eth
-        .getTransaction(transaction.tx)
+        .getTransactionReceipt(transaction.tx)
         .then(receipt => {
           if (receipt) {
             transaction.blockNumber = receipt.blockNumber;
