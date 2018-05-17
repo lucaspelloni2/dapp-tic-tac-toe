@@ -9,6 +9,51 @@
 \usepackage{dcolumn,array}
 \usepackage{tocloft}
 \usepackage{asudis}
+\usepackage{acronym}
+\usepackage{listings}
+\usepackage{color}
+
+
+\acrodef{sc}[SC]{Smart Contract}
+\acrodef{dapp}[DApp]{Decentralized Application}
+\acrodef{ct}[CT]{Challenge Task}
+
+\definecolor{lightgray}{rgb}{.8,.8,.8}
+\definecolor{darkgray}{rgb}{.6,.6,.6}
+\definecolor{purple}{rgb}{0.65, 0.12, 0.82}
+\definecolor{orange}{rgb}{1.0, 0.41, 0.01}
+\definecolor{forestgreen}{rgb}{0.04, 0.39, 0.13}
+
+\lstdefinelanguage{JavaScript}{
+	keywords={typeof, new, true, false, catch, function, return, null, catch, switch, var, if, in, while, do, else, case, break, event, uint, adress, bytes32, public, storage, memory, string, bool, , view, return, for},
+	keywordstyle=\color{orange}\bfseries,
+	ndkeywords={class, export, boolean, throw, implements, import, this},
+	ndkeywordstyle=\color{darkgray}\bfseries,
+	identifierstyle=\color{black},
+	sensitive=false,
+	comment=[l]{//},
+	morecomment=[s]{/*}{*/},
+	commentstyle=\color{purple}\ttfamily,
+	stringstyle=\color{forestgreen}\ttfamily,
+	morestring=[b]',
+	morestring=[b]"
+}
+
+\lstset{
+	language=JavaScript,
+	backgroundcolor=\color{lightgray},
+	extendedchars=true,
+	basicstyle=\tiny\ttfamily\linespread{0},
+	showstringspaces=false,
+	showspaces=false,
+	numbers=left,
+	numberstyle=\scriptsize,
+	numbersep=1pt,
+	tabsize=1,
+	breaklines=true,
+	showtabs=false,
+	captionpos=b
+}
 
 \begin{document}
 %-----------------------front matter
@@ -17,44 +62,25 @@
 \subtitle{Implementation of a Decentralized Application Tic Tac Toe}
 \paperType{Dissertation}
 \chair{Departements of Informatics - Communication Systems Group}
-\memberOne{Lucas Pelloni, leginumeber}
-\memberTwo{Severin Wullschleger leginumber}
+\memberOne{Lucas Pelloni, 13-722-038}
+\memberTwo{Severin Wullschleger 13-715-081}
 \memberThree{Andreas Schaufelbühl, 12-918-843}
+
 
 \maketitle
 \doublespace
-%\include{abstract}
-\dedicationpage{}
-%\include{ack}
 \tableofcontents
-% This puts the word "Page" right justified above everything else.
-\addtocontents{toc}{~\hfill Page\par}
-% Asking LaTeX for a new page here guarantees that the LOF is on a separate page
-% after the TOC ends.
 \newpage
-% Making the LOT and LOF "parts" rather than chapters gets them indented at
-% level -1 according to the chart: top of page 4 of the document at
-% ftp://tug.ctan.org/pub/tex-archive/macros/latex/contrib/tocloft/tocloft.pdf
-\addcontentsline{toc}{part}{LIST OF TABLES}
-\renewcommand{\cftlabel}{Table}
-\listoftables
-% This gets the headers for the LOT right on the first page.  Subsequent pages
-% are handled by the fancyhdr code in the asudis.sty file.
-\addtocontents{lot}{Table~\hfill Page \par}
-\newpage
-\addcontentsline{toc}{part}{LIST OF FIGURES}
-\addtocontents{toc}{CHAPTER \par}
-\renewcommand{\cftlabel}{Figure}
-\listoffigures
-% This gets the headers for the LOF right on the first page.  Subsequent pages
-% are handled by the fancyhdr code in the asudis.sty file.
-\addtocontents{lof}{Figure~\hfill Page \par}
 %-----------------------body
 \doublespace
 \pagenumbering{arabic}
+
 \include{chapter1}
 \include{chapter2}
 \include{chapter3}
+\include{chapter3_code1}
+\include{chapter3_code2}
+\include{chapter3_code3}
 \include{chapter4}
 \include{chapter5}
 \include{chapter6}
@@ -67,8 +93,7 @@
 \bibliographystyle{asudis}
 \bibliography{dis}}
 \renewcommand{\chaptername}{APPENDIX}
-\addtocontents{toc}{APPENDIX \par}
-\appendix
-\include{appendix1}
 \include{vita}
+
 \end{document}
+
