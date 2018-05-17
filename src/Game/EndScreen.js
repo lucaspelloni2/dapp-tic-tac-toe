@@ -57,21 +57,41 @@ class EndScreen extends Component {
   renderEndScreenMessage() {
     switch (this.getStatus()) {
       case 'won':
-        return <EndScreenMessage status={'won'}>You won</EndScreenMessage>;
+        return (
+          <EndScreenMessage game={this.props.game} status={'won'}>
+            You won
+          </EndScreenMessage>
+        );
       case 'lost':
-        return <EndScreenMessage status={'lost'}>You lost</EndScreenMessage>;
+        return (
+          <EndScreenMessage game={this.props.game} status={'lost'}>
+            You lost
+          </EndScreenMessage>
+        );
       case 'draw':
-        return <EndScreenMessage status={'draw'}>It's a draw</EndScreenMessage>;
+        return (
+          <EndScreenMessage game={this.props.game} status={'draw'}>
+            It's a draw
+          </EndScreenMessage>
+        );
       case 'o_won':
         return (
-          <EndScreenMessage status={'o_won'}>Player O won</EndScreenMessage>
+          <EndScreenMessage game={this.props.game} status={'o_won'}>
+            Player O won
+          </EndScreenMessage>
         );
       case 'x_won':
         return (
-          <EndScreenMessage status={'x_won'}>Player X won</EndScreenMessage>
+          <EndScreenMessage game={this.props.game} status={'x_won'}>
+            Player X won
+          </EndScreenMessage>
         );
       default:
-        return <EndScreenMessage status={'default'}>default</EndScreenMessage>;
+        return (
+          <EndScreenMessage game={this.props.game} status={'default'}>
+            default
+          </EndScreenMessage>
+        );
     }
   }
 

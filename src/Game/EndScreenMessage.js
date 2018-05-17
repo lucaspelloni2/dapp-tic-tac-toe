@@ -3,7 +3,20 @@ import styled, {keyframes} from 'styled-components';
 import Keyframes from './PulsingAnimation';
 
 this.getGradient = props => {
-  return 'linear-gradient(90deg, #08d196, rgb(4, 114, 175))';
+  switch (props.status) {
+    case 'won':
+      return 'linear-gradient(90deg,#09c198,rgb(125, 234, 80))';
+    case 'lost':
+      return 'linear-gradient(90deg,#d10808,rgb(4, 80, 175))';
+    case 'draw':
+      return 'linear-gradient(90deg,#d19408,rgb(4,80,175))';
+    case 'x_won':
+      return 'linear-gradient(90deg,#2fd108,rgb(4,80,175))';
+    case 'o_won':
+      return 'linear-gradient(90deg,#2fd108,rgb(4,80,175))';
+    default:
+      return null;
+  }
 };
 const Container = styled.div`
   width: 100%;
@@ -28,9 +41,21 @@ const Text = styled.p`
   text-transform: uppercase;
   letter-spacing: 3px;
   font-size: 20px;
+  margin: 0;
 `;
 
-const Message = styled.div``;
+const Message = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+`;
+
+const Moves = styled.p`
+  margin: 0;
+  font-size: 11px;
+  initial-letter: 0.2;
+`;
 
 class EndScreenMessage extends Component {
   constructor() {
@@ -42,6 +67,7 @@ class EndScreenMessage extends Component {
       <Container {...this.props}>
         <Message>
           <Text>{this.props.children}</Text>
+          <Moves>In {this.props.game.moveCounter} moves</Moves>
         </Message>
       </Container>
     );
