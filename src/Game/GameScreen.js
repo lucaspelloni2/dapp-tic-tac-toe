@@ -277,6 +277,7 @@ class GameScreen extends Component {
                 )}
                 {this.state.isTerminated ? (
                   <EndScreen
+                      isModalOpen={this.state.isModalOpen}
                     account={this.props.account}
                     game={this.state.game}
                     amIPlayerX={this.state.amIPlayerX}

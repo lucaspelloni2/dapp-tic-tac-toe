@@ -23,7 +23,7 @@ const Container = styled.div`
   height: 55px;
   position: absolute;
   z-index: 10;
-  display: flex;
+  display: ${props => props.isModalOpen ? 'none': 'flex'};
   justify-content: center;
   align-items: center;
   top: 33%;

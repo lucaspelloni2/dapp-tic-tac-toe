@@ -57,33 +57,33 @@ class EndScreen extends Component {
 
   renderEndScreenMessage() {
     switch (this.getStatus()) {
-      case 'won':
+        case 'won':
         return (
-          <EndScreenMessage game={this.props.game} status={'won'}>
+          <EndScreenMessage {...this.props} status={'won'}>
             You won <GameIcon icon={'award'}/>
           </EndScreenMessage>
         );
       case 'lost':
         return (
-          <EndScreenMessage game={this.props.game} status={'lost'}>
+          <EndScreenMessage {...this.props} status={'lost'}>
             You lost
           </EndScreenMessage>
         );
       case 'draw':
         return (
-          <EndScreenMessage game={this.props.game} status={'draw'}>
+          <EndScreenMessage {...this.props}  status={'draw'}>
             It's a draw
           </EndScreenMessage>
         );
       case 'o_won':
         return (
-          <EndScreenMessage game={this.props.game} status={'o_won'}>
+          <EndScreenMessage {...this.props} status={'o_won'}>
             Player O won
           </EndScreenMessage>
         );
       case 'x_won':
         return (
-          <EndScreenMessage game={this.props.game} status={'x_won'}>
+          <EndScreenMessage {...this.props} status={'x_won'}>
             Player X won
           </EndScreenMessage>
         );
