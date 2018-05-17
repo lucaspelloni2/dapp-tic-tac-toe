@@ -5,7 +5,7 @@ import Keyframes from './PulsingAnimation';
 this.getGradient = props => {
   switch (props.status) {
     case 'won':
-      return 'linear-gradient(90deg,#09c198,rgb(125, 234, 80))';
+      return 'linear-gradient(90deg,#0cfbc6,rgb(18, 51, 220))';
     case 'lost':
       return 'linear-gradient(90deg,#d10808,rgb(4, 80, 175))';
     case 'draw':

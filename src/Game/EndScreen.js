@@ -4,6 +4,7 @@ import GAME_STATUS from './GameStatus';
 import Typist from 'react-typist';
 import 'react-typist/dist/Typist.css';
 import EndScreenMessage from './EndScreenMessage';
+import GameIcon from "./GameIcon";
 
 class EndScreen extends Component {
   constructor() {
@@ -59,7 +60,7 @@ class EndScreen extends Component {
       case 'won':
         return (
           <EndScreenMessage game={this.props.game} status={'won'}>
-            You won
+            You won <GameIcon icon={'award'}/>
           </EndScreenMessage>
         );
       case 'lost':
