@@ -13,6 +13,7 @@ import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
 import Header from './Header';
 import EndScreen from './EndScreen';
+import JoinButton from './JoinButton';
 
 const ParentContainer = styled.div`
   display: flex;
@@ -176,7 +177,8 @@ class GameScreen extends Component {
         this.state.game.gameId,
         selectedTile % 3,
         Math.trunc(selectedTile / 3)
-      ).estimateGas({from: this.props.account.ethAddress});
+      )
+      .estimateGas({from: this.props.account.ethAddress});
 
     this.props.contract.methods
       .playMove(
@@ -268,6 +270,11 @@ class GameScreen extends Component {
                   isMyTurn={this.state.isMyTurn}
                   isTerminated={this.state.isTerminated}
                 />
+                <JoinButton
+                  game={this.state.game}
+                  account={this.props.account}
+                  isModalOpen={this.state.isModalOpen}
+                />
                 {this.state.isMyTurn ? null : (
                   <OpponentLoader
                     isModalOpen={this.state.isModalOpen}
@@ -276,7 +283,7 @@ class GameScreen extends Component {
                 )}
                 {this.state.isTerminated ? (
                   <EndScreen
-                      isModalOpen={this.state.isModalOpen}
+                    isModalOpen={this.state.isModalOpen}
                     account={this.props.account}
                     game={this.state.game}
                     amIPlayerX={this.state.amIPlayerX}

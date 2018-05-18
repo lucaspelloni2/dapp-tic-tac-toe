@@ -5,7 +5,7 @@ import TicTacToeSymbols from './TicTacToeSymbols';
 const BoardContainer = styled.div`
   width: 400px;
   height: 400px;
-  margin-top: 4em;
+  margin-top: 5em;
   box-shadow: rgba(43, 9, 9, 0.4) 0px 0px 15px 3px;
 
   background-image: radial-gradient(
@@ -43,7 +43,7 @@ const InactiveSquare = styled.td`
   &:last-child {
     border-right: 0;
   }
-  cursor: ${'not-allowed'};
+  cursor: not-allowed;
 `;
 
 const Square = styled.td`
