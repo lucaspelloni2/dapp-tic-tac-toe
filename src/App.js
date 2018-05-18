@@ -212,6 +212,8 @@ class App extends Component {
                       render={props => (
                         <Login
                           {...props}
+                          contract={this.state.contract}
+                          web3={this.state.web3}
                           account={this.state.account}
                           addresses={this.state.addresses}
                           updateUserAccount={async selectedAddress => {

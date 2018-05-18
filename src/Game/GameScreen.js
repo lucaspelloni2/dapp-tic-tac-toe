@@ -191,7 +191,6 @@ class GameScreen extends Component {
       })
       .on('transactionHash', tx => {
         this.addNewTx(tx, this.state.game.gameId, Status.MOVE_MADE);
-        // this.setLoadingToTrue(this.state.game);
       })
       .on('receipt', async res => {
         let isSuccess =

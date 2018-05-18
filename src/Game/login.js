@@ -4,6 +4,7 @@ import Context from './Context';
 import {Redirect} from 'react-router-dom';
 import MetaMaskLogo from './MetamaskLogo';
 import Header from './Header';
+import DEV from "../Environment";
 
 
 const Container = styled.div`
@@ -74,9 +75,36 @@ class Login extends Component {
     };
   }
 
+  async componentDidMount() {
+    const player = await this.getPlayer(this.props.account.ethAddress);
+    localStorage.setItem('username', player.playerName);
+    this.setState({
+      username: player.playerName
+    });
+  }
+
+  getPlayer(address) {
+    return this.props.contract.methods
+      .players(address)
+      .call({from: this.props.account.ethAddress})
+      .then(res => {
+        console.log(res);
+        return {
+          playerName: this.props.web3.utils
+            .hexToAscii(res)
+            .replace(/\u0000/g, '')
+        };
+      })
+      .catch(err => {
+        console.log(
+          'error getting player with address ' + address + ': ' + err
+        );
+      });
+  }
+
   handleChange(e) {
-      // TODO: SEVI save in the local storage different user names and addresses
-    this.setState({username: e.target.value, clickedLogin: false});
+    // TODO: SEVI save in the local storage different user names and addresses
+    // this.setState({username: e.target.value, clickedLogin: false});
     localStorage.setItem('username', e.target.value);
   }
 
@@ -94,7 +122,8 @@ class Login extends Component {
 
   login() {
     if (localStorage.getItem('username')) {
-      return <Redirect to="/lobby" />;
+      this.setState({username: localStorage.getItem('username')});
+      return <Redirect to="/lobby"/>;
     }
     return (
       <div style={{background: 'red', marginBottom: 30}}>
@@ -115,7 +144,7 @@ class Login extends Component {
           provider={this.props.provider}
         />
         <Container>
-          <MetaMaskLogo />
+          <MetaMaskLogo/>
           <LoginContainer>
             <h1>Tic Tac Toe</h1>
             <SubTitle>Please insert your username</SubTitle>
@@ -154,24 +183,32 @@ class Login extends Component {
               <LoginRow>
                 <InputLabel>
                   Username
-                  <InputField
-                    placeholder={'Username'}
-                    onChange={this.handleChange.bind(this)}
-                    onKeyPress={event => {
-                      if (event.key === 'Enter') {
-                        this.setState({
-                          clickedLogin: true
-                        });
-                      }
-                    }}
-                  />
+                  {this.state.username === '' ?
+                    (
+                      <InputField
+                        placeholder={'Username'}
+                        onChange={this.handleChange.bind(this)}
+                        onKeyPress={event => {
+                          if (event.key === 'Enter') {
+                            this.setState({
+                              clickedLogin: true
+                            });
+                          }
+                        }}
+                      />)
+                    : (
+                      <InputField
+                        value={this.state.username}
+                        disabled
+                      />
+                    )}
                 </InputLabel>
               </LoginRow>
               <ButtonLinkContainer>
                 {this.state.clickedLogin && this.login()}
                 <button
                   onClick={() => {
-                    //this.insertNewUser(e.target.value, this.props.account.ethAddress);
+                    // this.insertNewUser(e.target.value, this.props.account.ethAddress);
                     this.setState({
                       clickedLogin: true
                     });
