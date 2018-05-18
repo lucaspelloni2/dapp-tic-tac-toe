@@ -14,6 +14,7 @@ const GameNameContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
+  flex-direction: column;
 `;
 
 const GameInfo = styled.div`
@@ -63,12 +64,19 @@ const Title = styled.p`
   font-size: 38px;
 `;
 
+const SubTitle = styled.p`
+  margin-bottom: 5px;
+  font-size: 12px;
+`;
+
 const PlayerX = Player.extend``;
 const PlayerO = Player.extend``;
 
 const CurrentTurn = styled.div`
+  position: absolute;
   color: #f6841b;
   text-align: center;
+  width: 100%;
   margin-top: -45px;
 `;
 
@@ -82,6 +90,7 @@ class GameTopInfo extends Component {
       <GameInfo>
         <GameNameContainer>
           <Title>Game {this.props.game.gameId}</Title>
+          {/*<SubTitle>{this.props.game.name}</SubTitle>*/}
         </GameNameContainer>
         <PlayerContainer>
           <XContainer>

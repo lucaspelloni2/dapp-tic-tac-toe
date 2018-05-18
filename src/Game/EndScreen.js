@@ -31,7 +31,7 @@ class EndScreen extends Component {
       this.props.game.status === GAME_STATUS.WINNER_O &&
       playersInGame.includes(myAddress)
     ) {
-      return 'win';
+      return 'won';
     } else if (
       !this.props.amIPlayerX &&
       this.props.game.status === GAME_STATUS.WINNER_X &&
@@ -50,6 +50,7 @@ class EndScreen extends Component {
   }
 
   renderEndScreenMessage() {
+    console.log(this.props)
     switch (this.getStatus()) {
         case 'won':
         return (

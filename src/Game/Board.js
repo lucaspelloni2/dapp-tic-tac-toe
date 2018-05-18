@@ -6,9 +6,7 @@ import GAME_STATUS from "./GameStatus";
 const BoardContainer = styled.div`
   width: 400px;
   height: 400px;
-  margin-top: 5em;
   box-shadow: rgba(43, 9, 9, 0.4) 0px 0px 15px 3px;
-
   background-image: radial-gradient(
     farthest-side at 212% 285px,
     #0eef49 0,

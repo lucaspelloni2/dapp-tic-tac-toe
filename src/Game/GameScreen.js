@@ -8,12 +8,10 @@ import Status from './Status';
 import StatusRender from './StatusRender';
 import GameTopInfo from './GameTopInfo';
 import BetsComponent from './BetsComponent';
-import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
 import Header from './Header';
-import EndScreen from './EndScreen';
-import JoinButton from './JoinButton';
+import StatusBar from './StatusBar';
 
 const ParentContainer = styled.div`
   display: flex;
@@ -260,6 +258,14 @@ class GameScreen extends Component {
                   playerX={this.state.playerX}
                   playerO={this.state.playerO}
                 />
+                <StatusBar
+                  isModalOpen={this.state.isModalOpen}
+                  account={this.props.account}
+                  game={this.state.game}
+                  amIPlayerX={this.state.amIPlayerX}
+                  isTerminated={this.state.isTerminated}
+                  isMyTurn={this.state.isMyTurn}
+                />
                 <Board
                   game={this.state.game}
                   board={this.state.board}
@@ -270,25 +276,6 @@ class GameScreen extends Component {
                   isMyTurn={this.state.isMyTurn}
                   isTerminated={this.state.isTerminated}
                 />
-                <JoinButton
-                  game={this.state.game}
-                  account={this.props.account}
-                  isModalOpen={this.state.isModalOpen}
-                />
-                {this.state.isMyTurn ? null : (
-                  <OpponentLoader
-                    isModalOpen={this.state.isModalOpen}
-                    game={this.state.game}
-                  />
-                )}
-                {this.state.isTerminated ? (
-                  <EndScreen
-                    isModalOpen={this.state.isModalOpen}
-                    account={this.props.account}
-                    game={this.state.game}
-                    amIPlayerX={this.state.amIPlayerX}
-                  />
-                ) : null}
               </ColumnContainer>
               <ColumnContainer>
                 <BetsComponent

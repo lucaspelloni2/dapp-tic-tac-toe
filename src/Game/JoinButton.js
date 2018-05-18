@@ -4,16 +4,10 @@ import Keyframes from './PulsingAnimation';
 import GAME_STATUS from './GameStatus';
 
 const Container = styled.div`
-  width: 100%;
   height: 55px;
-  position: absolute;
-  z-index: 10;
   display: ${props => (props.isModalOpen ? 'none' : 'flex')};
   justify-content: center;
   align-items: center;
-  top: 33%;
-  pointer-events: none;
-  -ms-transform: rotate(27deg);
   box-shadow: rgba(168, 221, 224, 0.5) 0px 0px 15px 3px;
   background: linear-gradient(90deg, #0cfbc6, rgb(18, 51, 220));
   border-radius: 6px;
@@ -21,6 +15,8 @@ const Container = styled.div`
   animation: ${Keyframes} 5s infinite;
   cursor: pointer;
   text-align: center;
+  width: 400px;
+  margin: 0.8em 0; 
 `;
 
 const Text = styled.p`
