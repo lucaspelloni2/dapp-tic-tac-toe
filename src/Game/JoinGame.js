@@ -366,6 +366,7 @@ class JoinGame extends Component {
               this.props.updateUserAccount(selectedAddress);
             }}
             provider={this.props.provider}
+            games={this.props.games}
           />
           <MetaMaskLogo />
           <ParentContainer>

@@ -250,6 +250,7 @@ class GameScreen extends Component {
                 this.props.updateUserAccount(selectedAddress);
               }}
               provider={this.props.provider}
+              games={this.props.games}
             />
             <ParentContainer>
               <ColumnContainer>

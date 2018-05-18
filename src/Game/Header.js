@@ -5,6 +5,8 @@ import GameIcon from './GameIcon';
 import Select from 'react-select';
 import {Link} from 'react-router-dom';
 import UserAccount from './UserAccount';
+import {withRouter} from 'react-router';
+import {Redirect} from 'react-router-dom';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -85,11 +87,24 @@ const UserContainer = styled.div`
   padding: 0 20px;
 `;
 
+const GamesSearchContainer = styled.div`
+  display: flex;
+  padding: 0 10px;
+  flex-direction: column;
+`;
+
+const SearchGame = styled.p`
+  margin: 0;
+  font-size: 10px;
+  color: #026899;
+`;
+
 class Header extends Component {
   constructor() {
     super();
     this.state = {
-      selectedAddress: null
+      selectedAddress: null,
+      selectedGame: null
     };
   }
 
@@ -124,11 +139,17 @@ class Header extends Component {
     this.props.updateUserAccount(selectedAddress);
   };
 
+  handleSearchGame = selectedGame => {
+    this.setState({selectedGame: selectedGame});
+    this.props.history.push('/games/' + selectedGame.id);
+  };
+
   renderRightContent() {
     if (this.props.addresses && DEV) {
       return (
         <RightContainer>
           <div>{this.renderTabs()}</div>
+          {this.props.games ? <div>{this.renderGamesSearch()}</div> : null}
           <div>{this.renderUserAccount()}</div>
           <Select
             simpleValue
@@ -146,6 +167,7 @@ class Header extends Component {
       return (
         <RightContainer>
           {this.props.account ? <div>{this.renderTabs()}</div> : null}
+          {this.props.games ? <div>{this.renderGamesSearch()}</div> : null}
           {this.props.account ? <div>{this.renderUserAccount()}</div> : null}
         </RightContainer>
       );
@@ -173,6 +195,37 @@ class Header extends Component {
       </TabsContainer>
     );
   }
+
+  renderGamesSearch() {
+    return (
+      <GamesSearchContainer>
+        <Select
+          simpleValue
+          style={{width: 140}}
+          value={
+            null
+            // this.state.selectedGame
+            //   ? {
+            //       label: this.state.selectedGame.name.replace(/\u0000/g, ''),
+            //       value: this.state.selectedGame
+            //     }
+            //   : this.props.games.lenght > 0
+            //     ? {
+            //         label: this.props.games[0].name.replace(/\u0000/g, ''),
+            //         value: this.props.games[0]
+            //       }
+            //     : null
+          }
+          onChange={this.handleSearchGame}
+          options={this.props.games.map(game => ({
+            label: game.name,
+            value: game
+          }))}
+        />
+        <SearchGame>Visit another game</SearchGame>
+      </GamesSearchContainer>
+    );
+  }
   renderUserAccount() {
     return (
       <UserContainer>
@@ -198,4 +251,4 @@ class Header extends Component {
   }
 }
 
-export default Header;
+export default withRouter(Header);
