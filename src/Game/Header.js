@@ -7,6 +7,8 @@ import {Link} from 'react-router-dom';
 import UserAccount from './UserAccount';
 import {withRouter, observer} from 'react-router';
 import PropTypes from 'prop-types';
+import Web3Providers from './Web3Providers';
+import GameTooltip from './ToolTip';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -100,6 +102,19 @@ const SearchGame = styled.p`
   width: 70px;
 `;
 
+const Provider = styled.img`
+  height: 38px;
+  width: 38px;
+  cursor: pointer;
+`;
+
+const WebProviderContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 0 8px;
+`;
+
 class Header extends Component {
   static contextTypes = {
     router: PropTypes.object
@@ -110,7 +125,8 @@ class Header extends Component {
     this.state = {
       selectedAddress: null,
       selectedGame: null,
-      currentPath: null
+      currentPath: null,
+      isToolTipVisible: false
     };
   }
 
@@ -131,6 +147,10 @@ class Header extends Component {
           marginBottom={0}
           icon={'bet'}
         />
+
+        <WebProviderContainer>
+          {this.renderProviderImage()}
+        </WebProviderContainer>
 
         {DEV ? (
           <DevEnv color={'#d42517'} border={'#d42517'}>
@@ -248,6 +268,50 @@ class Header extends Component {
         />
       </UserContainer>
     );
+  }
+
+  renderProviderImage() {
+    if (this.props.provider === Web3Providers.META_MASK) {
+      return (
+        <GameTooltip
+          overlay={'Your browser is using Metamask!'}
+          placement={'bottom'}
+          visible={this.state.isToolTipVisible}
+        >
+          <a target="_blank" href={'https://github.com/MetaMask/'}>
+            <Provider
+              onMouseEnter={() => {
+                this.setState({isToolTipVisible: true});
+              }}
+              onMouseLeave={() => {
+                this.setState({isToolTipVisible: false});
+              }}
+              src={'./../metamask.png'}
+            />
+          </a>
+        </GameTooltip>
+      );
+    } else if (this.props.provider === Web3Providers.LOCALHOST) {
+      return (
+        <GameTooltip
+          overlay={'Your browser is using Ganache!'}
+          placement={'bottom'}
+          visible={this.state.isToolTipVisible}
+        >
+          <a target="_blank" href={'https://github.com/trufflesuite/ganache'}>
+            <Provider
+              onMouseEnter={() => {
+                this.setState({isToolTipVisible: true});
+              }}
+              onMouseLeave={() => {
+                this.setState({isToolTipVisible: false});
+              }}
+              src={'./../ganache.png'}
+            />
+          </a>
+        </GameTooltip>
+      );
+    }
   }
 
   render() {
