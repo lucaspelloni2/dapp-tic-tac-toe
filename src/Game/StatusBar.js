@@ -3,6 +3,7 @@ import JoinButton from './JoinButton';
 import EndScreen from './EndScreen';
 import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
+import StartButton from './StartButton';
 
 class StatusBar extends Component {
   constructor() {
@@ -32,13 +33,22 @@ class StatusBar extends Component {
         />
       );
     } else if (
-        (this.props.game.status === GAME_STATUS.O_HAS_TURN ||
-      this.props.game.status === GAME_STATUS.X_HAS_TURN) && !this.props.isMyTurn
+      (this.props.game.status === GAME_STATUS.O_HAS_TURN ||
+        this.props.game.status === GAME_STATUS.X_HAS_TURN) &&
+      !this.props.isMyTurn
     ) {
       return (
         <OpponentLoader
           isModalOpen={this.props.isModalOpen}
           game={this.props.game}
+        />
+      );
+    } else if (this.props.game.status === GAME_STATUS.READY) {
+      return (
+        <StartButton
+          account={this.props.account}
+          game={this.props.game}
+          isModalOpen={this.props.isModalOpen}
         />
       );
     } else {

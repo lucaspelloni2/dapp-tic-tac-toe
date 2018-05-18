@@ -120,6 +120,7 @@ class JoinGame extends Component {
     const createdGameName = params.get('gameName');
 
     const gameIdToJoin = params.get('join');
+    const gameIdToStart = params.get('start');
 
     if (createdGameName) {
       this.setState({createdGameName: createdGameName});
@@ -129,6 +130,13 @@ class JoinGame extends Component {
       let gameToJoin = this.props.games.find(g => g.id === gameIdToJoin);
       if (gameToJoin) {
         this.joinGame(gameToJoin, localStorage.getItem('username'));
+      }
+    }
+
+    if (gameIdToStart) {
+      let gameToStart = this.props.games.find(g => g.id === gameIdToStart);
+      if (gameIdToStart) {
+        this.startGame(gameToStart);
       }
     }
   }
