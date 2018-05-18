@@ -321,7 +321,7 @@ class BetForm extends Component {
                 </ChildModalElement>
               </FormRow>
               <FormRow>
-                <Label>Your Bettor: </Label>
+                <Label>Bet on: </Label>
                 <ChildModalElement>{this.renderBettor()}</ChildModalElement>
               </FormRow>
               <LastRow>
@@ -365,7 +365,7 @@ class BetForm extends Component {
         <h2>Add Your Bet</h2>
         <FormContainer>
           <FormRow>
-            <Label>Select the game you want</Label>
+            <Label>Select a game</Label>
             <Select
               simpleValue
               style={{width: 220}}
@@ -402,7 +402,7 @@ class BetForm extends Component {
             ) : null}
           </FormRow>
           <FormRow>
-            <Label>How many ETH you want to bet</Label>
+            <Label>How many ETH do you want to bet?</Label>
             <InputBalance
               value={this.state.betAmount}
               type="number"
@@ -425,7 +425,7 @@ class BetForm extends Component {
             </div>
           </FormRow>
           <FormRow>
-            <Label>Choose your Bettor</Label>
+            <Label>Who do you bet on?</Label>
             <RadioInputsContainer>
               <RadioGroup onChange={this.handleBetOn.bind(this)} horizontal>
                 <RadioButton value={'X'}>
