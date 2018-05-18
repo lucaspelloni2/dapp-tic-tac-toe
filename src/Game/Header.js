@@ -5,8 +5,8 @@ import GameIcon from './GameIcon';
 import Select from 'react-select';
 import {Link} from 'react-router-dom';
 import UserAccount from './UserAccount';
-import {withRouter} from 'react-router';
-import {Redirect} from 'react-router-dom';
+import {withRouter, observer} from 'react-router';
+import PropTypes from 'prop-types';
 
 const HeaderContainer = styled.div`
   z-index: 1;
@@ -100,11 +100,16 @@ const SearchGame = styled.p`
 `;
 
 class Header extends Component {
-  constructor() {
-    super();
+  static contextTypes = {
+    router: PropTypes.object
+  };
+
+  constructor(context) {
+    super(context);
     this.state = {
       selectedAddress: null,
-      selectedGame: null
+      selectedGame: null,
+      currentPath: null
     };
   }
 
@@ -112,7 +117,9 @@ class Header extends Component {
     if (this.props.account && DEV) {
       this.setState({selectedAddress: this.props.account.ethAddress});
     }
+    this.setState({currentPath: this.props.location.pathname});
   }
+
 
   renderLeftContent() {
     return (
@@ -141,7 +148,9 @@ class Header extends Component {
 
   handleSearchGame = selectedGame => {
     this.setState({selectedGame: selectedGame});
-    this.props.history.push('/games/' + selectedGame.id);
+    //this.props.history.push('/games/' + selectedGame.id);
+    this.context.router.history.push('/games/' + selectedGame.id);
+      window.location.reload(true);
   };
 
   renderRightContent() {
