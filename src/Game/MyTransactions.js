@@ -121,7 +121,7 @@ class MyTransactions extends Component {
             <tbody>
               <tr>
                 <th>
-                  <Title>Name</Title>
+                  <Title>Name/Id</Title>
                 </th>
                 <th>
                   <Title>Tx Hash</Title>
