@@ -186,21 +186,17 @@ class Header extends Component {
   renderTabs() {
     return (
       <TabsContainer>
-        <Tab>
-          <Link style={{textDecoration: 'none'}} to="/games/create">
-            Create a Game
-          </Link>
-        </Tab>
-        <Tab>
-          <Link style={{textDecoration: 'none'}} to="/lobby">
-            Lobby
-          </Link>
-        </Tab>
-        <Tab>
-          <Link style={{textDecoration: 'none'}} to="/games">
-            Join a Game
-          </Link>
-        </Tab>
+        <Link style={{textDecoration: 'none'}} to="/games/create">
+          <Tab>Create a Game</Tab>
+        </Link>
+
+        <Link style={{textDecoration: 'none'}} to="/lobby">
+          <Tab>Lobby</Tab>
+        </Link>
+
+        <Link style={{textDecoration: 'none'}} to="/games">
+          <Tab>Join a Game</Tab>
+        </Link>
       </TabsContainer>
     );
   }
