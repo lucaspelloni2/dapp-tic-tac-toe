@@ -199,6 +199,7 @@ class Login extends Component {
                       <InputField
                         value={this.state.username}
                         disabled
+                        style={{backgroundColor: 'gainsboro'}}
                       />
                     )}
                 </InputLabel>
