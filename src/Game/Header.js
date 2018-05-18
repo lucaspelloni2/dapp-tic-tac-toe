@@ -90,13 +90,14 @@ const UserContainer = styled.div`
 const GamesSearchContainer = styled.div`
   display: flex;
   padding: 0 10px;
-  flex-direction: column;
+  align-items: center;
 `;
 
 const SearchGame = styled.p`
   margin: 0;
   font-size: 10px;
   color: #026899;
+  width: 70px;
 `;
 
 class Header extends Component {
@@ -119,7 +120,6 @@ class Header extends Component {
     }
     this.setState({currentPath: this.props.location.pathname});
   }
-
 
   renderLeftContent() {
     return (
@@ -150,7 +150,7 @@ class Header extends Component {
     this.setState({selectedGame: selectedGame});
     //this.props.history.push('/games/' + selectedGame.id);
     this.context.router.history.push('/games/' + selectedGame.id);
-      window.location.reload(true);
+    window.location.reload(true);
   };
 
   renderRightContent() {
@@ -208,6 +208,16 @@ class Header extends Component {
   renderGamesSearch() {
     return (
       <GamesSearchContainer>
+        <SearchGame>
+          Visit another game{' '}
+          <GameIcon
+            icon={'search'}
+            width={12}
+            height={12}
+            marginLeft={1}
+            color={'#026899'}
+          />
+        </SearchGame>
         <Select
           simpleValue
           style={{width: 140}}
@@ -230,7 +240,6 @@ class Header extends Component {
             value: game
           }))}
         />
-        <SearchGame>Visit another game</SearchGame>
       </GamesSearchContainer>
     );
   }
