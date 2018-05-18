@@ -119,15 +119,24 @@ class JoinGame extends Component {
     const params = new URLSearchParams(this.props.location.search);
     const createdGameName = params.get('gameName');
 
+    const gameIdToJoin = params.get('join');
+
     if (createdGameName) {
       this.setState({createdGameName: createdGameName});
+    }
+
+    if (gameIdToJoin) {
+      let gameToJoin = this.props.games.find(g => g.id === gameIdToJoin);
+      if (gameToJoin) {
+        this.joinGame(gameToJoin, localStorage.getItem('username'));
+      }
     }
   }
 
   async joinGame(game, playerName) {
     const gasAmount = await this.props.contract.methods
-      .joinGame(game.id, this.props.web3.utils.fromAscii(playerName)
-      ).estimateGas({from: this.props.account.ethAddress});
+      .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
+      .estimateGas({from: this.props.account.ethAddress});
 
     this.props.contract.methods
       .joinGame(game.id, this.props.web3.utils.fromAscii(playerName))
@@ -273,7 +282,10 @@ class JoinGame extends Component {
         return this.renderBetButton(game, 'Play/Bet');
       else return this.renderBetButton(game, 'Bet');
 
-    if (game.status === GAME_STATUS.WAITING_FOR_X || game.status === GAME_STATUS.WAITING_FOR_O)
+    if (
+      game.status === GAME_STATUS.WAITING_FOR_X ||
+      game.status === GAME_STATUS.WAITING_FOR_O
+    )
       if (
         game.playerX === this.props.account.ethAddress ||
         game.playerO === this.props.account.ethAddress
@@ -348,11 +360,7 @@ class JoinGame extends Component {
       <div>
         <div>
           {this.state.receivedGame ? (
-            <Redirect
-              to={`/games/${
-                this.state.receivedGame.id
-              }`}
-            />
+            <Redirect to={`/games/${this.state.receivedGame.id}`} />
           ) : null}
         </div>
         <div>

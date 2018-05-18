@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import styled from 'styled-components';
 import Keyframes from './PulsingAnimation';
 import GAME_STATUS from './GameStatus';
+import {Link} from 'react-router-dom';
 
 const Container = styled.div`
   height: 55px;
@@ -16,7 +17,7 @@ const Container = styled.div`
   cursor: pointer;
   text-align: center;
   width: 400px;
-  margin: 0.8em 0; 
+  margin: 0.8em 0;
 `;
 
 const Text = styled.p`
@@ -32,7 +33,6 @@ const Message = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
- 
 `;
 class JoinButton extends Component {
   constructor() {
@@ -46,11 +46,13 @@ class JoinButton extends Component {
       this.props.game.ownerAddr !== this.props.account.ethAddress
     ) {
       return (
-        <Container {...this.props}>
-          <Message>
-            <Text>Do you want to join this game?</Text>
-          </Message>
-        </Container>
+        <Link style={{textDecoration: 'none'}} to={'/games?join=' + this.props.game.gameId}>
+          <Container {...this.props}>
+            <Message>
+              <Text>Do you want to join this game?</Text>
+            </Message>
+          </Container>
+        </Link>
       );
     } else if (
       (this.props.game.status === GAME_STATUS.WAITING_FOR_X ||
