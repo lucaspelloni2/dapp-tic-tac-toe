@@ -4,7 +4,6 @@ import Context from './Context';
 import {Redirect} from 'react-router-dom';
 import MetaMaskLogo from './MetamaskLogo';
 import Header from './Header';
-import DEV from "../Environment";
 
 
 const Container = styled.div`

@@ -12,7 +12,6 @@ import OpponentLoader from './OpponentLoader';
 import GAME_STATUS from './GameStatus';
 import DEV from './../Environment';
 import Header from './Header';
-import Gas from './Gas';
 import EndScreen from './EndScreen';
 
 const ParentContainer = styled.div`

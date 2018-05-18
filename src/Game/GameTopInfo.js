@@ -73,10 +73,6 @@ const CurrentTurn = styled.div`
 `;
 
 class GameTopInfo extends Component {
-  constructor() {
-    super();
-  }
-
   getCurrentPlayer() {
     return <p>{this.props.game.status.toString().replace(/_/g, ' ')} </p>;
   }

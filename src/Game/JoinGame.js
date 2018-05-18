@@ -5,12 +5,9 @@ import Spinner from './Spinner';
 import MyTransactions from './MyTransactions';
 import Transaction from './Transaction';
 import Status from './Status';
-import ArrowWithPath from './ArrowWithPath';
 import GameIcon from './GameIcon';
 import {Redirect} from 'react-router';
-import StatusRender from './StatusRender';
 import GAME_STATUS from './GameStatus';
-import Gas from './Gas';
 import Header from './Header';
 
 const Container = styled.div`

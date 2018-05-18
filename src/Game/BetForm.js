@@ -10,7 +10,6 @@ import 'react-select/dist/react-select.css';
 import '../tooltip.css';
 import Status from './Status';
 import Transaction from './Transaction';
-import Gas from './Gas';
 
 const Container = styled.div`
   &:hover {

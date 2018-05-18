@@ -63,10 +63,6 @@ const Square = styled.td`
 `;
 
 class Board extends Component {
-  constructor() {
-    super();
-  }
-
   static renderSymbol(symbol) {
     switch (symbol) {
       case '0':

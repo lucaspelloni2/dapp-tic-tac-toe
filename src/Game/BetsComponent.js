@@ -3,10 +3,6 @@ import Bets from './Bets';
 import BetForm from './BetForm';
 
 class BetsComponent extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <div>

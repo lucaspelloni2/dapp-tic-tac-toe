@@ -5,7 +5,6 @@ import StatusRender from './StatusRender';
 import BET_STATUS from './BetStatus';
 import Status from './Status';
 import Transaction from './Transaction';
-import Gas from './Gas';
 
 const BetsContainer = styled.div`
   display: flex;
@@ -264,6 +263,8 @@ class Bets extends Component {
         return <Element color={'#024169'}>{bet.status}</Element>;
       case BET_STATUS.WITHDRAWN:
         return <Element color={'#008ad6'}>{bet.status}</Element>;
+      default:
+        return <Element color={'#d42517'}>Default</Element>;
     }
   }
 
@@ -281,7 +282,7 @@ class Bets extends Component {
             this.joinBet(bet);
           }}
         >
-          <GameIcon icon={'bet'} height={'14'}/>
+          <GameIcon icon={'bet'} height={'14'} />
           <Paragraph>BET</Paragraph>
         </Button>
       );

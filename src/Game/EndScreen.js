@@ -1,16 +1,10 @@
 import React, {Component} from 'react';
-import styled, {keyframes} from 'styled-components';
 import GAME_STATUS from './GameStatus';
-import Typist from 'react-typist';
 import 'react-typist/dist/Typist.css';
 import EndScreenMessage from './EndScreenMessage';
 import GameIcon from "./GameIcon";
 
 class EndScreen extends Component {
-  constructor() {
-    super();
-  }
-
   componentDidMount() {
     this.getStatus();
   }

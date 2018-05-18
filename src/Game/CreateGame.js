@@ -5,7 +5,6 @@ import MyTransactions from './MyTransactions';
 import MetaMaskLogo from './MetamaskLogo';
 import Status from './Status';
 import Transaction from './Transaction';
-import Gas from './Gas';
 import Header from './Header';
 import {Redirect} from 'react-router-dom';
 

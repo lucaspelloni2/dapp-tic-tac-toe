@@ -5,7 +5,7 @@ import GameIcon from './GameIcon';
 import Select from 'react-select';
 import {Link} from 'react-router-dom';
 import UserAccount from './UserAccount';
-import {withRouter, observer} from 'react-router';
+import {withRouter} from 'react-router';
 import PropTypes from 'prop-types';
 import Web3Providers from './Web3Providers';
 import GameTooltip from './ToolTip';

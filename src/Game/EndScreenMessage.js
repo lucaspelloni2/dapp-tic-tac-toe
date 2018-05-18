@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import styled, {keyframes} from 'styled-components';
+import styled from 'styled-components';
 import Keyframes from './PulsingAnimation';
 
 this.getGradient = props => {
@@ -58,10 +58,6 @@ const Moves = styled.p`
 `;
 
 class EndScreenMessage extends Component {
-  constructor() {
-    super();
-  }
-
   render() {
     return (
       <Container {...this.props}>
