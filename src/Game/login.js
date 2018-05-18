@@ -77,6 +77,7 @@ class Login extends Component {
 
   async componentDidMount() {
     const player = await this.getPlayer(this.props.account.ethAddress);
+    localStorage.setItem('username', player.playerName);
     this.setState({
       username: player.playerName
     });
@@ -207,7 +208,7 @@ class Login extends Component {
                 {this.state.clickedLogin && this.login()}
                 <button
                   onClick={() => {
-                    //this.insertNewUser(e.target.value, this.props.account.ethAddress);
+                    // this.insertNewUser(e.target.value, this.props.account.ethAddress);
                     this.setState({
                       clickedLogin: true
                     });
