@@ -20,6 +20,7 @@ const Container = styled.div`
   color: white;
   animation: ${Keyframes} 5s infinite;
   cursor: pointer;
+  text-align: center;
 `;
 
 const Text = styled.p`
@@ -35,6 +36,7 @@ const Message = styled.div`
   justify-content: center;
   align-items: center;
   flex-direction: column;
+ 
 `;
 class JoinButton extends Component {
   constructor() {
@@ -51,6 +53,18 @@ class JoinButton extends Component {
         <Container {...this.props}>
           <Message>
             <Text>Do you want to join this game?</Text>
+          </Message>
+        </Container>
+      );
+    } else if (
+      (this.props.game.status === GAME_STATUS.WAITING_FOR_X ||
+        this.props.game.status === GAME_STATUS.WAITING_FOR_O) &&
+      this.props.game.ownerAddr === this.props.account.ethAddress
+    ) {
+      return (
+        <Container {...this.props}>
+          <Message>
+            <Text>Waiting for someone that joins your game!</Text>
           </Message>
         </Container>
       );
