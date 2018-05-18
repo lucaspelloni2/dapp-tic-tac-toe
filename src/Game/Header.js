@@ -212,18 +212,17 @@ class Header extends Component {
           simpleValue
           style={{width: 140}}
           value={
-            null
-            // this.state.selectedGame
-            //   ? {
-            //       label: this.state.selectedGame.name.replace(/\u0000/g, ''),
-            //       value: this.state.selectedGame
-            //     }
-            //   : this.props.games.lenght > 0
-            //     ? {
-            //         label: this.props.games[0].name.replace(/\u0000/g, ''),
-            //         value: this.props.games[0]
-            //       }
-            //     : null
+            this.state.selectedGame
+              ? {
+                  label: this.state.selectedGame.name.replace(/\u0000/g, ''),
+                  value: this.state.selectedGame
+                }
+              : this.props.games.lenght > 0
+                ? {
+                    label: this.props.games[0].name.replace(/\u0000/g, ''),
+                    value: this.props.games[0]
+                  }
+                : null
           }
           onChange={this.handleSearchGame}
           options={this.props.games.map(game => ({
