@@ -83,7 +83,7 @@ class Lobby extends Component {
               updateUserAccount={async selectedAddress => {
                 this.props.updateUserAccount(selectedAddress);
               }}
-
+              games={this.props.games}
             />
             <ParentContainer>
               <div style={{marginBottom: 130}}>
@@ -96,7 +96,7 @@ class Lobby extends Component {
                 {/*</p>*/}
                 <LobbyContainer>
                   <Column>
-                      <h1>Lobby</h1>
+                    <h1>Lobby</h1>
                     <ButtonsContainer>
                       <ButtonContainer>
                         <ButtonLink width={250} location={'games/create'}>

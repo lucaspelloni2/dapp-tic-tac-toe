@@ -268,6 +268,7 @@ class App extends Component {
                           fetchGames={async () => {
                             await this.fetchGames();
                           }}
+                          games={this.state.games}
                           addresses={this.state.addresses}
                           updateUserAccount={async selectedAddress => {
                             await this.fetchUserInfo(selectedAddress);
