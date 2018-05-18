@@ -233,7 +233,7 @@ class BetForm extends Component {
 
   async createBet(game, isBetOnX, betValueInEth) {
     let gameId;
-    if (this.props.game) {
+    if (game.id == null) {
       gameId = game.gameId;
     } else {
       gameId = game.id;
@@ -310,14 +310,19 @@ class BetForm extends Component {
                 <Label>The game you selected: </Label>
                 <ChildModalElement>
                   {this.state.selectedGame.name.replace(/\u0000/g, '')} (ID:{' '}
-                  {this.state.selectedGame.gameId})
+                  {
+                    this.state.selectedGame.id != null
+                      ? (this.state.selectedGame.id)
+                      : (this.state.selectedGame.gameId)
+                  }
+                  )
                 </ChildModalElement>
               </FormRow>
               <FormRow>
                 <Label>The amount you want to bet: </Label>
                 <ChildModalElement>
                   {this.state.betAmount}{' '}
-                  <GameIcon icon={'bet'} height={20} width={20} />
+                  <GameIcon icon={'bet'} height={20} width={20}/>
                 </ChildModalElement>
               </FormRow>
               <FormRow>
@@ -372,15 +377,15 @@ class BetForm extends Component {
               value={
                 this.state.selectedGame
                   ? {
-                      label: this.state.selectedGame.name.replace(/\u0000/g, ''),
-                      value: this.state.selectedGame
-                    }
+                    label: this.state.selectedGame.name.replace(/\u0000/g, ''),
+                    value: this.state.selectedGame
+                  }
                   : this.props.game
-                    ? {
-                        label: this.props.game.name.replace(/\u0000/g, ''),
-                        value: this.props.game
-                      }
-                    : null
+                  ? {
+                    label: this.props.game.name.replace(/\u0000/g, ''),
+                    value: this.props.game
+                  }
+                  : null
               }
               onChange={this.handleChange}
               options={this.props.games.map(game => ({
@@ -390,12 +395,16 @@ class BetForm extends Component {
             />
             {this.state.selectedGame ? (
               <a
-                href={this.getDomain() + this.state.selectedGame.id}
+                href={
+                  this.state.selectedGame.id != null
+                    ? (this.getDomain() + this.state.selectedGame.id)
+                    : (this.getDomain() + this.state.selectedGame.gameId)
+                }
                 target={'_blank'}
               >
                 <GamePreview>
                   <ChildModalElement justifyContentCenter marginLeft={'20px'}>
-                    Show the game <GameIcon icon={'search'} />
+                    Show the game <GameIcon icon={'search'}/>
                   </ChildModalElement>
                 </GamePreview>
               </a>
@@ -420,7 +429,7 @@ class BetForm extends Component {
                 visible={this.state.isToolTipVisible}
                 placement={'right'}
               >
-                <GameIcon icon={'bet'} height={'35'} />
+                <GameIcon icon={'bet'} height={'35'}/>
               </GameToolTip>
             </div>
           </FormRow>
