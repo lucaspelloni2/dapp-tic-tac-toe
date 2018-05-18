@@ -1,6 +1,7 @@
 import React, {Component} from 'react';
 import styled from 'styled-components';
 import TicTacToeSymbols from './TicTacToeSymbols';
+import GAME_STATUS from "./GameStatus";
 
 const BoardContainer = styled.div`
   width: 400px;
@@ -43,7 +44,7 @@ const InactiveSquare = styled.td`
   &:last-child {
     border-right: 0;
   }
-  cursor: not-allowed;
+  cursor: ${'not-allowed'};
 `;
 
 const Square = styled.td`
@@ -88,11 +89,11 @@ class Board extends Component {
                     {new Array(3).fill(true).map((b, j) => {
                       return (this.props.game.playerXAddr ===
                         this.props.account.ethAddress &&
-                        this.props.game.status === 'X_HAS_TURN' &&
+                        this.props.game.status === GAME_STATUS.X_HAS_TURN &&
                         this.props.board[i * 3 + j] === '0') ||
                         (this.props.game.playerOAddr ===
                           this.props.account.ethAddress &&
-                          this.props.game.status === 'O_HAS_TURN' &&
+                          this.props.game.status === GAME_STATUS.O_HAS_TURN &&
                           this.props.board[i * 3 + j] === '0') ? (
                         <Square
                           key={i * 3 + j}
