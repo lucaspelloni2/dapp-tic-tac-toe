@@ -360,6 +360,18 @@ class Bets extends Component {
     });
   }
 
+  renderGameMoves(bet) {
+    if (this.props.game) {
+      return this.props.game.moveCounter;
+    } else {
+      // TODO in SC return the number of moves also in the methods getGames() for each game
+      let game = this.props.games.find(game => game.id === bet.gameId);
+      if (game) {
+        return <div>{game.moveCounter}</div>;
+      }
+    }
+  }
+
   render(props) {
     return (
       <div>
@@ -373,7 +385,10 @@ class Bets extends Component {
                 <tbody>
                   <tr>
                     <th>
-                      <Title>Game Id</Title>
+                      <Title>Hot</Title>
+                    </th>
+                    <th>
+                      <Title>Moves</Title>
                     </th>
                     <th>
                       <Title>Status</Title>
@@ -399,6 +414,7 @@ class Bets extends Component {
                   {this.state.bets.map(bet => (
                     <tr key={bet.id}>
                       <td>{bet.gameId}</td>
+                      <td>{this.renderGameMoves(bet)}</td>
                       <td>{this.getElement(bet)}</td>
                       <td>
                         <Element color={'#024169'} border={'#02b8d4'}>

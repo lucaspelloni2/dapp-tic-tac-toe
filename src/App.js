@@ -119,6 +119,7 @@ class App extends Component {
   }
 
   createGame(res, i) {
+    console.log(res);
     let game = null;
     let owner = res.owners[i];
     let playerX = res.playerXs[i];

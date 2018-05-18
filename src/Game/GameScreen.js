@@ -55,12 +55,10 @@ class GameScreen extends Component {
       isModalOpen: false
     });
 
-    console.log(this.state.game);
-
-    if (!DEV) {
-      const isMyTurn = this.isMyTurn();
-      this.setState({isMyTurn: isMyTurn});
-    }
+    // if (!DEV) {
+    const isMyTurn = this.isMyTurn();
+    this.setState({isMyTurn: isMyTurn});
+    // }
     this.checkIfGameIsFinished();
     if (this.props.account.ethAddress === this.state.game.playerXAddr) {
       this.setState({amIPlayerX: true});
@@ -119,9 +117,9 @@ class GameScreen extends Component {
         this.setState({game: game});
         let isMyTurn = this.isMyTurn();
 
-        if (DEV) {
-          isMyTurn = true;
-        }
+        // if (DEV) {
+        //   isMyTurn = true;
+        // }
         this.setState({isMyTurn: isMyTurn});
       })
       .catch(err => {

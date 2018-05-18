@@ -38,10 +38,13 @@ class StatusBar extends Component {
       !this.props.isMyTurn
     ) {
       return (
-        <OpponentLoader
-          isModalOpen={this.props.isModalOpen}
-          game={this.props.game}
-        />
+        <div>
+          <div style={{height: 55}} />
+          <OpponentLoader
+            isModalOpen={this.props.isModalOpen}
+            game={this.props.game}
+          />
+        </div>
       );
     } else if (this.props.game.status === GAME_STATUS.READY) {
       return (
