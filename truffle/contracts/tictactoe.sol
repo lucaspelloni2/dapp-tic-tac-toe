@@ -231,6 +231,7 @@ contract TicTacToe {
 
         require(game.state >= GameState.X_HAS_TURN, "The game is not started yet.");
         require(game.state < GameState.WINNER_X, "The game is already finished.");
+        require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
         game.moveCounter += 1;
 
@@ -239,7 +240,6 @@ contract TicTacToe {
             require(game.playerXAddr == msg.sender
                     || game.moveCounter == boardSize * boardSize      // last move made automatically
                     , "Sender not equal player X");
-            require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.X;
             game.state = GameState.O_HAS_TURN;
@@ -252,7 +252,6 @@ contract TicTacToe {
             require(game.playerOAddr == msg.sender
                     || game.moveCounter == boardSize * boardSize      // last move made automatically
                     , "Sender not equal player O");
-            require(game.board[y][x] == SquareState.EMPTY, "Move not possible because the square is not empty.");
 
             game.board[y][x] = SquareState.O;
             game.state = GameState.X_HAS_TURN;
@@ -442,36 +441,36 @@ contract TicTacToe {
     function payoutBets(uint gameId) internal {
         for (uint i = 0; i < openBetIds.length; i++) {
 
-            Bet storage iBet = bets[openBetIds[i]];
+            Bet storage bet = bets[openBetIds[i]];
 
-            if (iBet.gameId == gameId) {
+            if (bet.gameId == gameId) {
 
-                if (iBet.state == BetState.FIXED) {
+                if (bet.state == BetState.FIXED) {
 
                     // bettorOnX wins
                     if (games[gameId].state == GameState.WINNER_X) {
-                        (iBet.bettorOnXAddr).transfer(SafeMath.mul(2, iBet.value));
+                        (bet.bettorOnXAddr).transfer(SafeMath.mul(2, bet.value));
 
                     // bettorOnO wins
                     } else if (games[gameId].state == GameState.WINNER_O) {
-                        (iBet.bettorOnOAddr).transfer(SafeMath.mul(2, iBet.value));
+                        (bet.bettorOnOAddr).transfer(SafeMath.mul(2, bet.value));
 
                     // draw
                     } else {
-                        (iBet.bettorOnOAddr).transfer(iBet.value);
-                        (iBet.bettorOnXAddr).transfer(iBet.value);
+                        (bet.bettorOnOAddr).transfer(bet.value);
+                        (bet.bettorOnXAddr).transfer(bet.value);
                     }
-                    iBet.state = BetState.PAYEDOUT;
+                    bet.state = BetState.PAYEDOUT;
                 }
 
                 // handle not fixed games: transfer value back to owner
-                if (iBet.state == BetState.MISSING_O_BETTOR) {
-                    (iBet.bettorOnXAddr).transfer(iBet.value);
-                    iBet.state = BetState.WITHDRAWN;
+                if (bet.state == BetState.MISSING_O_BETTOR) {
+                    (bet.bettorOnXAddr).transfer(bet.value);
+                    bet.state = BetState.WITHDRAWN;
                 }
-                if (iBet.state == BetState.MISSING_X_BETTOR) {
-                    (iBet.bettorOnOAddr).transfer(iBet.value);
-                    iBet.state = BetState.WITHDRAWN;
+                if (bet.state == BetState.MISSING_X_BETTOR) {
+                    (bet.bettorOnOAddr).transfer(bet.value);
+                    bet.state = BetState.WITHDRAWN;
                 }
             }
         }
