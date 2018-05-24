@@ -93,7 +93,7 @@ class GameTopInfo extends Component {
       <GameInfo>
         <GameNameContainer>
           <Title>Game {this.props.game.gameId}</Title>
-          <SubTitle>{this.props.game.name}</SubTitle>
+          <SubTitle>{this.props.game.name.replace(/\u0000/g, '')}</SubTitle>
         </GameNameContainer>
         <PlayerContainer>
           <XContainer>
