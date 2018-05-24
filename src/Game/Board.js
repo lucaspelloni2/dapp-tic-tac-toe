@@ -13,7 +13,7 @@ const BoardContainer = styled.div`
     #03b8d4 1200px
   );
   pointer-events: ${props => (props.isMyTurn ? null : 'none')};
-  opacity: ${props => (props.isMyTurn && !props.isTerminated ? 1 : 0.15)};
+  opacity: ${props => ( ((props.isMyTurn && !props.isTerminated) || !props.spinnerCanBeShown)? 1 : 0.15)};
   //border: 1px solid #03b8d4;
 `;
 
