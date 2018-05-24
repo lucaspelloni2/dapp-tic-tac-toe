@@ -41,6 +41,7 @@ class StatusBar extends Component {
         <div>
           <div style={{height: 55}} />
           <OpponentLoader
+            account={this.props.account}
             isModalOpen={this.props.isModalOpen}
             game={this.props.game}
           />
