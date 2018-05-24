@@ -5,6 +5,7 @@ import StatusRender from './StatusRender';
 import BET_STATUS from './BetStatus';
 import Status from './Status';
 import Transaction from './Transaction';
+import Keyframes from './PulsingAnimation';
 
 const BetsContainer = styled.div`
   display: flex;
@@ -99,6 +100,18 @@ const Withdraw = styled.td`
   flex-direction: column;
   cursor: pointer;
 `;
+
+
+
+const Hot = styled.div`
+  background: linear-gradient(90deg, rgb(255, 50, 50), rgb(1, 141, 219));
+  padding: 5px;
+  font-weight: bold;
+  border-radius: 9px;
+  animation: ${Keyframes} 3s infinite;
+`;
+
+
 
 class Bets extends Component {
   constructor() {
@@ -372,6 +385,19 @@ class Bets extends Component {
     }
   }
 
+  renderHotBet(bet) {
+    if (this.props.game) {
+      if (
+        bet.status === BET_STATUS.MISSING_O_BETTOR ||
+        bet.status === BET_STATUS.MISSING_X_BETTOR
+      ) {
+        if (this.props.game.moveCounter > 4) {
+          return <Hot color={'#d42517'}>HOT</Hot>;
+        }
+      }
+    }
+  }
+
   render(props) {
     return (
       <div>
@@ -384,9 +410,7 @@ class Bets extends Component {
               <Table>
                 <tbody>
                   <tr>
-                    <th>
-                      <Title>Hot</Title>
-                    </th>
+                    <th />
                     <th>
                       <Title>Moves</Title>
                     </th>
@@ -413,7 +437,7 @@ class Bets extends Component {
                 <tbody>
                   {this.state.bets.map(bet => (
                     <tr key={bet.id}>
-                      <td>{bet.gameId}</td>
+                      <td>{this.renderHotBet(bet)}</td>
                       <td>{this.renderGameMoves(bet)}</td>
                       <td>{this.getElement(bet)}</td>
                       <td>
