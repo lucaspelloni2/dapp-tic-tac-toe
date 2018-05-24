@@ -42,17 +42,24 @@ class OpponentLoader extends Component {
     }
   }
 
+  isShown() {
+    const playersInGame = [];
+    playersInGame.push(this.props.game.playerOAddr);
+    playersInGame.push(this.props.game.playerXAddr);
+    return playersInGame.includes(this.props.account.ethAddress);
+  }
+
   render() {
     return (
       <div>
-        {this.props.isModalOpen ? null : (
+        {!this.props.isModalOpen && this.isShown() ? (
           <Container>
             <OpponentSpinner />
             <WaitingForContainer>
               <WaitingFor>{this.renderTurn()}</WaitingFor>
             </WaitingForContainer>
           </Container>
-        )}
+        ) : null}
       </div>
     );
   }
