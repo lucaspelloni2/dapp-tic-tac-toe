@@ -233,6 +233,13 @@ class GameScreen extends Component {
     return isMyTurn;
   }
 
+  isShown() {
+    const playersInGame = [];
+    playersInGame.push(this.state.game.playerOAddr);
+    playersInGame.push(this.state.game.playerXAddr);
+    return playersInGame.includes(this.props.account.ethAddress);
+  }
+
   render() {
     return (
       <div style={{marginBottom: '4em'}}>
@@ -273,6 +280,7 @@ class GameScreen extends Component {
                   }}
                   isMyTurn={this.state.isMyTurn}
                   isTerminated={this.state.isTerminated}
+                  spinnerCanBeShown={this.isShown()}
                 />
               </ColumnContainer>
               <ColumnContainer>

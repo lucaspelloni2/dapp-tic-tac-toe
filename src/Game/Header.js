@@ -148,6 +148,13 @@ class Header extends Component {
           icon={'bet'}
         />
 
+        <a
+          href={'https://github.com/lucaspelloni2/dapp-tic-tac-toe'}
+          target="_blank"
+        >
+          <GameIcon icon={'github'} />
+        </a>
+
         <WebProviderContainer>
           {this.renderProviderImage()}
         </WebProviderContainer>

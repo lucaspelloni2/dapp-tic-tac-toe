@@ -65,8 +65,11 @@ const Title = styled.p`
 `;
 
 const SubTitle = styled.p`
-  margin-bottom: 5px;
-  font-size: 12px;
+  margin-top: 0; 
+  margin-bottom: 2px;
+  font-size: 10px;
+  letter-spacing: 7px;
+  text-transform: uppercase;
 `;
 
 const PlayerX = Player.extend``;
@@ -90,7 +93,7 @@ class GameTopInfo extends Component {
       <GameInfo>
         <GameNameContainer>
           <Title>Game {this.props.game.gameId}</Title>
-          {/*<SubTitle>{this.props.game.name}</SubTitle>*/}
+          <SubTitle>{this.props.game.name.replace(/\u0000/g, '')}</SubTitle>
         </GameNameContainer>
         <PlayerContainer>
           <XContainer>
